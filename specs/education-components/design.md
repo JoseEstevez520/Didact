@@ -1,9 +1,15 @@
 # Design — Education Components Library
 
-> Answers the **how**, starting from `requirements.md`. Several sections are marked
-> **[PENDING — research phase]**: they are not closed here because `requirements.md` §6 requires
-> evidence before deciding. The decisions from `requirements.md` §0 (product owner) ARE closed and
-> this document does not reopen them — it only verifies their technical viability.
+> Answers the **how**, starting from `requirements.md`. **Phase 2 status: closed.** Every section
+> that was previously marked as awaiting the research phase is now resolved below, using the
+> cited evidence from `specs/education-components/research.md` (Phase 1) and, where the product
+> owner overrode a research recommendation, `research/decisions.md` (D1, D2). The decisions from
+> `requirements.md` §0 (product owner) were already closed before Phase 1 and are not reopened
+> here — this document only verified their technical viability and now records the result.
+> Anything still genuinely open is written as an explicit **Phase 3 open item**, not left marked as
+> undecided — `research.md` is honest about what it could not verify (no executed React 19 smoke
+> test, no live `shadcn diff` test against a third-party registry), and this document does not
+> upgrade those into false certainties just to appear fully closed.
 
 ## 0. Framework: core vs. adapter
 
@@ -55,8 +61,8 @@ None of §1.2 applies to the core. A core component does not "know" SkillNet exi
 │    (neutral theme, restyleable)              │  the primitives. A single place for theming.
 ├─────────────────────────────────────────────┤
 │ 1. Accessible primitives                     │  Accessible behavior with no styling of its
-│    (headless)                                │  own (focus, keyboard, ARIA). Candidate: Radix UI
-│                                               │  (the same base shadcn/ui uses) [to verify]
+│    (headless)                                │  own (focus, keyboard, ARIA). Decided: Radix UI
+│                                               │  (the same base shadcn/ui uses)
 └─────────────────────────────────────────────┘
 ```
 
@@ -66,8 +72,34 @@ project's real value lives — layers 1 and 2 exist so we don't reinvent accessi
 (see the cost of doing it by hand in `openui-adoption.md` §1: 1500+ lines of tests to shield a
 custom parser).
 
-**[PENDING — research phase, requirements.md §6.2]**: confirm that Radix UI (or whichever
-alternative wins the comparison) works well on React 19 with executed evidence.
+**Resolved (`requirements.md` §6.2, `research.md` Question 2): Radix UI is layer 1's default.**
+Rationale: alignment with shadcn/ui maximizes reuse of patterns/examples, which is the whole point
+of using shadcn as the style/architecture reference (`requirements.md` §0.2). The evidence
+(`research.md` Q2) is a peer-dependency and changelog comparison, not an executed project, and it
+is reported at that confidence level:
+
+- Radix UI's `latest` npm packages today declare `peerDependencies.react` pinned to
+  `^18.0.0 || ^19.0.0-rc.1` — not `^19.0.0` — so a plain `npm install` on stable React 19 needs
+  `--legacy-peer-deps`/`--force` (confirmed by shadcn's own docs and `radix-ui/primitives#2909`).
+  **This friction is documented here as part of the consumer contract**, not hidden: consumers
+  installing with npm on React 19 must pass `--legacy-peer-deps` (or use pnpm/yarn, which don't
+  enforce the peer range as strictly) until Radix promotes its React-19-clean `v1.2.0` (in RC as
+  of the research date) to `latest`.
+- Base UI (`@base-ui/react`, MUI) already declares a clean `^17 || ^18 || ^19` peer range and comes
+  from the team that migrated MUI to React 19. It is **not** chosen as the default now because it
+  has less adoption/precedent than Radix and shadcn itself is built on Radix — but it is the
+  designated **watch item**: re-evaluate it in 3-6 months once it has more production usage.
+  React Aria/Ariakit are not adopted as the default layer: React Aria shares Radix's peer-dep
+  friction without shadcn's alignment advantage, and Ariakit lacks the shadcn-ecosystem precedent.
+- **Open item for Phase 3, not a hidden decision:** none of the above is an executed smoke test.
+  `research.md` Q2 is explicit that no real React 19 project was run against any candidate — the
+  evidence is changelog + peer-dependency-range analysis. Phase 3 must run an actual smoke test
+  (focus management, portals, dialog behavior) against stable React 19 with Radix before treating
+  this as functionally verified, not just contractually documented. Do not claim in any later
+  document that this smoke test happened until it has.
+- RNF-5 applies regardless of the outcome: Radix is pinned to an exact version with a drift test,
+  since the copy-paste distribution model protects the copied components, not this kind of
+  external behavioral dependency (`design.md` §9).
 
 ## 3. Distribution model: shadcn/ui-style registry
 
@@ -84,9 +116,46 @@ verification in §6.1.
   there are as many copies as projects that adopted it. The central library is the source of truth
   for *new* copies and for anyone who wants to update theirs, not a shared runtime.
 
-**[PENDING — research phase, requirements.md §6.1, §6.3]**: the exact third-party registry
-mechanism, and whether requiring Tailwind as a peer dependency is acceptable given the "any
-project" goal.
+**Resolved (`requirements.md` §6.1, `research.md` Question 1): adopt shadcn/ui's official CLI and
+schema as the primary distribution mechanism.** The mechanism is documented as a first-class,
+recent product (CLI 3.0 Aug-2025, CLI v4 Mar-2026), explicitly designed for third-party registries
+(`registry.json`/`registry-item.json`, static-JSON or GitHub hosting, namespace-based installation,
+header/env-var auth) — not a community hack. The risk previously flagged in §9 ("the third-party
+mechanism doesn't support what we need") **is not confirmed**; building a custom CLI stays a
+theoretical plan B, not committed work. Two real gaps stay open and are tracked, not hidden:
+
+- **No native `version` field** in `registry-item.json` — there is no built-in way to version the
+  same component across releases. **Decision: define our own versioning convention** (e.g. an
+  explicit `version` key inside each entry's own metadata, or versioned route paths such as
+  `/r/flashcard/1.0.0.json`) rather than waiting for shadcn to add one.
+- **`shadcn diff` against third-party namespaced registries is NOT verified** in the official docs
+  (only confirmed for the official registry). **Decision: treat this as unverified, not as
+  working.** Phase 3 must empirically test `shadcn diff`/`shadcn add --overwrite` against a real
+  test registry before documenting it as the update mechanism consumers can rely on.
+
+**Resolved (`requirements.md` §6.3, product decision D1 in `research/decisions.md`): Tailwind IS
+the styling layer.** `research.md` Question 3 recommends, with cited evidence, **not** requiring
+Tailwind as a core peer dependency — the registry format itself doesn't need it (`cssVars`/`css`
+in `registry-item.json`, `tailwind` deprecated in favor of `cssVars.theme`; precedents like
+`shadcn-css` prove the layer pattern works without Tailwind). That research finding is not being
+reworded or walked back here. **What changes it is a product decision made after Phase 1**: per
+`research/decisions.md` D1, Jose chose to adopt Tailwind v4 anyway, for visual consistency and
+alignment with the shadcn/ui reference (`requirements.md` §0.2), independently of what the
+distribution mechanism strictly requires. Concretely for this design:
+
+- Layer 2 ("Styled layer" in §2's diagram) is **Tailwind v4 + `class-variance-authority`** applied
+  over the neutral tokens exposed by `@didact/theme` (a new package; see D1's scaffold changes).
+- The tokens themselves still live as **plain CSS custom properties** at the base of
+  `@didact/theme` (RF-16) — a consumer with no Tailwind in their project can still restyle a
+  copied component by overriding those variables. Tailwind is an additional utility layer written
+  on top of the same variables, not a replacement for the token-based restyling mechanism RF-16
+  requires. This keeps the "any project" goal from §0.1 alive even though Tailwind is now the
+  default authoring layer.
+- Pinned per RNF-5 (scaffold, not yet installed): `tailwindcss` 4.1.11, `@tailwindcss/postcss`
+  4.1.11, `postcss` 8.4.49, `class-variance-authority` 0.7.1 — these versions are a reasonable
+  reference as of D1's date, **not verified live against `registry.npmjs.org`** the way
+  `research.md` verified the primitives layer; confirm the actual stable versions before installing
+  in Phase 4.
 
 ## 4. SkillNet adapter (outside the core)
 
@@ -112,24 +181,53 @@ A core component enters SkillNet's catalog
 This is adapter work, it lives in `repo/`, and it does not condition the core components' design
 except that they must be describable statically when reasonable (RNF-4).
 
-## 5. Inventory of candidate components (core — final priority after research)
+## 5. Inventory of candidate components (core — final priority, no longer draft)
 
-| Component | Requirement | Expressible without reactivity for the SkillNet adapter? (draft) | Priority (draft) |
-|---|---|---|---|
-| `Flashcard` | RF-1 | Likely yes | High |
-| `SpacedRepetitionDeck` | RF-2 | Likely no (state across sessions) | Medium |
-| `MatchingExercise` / `SortExercise` / `CategorizeExercise` | RF-3 | To confirm | High |
-| Quiz variants (multi-answer, T/F, blank, short open) | RF-4 | Yes, same pattern as SkillNet's current `QuizItem` | High |
-| `Glossary` / `Term` | RF-5 | Yes | Medium |
-| `Hint` / `Reveal` | RF-6 | Yes, careful not to leak the answer in the DOM | High |
-| Progress/mastery indicators | RF-7 | Yes | Medium |
-| `Timeline` / `Steps` | RF-8 | Yes | Medium |
-| Video checkpoint | RF-9 | To confirm (depends on the player) | Low |
-| `Rubric` / self-assessment | RF-10 | Yes | Low |
-| Code exercise | RF-11 | Likely no (needs execution) | Low |
+**Sort key: pedagogical evidence strength first** (`packages/validators/pedagogy/evidence.json`,
+derived from `research.md` §9.1 — Dunlosky et al. 2013, Wisniewski/Zierer/Hattie 2019), **then
+utility + SkillNet-adapter precedent** (`research.md` Question 7) as a tiebreaker among components
+the pedagogy sources don't independently rate. This ordering is the ROADMAP Phase 2 exit
+criterion: it must be defensible from cited evidence, not intuition — every row below traces to a
+source. Scope stays broad per product decision D2 (`research/decisions.md`): nothing is dropped,
+the advanced/graphical/code families enter as later waves instead.
+
+| Wave | Component | Requirement | Pedagogical evidence (`evidence.json`) | Expressible without reactivity for the SkillNet adapter? (`research.md` Q7 — final verdict) |
+|---|---|---|---|---|
+| **1** | `Flashcard` | RF-1 | Not independently rated; it is the substrate `SpacedRepetitionDeck` operates on, so it ships alongside RF-2's high-evidence technique | **FIT** — flip/mark-as-known is ephemeral React state, no `answer_key` to protect (`QuizItemBlock` precedent) |
+| **1** | `SpacedRepetitionDeck` | RF-2 | **High** — distributed practice is one of only 2 of Dunlosky et al.'s 10 techniques rated high-utility | **NOT FIT** — cross-session persistence needs `Query`/`Mutation`, forbidden while `RENDER_ALLOW_REACTIVE=False`. Core priority is unaffected by this: adapter fitness is not a core-priority criterion (see note below the table) |
+| **1** | Quiz variants (multi-answer, T/F, blank, short open) | RF-4 | **High** — practice testing is the other Dunlosky high-utility technique; see the informative-feedback note below | **FIT** — `QuizItem` already covers 6 `item_type`s without leaking `correct`/`explanation` (rule 5, `spec.py`) |
+| **2** | `Timeline` / `Steps` | RF-8 | Not rated by the pedagogy sources | **FIT** — 1:1 precedent, already exists in production as `StepSequence` (`schemas.ts:103-106`) |
+| **2** | `MatchingExercise` / `SortExercise` / `CategorizeExercise` | RF-3 | Not rated by the pedagogy sources | **FIT (confirmed)** — `DragOrder` precedent; also the component WCAG 2.2 §2.5.7 (dragging movements, AA) binds most directly, so it carries accessibility/legal weight beyond pure utility (`research.md` §9.4) |
+| **2** | `Glossary` / `Term` | RF-5 | **Low** as passive lookup — Dunlosky et al., by analogy with rereading/highlighting (both low-utility). Must be redesigned to force active recall, not stay a pure lookup, to earn a higher place later | **FIT** — pure presentation, no answer to protect |
+| **2** | Progress/mastery indicators | RF-7 | Not rated by the pedagogy sources | **FIT** — static snapshot prop, same pattern as `Chart` (`schemas.ts:118-123`) |
+| **2** | `Rubric` / self-assessment | RF-10 | Not rated by the pedagogy sources | **FIT** — no automatic grading means no `answer_key` (rule 5 doesn't apply), ephemeral selection state |
+| **2** | `Hint` / `Reveal` | RF-6 | Not rated by the pedagogy sources; carries the informative-feedback recommendation (see note below) | **FIT WITH STRUCTURAL TENSION** — the toggle is ordinary React state, but the canonical re-serialization ships the whole `ui_spec` at once, so it must delegate to `QuizItem`'s self-contained POST rather than ever carry a real exam answer as a prop. Registered last within wave 2, per `research.md` Q7's explicit recommendation, until that boundary is documented |
+| **3** | Video checkpoint | RF-9 | Not rated by the pedagogy sources | **FIT IN PRINCIPLE / BLOCKED BY INFRASTRUCTURE** — reactivity is not the obstacle, the absence of any video player in `skillnet-web` is (`research.md` Q8); source type (self-hosted vs. YouTube/Vimeo) must be decided before the component itself can be designed |
+| **4 (advanced wave)** | Code exercise | RF-11 | Not rated by the pedagogy sources | **NOT FIT** — checking requires execution/network (≈`Mutation`), outside the `assertStaticOnly` model; Sandpack (Apache-2.0) solves execution, not checking, and does not change this verdict (`research.md` §9.3) |
+| **4 (advanced wave)** | Graphical/image-based interactions (hotspot, hot-text, graphic-order, graphic-associate, graphic-gap-match, position-object, select-point, drawing) | none yet — `packages/validators/pedagogy/qti-mapping.json` `plannedGaps` | Not rated by the pedagogy sources | Not assessed — no RF exists yet to classify; per product decision D2 these are **planned**, not dropped (`research.md` §9.2) |
+| **4 (advanced wave)** | Numeric/slider response | none yet — `qti-mapping.json` `plannedGaps` | Not rated by the pedagogy sources | Not assessed, same status as the graphical family above |
+
+Totals from `research.md` Question 7 (11 originally-scoped RF components): **8 FIT** (Flashcard,
+Matching/Sort/Categorize, Quiz, Glossary, Progress/mastery, Rubric, Hint/Reveal, Timeline), **1
+fit-but-blocked** (Video checkpoint), **2 not fit** (SpacedRepetitionDeck, Code exercise).
 
 The "expressible without reactivity" column is specific to the SkillNet adapter; for the core,
-priority is based solely on general usefulness (`requirements.md` §4.1), not on that column.
+priority (the **Wave** column) is based on pedagogical evidence first and general usefulness
+second (`requirements.md` §4.1), never on adapter fitness — that is precisely why
+`SpacedRepetitionDeck` sits in Wave 1 despite being "not fit" for the adapter today.
+
+**Informative-feedback slot (optional but recommended) — applies to RF-4 and RF-6.** Wisniewski,
+Zierer & Hattie 2019 (435 studies, `research.md` §9.1) found informative feedback (why an answer
+is right/wrong, what strategy to use next) at d=0.99, versus d=0.24 for plain
+reinforcement/praise/points. Quiz variants (RF-4) and `Hint`/`Reveal` (RF-6) should each expose an
+**optional slot** for this kind of feedback beyond a bare correct/incorrect state — recommended,
+not a hard requirement, so components that only need a visual correct/incorrect state remain
+valid.
+
+Beyond this inventory, `evidence.json` also lists `SelfExplanation`, `ConceptMap` (Fiorella &
+Mayer 2016) and a branching-scenario component backed by Ink/inkjs (`research.md` §9.3, moderate
+evidence per Sitzmann 2011) as **v2 candidates with no assigned RF today** — not part of any wave
+above, explicitly not to be implemented until `requirements.md` is revisited.
 
 ## 6. Theming (core)
 
@@ -138,6 +236,18 @@ default theme** (so it can be shown in the registry/Storybook without depending 
 exposed via CSS custom properties, and any project — SkillNet included — overrides it with its
 own. SkillNet, as an adapter, maps `design-system.md` onto those variables (RF-18); this is no
 different from how any project adopts a shadcn/ui theme.
+
+**Resolved (`requirements.md` §6): the components' visual style follows shadcn/ui.** This is a
+distinct decision from the styling *mechanism* (§3: Tailwind + `cva`) — it's about spacing scale,
+radii, typography, focus-ring treatment, subtle/no shadows, and a neutral OKLCH palette, matching
+what `requirements.md` §0.2 already named as the style reference. `@didact/theme`'s neutral
+default (D1, `research/decisions.md`) should mirror that shadcn aesthetic as its out-of-the-box
+look, while remaining fully restyleable via the CSS custom properties RF-16 requires — a consumer
+is free to discard the shadcn look entirely by overriding the tokens, exactly as they would with
+any shadcn/ui-derived component. **This reference can and should be calibrated/verified live**
+against `ui.shadcn.com` using browser automation during Phase 3/4 (spacing values, exact radii,
+focus-ring color/width, shadow tokens) rather than approximated from memory — the same "verify,
+don't assume" standard `research.md` applied to the technical questions.
 
 ## 7. Project location — **decided**
 
@@ -150,8 +260,9 @@ makes no sense if only one repo consumes it). SkillNet consumes this library jus
 consume any third-party shadcn registry: by copying components, without publishing or depending
 on an npm version.
 
-What remains pending research is only the **exact mechanism** (`requirements.md` §6.1), not the
-general shape.
+The **exact mechanism** (`requirements.md` §6.1) is resolved in §3 above: shadcn's official CLI
+and schema, with a custom versioning convention and `shadcn diff` still to be empirically verified
+in Phase 3 — that residual verification does not reopen the general shape decided here.
 
 ## 8. Quality and tooling (core)
 
@@ -165,12 +276,16 @@ general shape.
 
 ## 9. Risks
 
-- **shadcn's third-party registry mechanism doesn't support what we need** (§6.1) — mitigate by
-  having a minimal own CLI/registry as plan B, not just assuming shadcn's works as-is.
-- **Choosing a base dependency (layer 1) that breaks like `@openuidev` 0.2.x** — mitigate with an
-  exact version + drift test if something external is adopted (RNF-5). The copy-paste model
-  protects the *components*, not their internal behavioral dependencies (e.g. Radix is still a
-  real dependency if it isn't also copied).
+- **shadcn's third-party registry mechanism doesn't support what we need** (§6.1) — `research.md`
+  Q1 found this **not confirmed**: the mechanism is explicitly built for third-party registries.
+  Residual risk downgraded to two narrower, tracked items: no native `version` field (mitigated
+  with our own versioning convention, §3) and `shadcn diff` against third-party registries being
+  unverified (mitigate by empirically testing it in Phase 3 before relying on it; keep a minimal
+  own CLI/registry as a theoretical plan B only if that test fails).
+- **Choosing a base dependency (layer 1) that breaks like `@openuidev` 0.2.x** — Radix UI is now
+  the decided default (§2); mitigate with an exact version + drift test (RNF-5). The copy-paste
+  model protects the *components*, not their internal behavioral dependencies (e.g. Radix is still
+  a real dependency if it isn't also copied). Watch Base UI as a cleaner alternative in 3-6 months.
 - **Designing for SkillNet without realizing it** (coupling tokens, language, or SkillNet
   assumptions into the core) — mitigate by reviewing every core PR against the question "does this
   make sense to someone who has never heard of SkillNet?".
