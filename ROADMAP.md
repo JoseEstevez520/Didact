@@ -5,10 +5,10 @@
 > yet.** Each phase is designed to be handed to a different agent (or a new session), with enough
 > context to not depend on this conversation.
 >
-> Reminder from `requirements.md` §0: this is a general-purpose library, distributed as a
-> shadcn/ui-style registry, usable in any project. SkillNet (`repo/`) is the first real consumer,
-> via an **adapter** — the phases marked "(adapter)" live in `repo/`, not in this project, and are
-> optional with respect to the core.
+> Reminder from `requirements.md` §0: this is a general-purpose library, distributed through
+> Didact's own registry-based copy-paste model, usable in any project. SkillNet (`repo/`) is the
+> first real consumer, via an **adapter** — the phases marked "(adapter)" live in `repo/`, not in
+> this project, and are optional with respect to the core.
 
 ## How to use this roadmap
 
@@ -46,11 +46,12 @@ explicitly").
 ### Brief for the research agent (use as the assignment prompt)
 
 > Research in depth to ground the design of a general-purpose education components library (not
-> specific to one project), distributed with the shadcn/ui model (registry + CLI that copies
-> source code, not a versioned npm dependency). First read
+> specific to one project), distributed with Didact's own registry model (registry + CLI that
+> copies source code, not a versioned npm dependency). First read
 > `Anfaia/library/specs/education-components/requirements.md` in full — especially §0 (decisions
-> already made by the product owner: general purpose, shadcn style) and §6 (the exact 8 questions)
-> — and `design.md` (sections marked `[PENDING]`). Do not propose new architecture or write code:
+> already made by the product owner: general purpose, registry-based copy-paste distribution) and
+> §6 (the exact 8 questions) — and `design.md` (sections marked `[PENDING]`). Do not propose new
+> architecture or write code:
 > the deliverable is a report, `Anfaia/library/specs/education-components/research.md`, with one
 > section per question in `requirements.md` §6, cited evidence (URLs, verified behavior where
 > feasible), and an explicit recommendation per question.
