@@ -1,28 +1,40 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { cn } from "../lib/cn.js";
+
 /**
  * MasteryBadge -- the trivial component that proves the ROADMAP.md Phase 3 scaffold end to end
  * (build, test, Storybook, registry, copy mechanism) before Phase 4 builds the real inventory in
  * design.md §5. It is named `MasteryBadge` in that same diagram (design.md §2), which is why this
  * component -- not an arbitrary generic Badge -- was picked as the proof.
  *
+ * Visual style (product decision, 2026-08-11): must faithfully reproduce shadcn/ui's Badge
+ * (owner-rejected the previous look). Anatomy, class list, and variants below are taken verbatim
+ * from `docs/shadcn-visual-reference.md` §2 (itself pulled from `shadcn-ui/ui`'s
+ * `apps/v4/registry/new-york-v4/ui/badge.tsx` on 2026-08-11): pill shape (`rounded-full`), tiny
+ * padding (`px-2 py-0.5`), `text-xs font-medium`, transparent border, and a 3px/50%-opacity focus
+ * ring -- not the old 2px outline+offset. shadcn is a visual-style reference here, not a
+ * dependency.
+ *
  * Layer 2 (styled layer, design.md §2): Tailwind v4 utilities + `cva` variants over
- * `@didact/theme`'s CSS custom properties (`--didact-color-*`, `--didact-radius-*`,
- * `--didact-focus-ring`). No Radix/layer-1 primitive is used here on purpose -- a static or
- * toggle-only badge needs no focus trap, portal, or roving tabindex behavior, so pulling in a
- * headless primitive for it would add a real dependency (RNF-5's pinned-and-drift-tested kind)
- * for no accessibility benefit (see packages/core/README.md and research.md Question 2).
+ * `@didact/theme`'s CSS custom properties (`--didact-primary`, `--didact-secondary`,
+ * `--didact-border`, `--didact-ring`, etc.). No Radix/layer-1 primitive is used here on purpose --
+ * a static or toggle-only badge needs no focus trap, portal, or roving tabindex behavior, so
+ * pulling in a headless primitive for it would add a real dependency (RNF-5's
+ * pinned-and-drift-tested kind) for no accessibility benefit (see packages/core/README.md and
+ * research.md Question 2).
  *
  * Accessibility (RF-12, "not color-only"): every level renders its own text label
- * (Beginner/Intermediate/Advanced), never only a color swatch -- WCAG 1.4.1 Use of Color, same
- * rule @didact/theme's tokens.css documents for its status tokens. The optional `interactive`
+ * (Beginner/Intermediate/Advanced), never only a color swatch -- WCAG 1.4.1 Use of Color. The
+ * palette itself is also neutral only (no green/orange status colors on the badge, per the shadcn
+ * reference's Badge variants), so level is never implied by hue either. The optional `interactive`
  * mode renders a native `<button>` (keyboard-operable, focusable, with `aria-pressed`) instead of
- * a `<div onClick>`, and its focus-visible style reads `--didact-focus-ring` (WCAG 2.4.7).
+ * a `<div onClick>`, and its focus-visible style reads `--didact-ring` (WCAG 2.4.7).
  *
  * Styling reads the tokens through Tailwind v4's `[type:var(--x)]` arbitrary-value syntax
- * (e.g. `bg-[color:var(--didact-color-muted)]`) instead of named theme-scale utilities like
- * `bg-didact-muted`. This was a deliberate correction made during the Phase 3 registry copy
+ * (e.g. `bg-[color:var(--didact-primary)]`) instead of named theme-scale utilities like
+ * `bg-didact-primary`. This was a deliberate correction made during the Phase 3 registry copy
  * proof (ROADMAP.md block F): `@didact/theme`'s own `@theme` block (which registers those named
  * utilities) is only guaranteed present for a consumer who imports the `@didact/theme` package
  * directly. A consumer who instead copies this component through the registry only receives the
@@ -32,6 +44,11 @@ import { cva, type VariantProps } from "class-variance-authority";
  * dependency on shadcn's `cssVars` auto-aliasing heuristic (which only auto-generates a
  * `--color-*` alias for values that look like colors, and does nothing for `--radius-*`/
  * `--font-*`-shaped tokens -- confirmed by inspecting its output, not assumed).
+ *
+ * Customization (docs/shadcn-visual-reference.md §3, "the shadcn model we must replicate"): this
+ * component accepts `variant` (a named `cva` look, like shadcn) and `className`, merged LAST via
+ * `cn()` (`clsx` + `tailwind-merge`, see `../lib/cn.ts`) so a single instance can be restyled
+ * inline without fighting the base classes.
  */
 
 const masteryLevels = ["beginner", "intermediate", "advanced"] as const;
@@ -44,46 +61,49 @@ const masteryLevelLabel: Record<MasteryLevel, string> = {
   advanced: "Advanced",
 };
 
+/** Default `variant` per mastery `level` when no explicit `variant` prop is given. Neutral
+ *  mapping only -- no color implies "better" or "worse" (WCAG 1.4.1). */
+const masteryLevelDefaultVariant: Record<MasteryLevel, "default" | "secondary" | "outline"> = {
+  beginner: "secondary",
+  intermediate: "default",
+  advanced: "outline",
+};
+
 const masteryBadgeVariants = cva(
   [
-    "inline-flex items-center gap-1.5 border px-2.5 py-1",
-    "rounded-[length:var(--didact-radius-md)]",
-    "text-sm font-medium leading-none",
-    "transition-colors duration-[var(--didact-motion-duration)]",
+    "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden",
+    "rounded-full border border-transparent px-2 py-0.5",
+    "text-xs font-medium whitespace-nowrap",
+    "transition-[color,box-shadow] duration-[var(--didact-motion-duration)]",
+    "focus-visible:border-[color:var(--didact-ring)] focus-visible:ring-[3px]",
+    "focus-visible:ring-[color:var(--didact-ring)]/50",
   ].join(" "),
   {
     variants: {
-      level: {
-        beginner: [
-          "bg-[color:var(--didact-color-muted)]",
-          "text-[color:var(--didact-color-muted-fg)]",
-          "border-[color:var(--didact-color-border)]",
+      variant: {
+        default: [
+          "bg-[color:var(--didact-primary)]",
+          "text-[color:var(--didact-primary-foreground)]",
         ].join(" "),
-        intermediate: [
-          "bg-[color:var(--didact-color-warning-bg)]",
-          "text-[color:var(--didact-color-warning)]",
-          "border-[color:var(--didact-color-warning)]",
+        secondary: [
+          "bg-[color:var(--didact-secondary)]",
+          "text-[color:var(--didact-secondary-foreground)]",
         ].join(" "),
-        advanced: [
-          "bg-[color:var(--didact-color-success-bg)]",
-          "text-[color:var(--didact-color-success)]",
-          "border-[color:var(--didact-color-success)]",
+        outline: [
+          "border-[color:var(--didact-border)]",
+          "text-[color:var(--didact-foreground)]",
         ].join(" "),
       },
       interactive: {
         true: [
           "cursor-pointer select-none",
           "focus-visible:outline-none",
-          "focus-visible:ring-[length:var(--didact-focus-ring-width)]",
-          "focus-visible:ring-[color:var(--didact-focus-ring)]",
-          "focus-visible:ring-offset-2",
-          "hover:brightness-95",
+          "hover:opacity-90",
         ].join(" "),
         false: "",
       },
     },
     defaultVariants: {
-      level: "beginner",
       interactive: false,
     },
   },
@@ -93,9 +113,16 @@ const masteryBadgeFontFamily = "var(--didact-font-sans)";
 
 export interface MasteryBadgeProps
   extends Omit<React.ComponentPropsWithoutRef<"button">, "onClick">,
-    VariantProps<typeof masteryBadgeVariants> {
+    Omit<VariantProps<typeof masteryBadgeVariants>, "variant"> {
   /** Mastery tier this badge represents. Always rendered as text, never color-only. */
   level: MasteryLevel;
+  /**
+   * shadcn-style visual variant (`default` | `secondary` | `outline`). Defaults from `level`
+   * (beginner -> secondary, intermediate -> default, advanced -> outline) but can be set
+   * explicitly to override that mapping -- this is the customization hook shadcn's Badge exposes,
+   * see docs/shadcn-visual-reference.md §3.2.
+   */
+  variant?: "default" | "secondary" | "outline";
   /**
    * Optional mastery percentage (0-100). Rounded and rendered as `"NN%"` text next to the level
    * label when provided.
@@ -118,15 +145,14 @@ function describeMastery(level: MasteryLevel, percent?: number): string {
 
 export const MasteryBadge = React.forwardRef<HTMLButtonElement | HTMLSpanElement, MasteryBadgeProps>(
   function MasteryBadge(
-    { level, percent, interactive = false, className, style, ...props },
+    { level, variant, percent, interactive = false, className, style, ...props },
     ref,
   ) {
     const [expanded, setExpanded] = React.useState(false);
+    const resolvedVariant = variant ?? masteryLevelDefaultVariant[level];
     const label = masteryLevelLabel[level];
     const summary = describeMastery(level, percent);
-    const classes = [masteryBadgeVariants({ level, interactive }), className]
-      .filter(Boolean)
-      .join(" ");
+    const classes = cn(masteryBadgeVariants({ variant: resolvedVariant, interactive }), className);
     const mergedStyle: React.CSSProperties = {
       fontFamily: masteryBadgeFontFamily,
       ...style,
@@ -161,7 +187,7 @@ export const MasteryBadge = React.forwardRef<HTMLButtonElement | HTMLSpanElement
         {expanded && percent !== undefined ? (
           <span
             className="font-normal"
-            style={{ color: "var(--didact-color-muted-fg)" }}
+            style={{ color: "var(--didact-muted-foreground)" }}
           >
             {Math.max(0, Math.min(100, Math.round(percent)))}% mastery
           </span>

@@ -15,56 +15,76 @@
  *      restyle without touching Tailwind at all (still works if a consumer copies a component
  *      into a project without Tailwind).
  *   2. A `@theme` block that remaps those variables into Tailwind v4 design tokens, so components
- *      can use utilities (`bg-didact-accent`, `rounded-didact-md`, etc.) without fixing values —
+ *      can use utilities (`bg-didact-primary`, `rounded-didact-md`, etc.) without fixing values —
  *      the Tailwind utility still reads the CSS variable from (1).
  *
- * Sources for the value decisions (not invented, traced to research.md P5):
+ * Product decision (2026-08-11): Didact's visual style must faithfully reproduce shadcn/ui's
+ * (owner-rejected look, see docs/shadcn-visual-reference.md). The semantic token SET and OKLCH
+ * VALUES below are shadcn's real defaults (traced to docs/shadcn-visual-reference.md, itself
+ * pulled from ui.shadcn.com/docs/theming and the shadcn-ui/ui repo on 2026-08-11), kept under the
+ * `--didact-*` naming contract so a consumer can still override without touching Tailwind. shadcn
+ * is a visual-style reference here, not a dependency.
+ *
+ * Sources for the a11y-specific additions that are genuinely ours (NOT part of shadcn's token
+ * set, kept on top of it):
  * - Sans-serif typography by default, relative sizes (never fixed px) — British Dyslexia
  *   Association Style Guide 2023.
  * - ~60-70 character-per-line limit — BDA Style Guide 2023.
- * - Status tokens (success/warning/danger) that are NEVER used alone: every component consuming
- *   them must pair them with an icon/text, not color alone (BDA + WCAG 1.4.1 Use of Color).
+ * - Status tokens (success/warning/danger-bg) that are NEVER used alone: every component
+ *   consuming them must pair them with an icon/text, not color alone (BDA + WCAG 1.4.1 Use of
+ *   Color). These are EXTRA tokens on top of shadcn's set, useful for future non-badge
+ *   components — `MasteryBadge` itself does NOT use them (neutral palette only, see
+ *   mastery-badge.tsx).
  * - Target contrast ratios: normal text >=4.5:1 (WCAG 1.4.3), borders/icons/progress bars >=3:1
- *   (WCAG 1.4.11). The OKLCH values below are a reasonable starting point, NOT a verified
- *   contrast audit — pending measurement with a real tool (e.g. axe/Pa11y) before Phase 4, don't
- *   treat it as satisfied just because of the formula.
+ *   (WCAG 1.4.11). The OKLCH values below (both shadcn's and ours) are what shadcn/we ship, NOT a
+ *   verified contrast audit — pending measurement with a real tool (e.g. axe/Pa11y) before Phase
+ *   4, don't treat it as satisfied just because of the formula.
  * - `prefers-reduced-motion` (WCAG 2.3.3 + RF-13): motion durations are overridden here at the
  *   token level; each component remains responsible for respecting them.
  *
- * STATUS: scaffold (Phase 1-3). Reference palette and scales, not audited or frozen — adjustable
- * without breaking the variable NAME contract, which is what `@didact/core`'s components consume.
+ * STATUS: scaffold (Phase 1-3). Token NAMES are the contract `@didact/core`'s components consume;
+ * values now mirror shadcn exactly (see the reference doc) rather than an invented palette.
  */
 
 @import "tailwindcss";
 
 :root {
-  /* Base neutral palette. The consumer overrides these variables to re-brand (just like any
-     project that adopts a shadcn/ui theme). */
-  --didact-color-bg: oklch(100% 0 0);
-  --didact-color-fg: oklch(20% 0 0);
-  --didact-color-muted: oklch(96% 0 0);
-  --didact-color-muted-fg: oklch(40% 0 0);
-  --didact-color-border: oklch(88% 0 0);
-  --didact-color-accent: oklch(45% 0.08 260);
-  --didact-color-accent-fg: oklch(98% 0 0);
+  /* Radius: shadcn's exact default + derived scale (docs/shadcn-visual-reference.md §1). */
+  --didact-radius: 0.625rem;
+  --didact-radius-sm: calc(var(--didact-radius) - 4px);
+  --didact-radius-md: calc(var(--didact-radius) - 2px);
+  --didact-radius-lg: var(--didact-radius);
+  --didact-radius-xl: calc(var(--didact-radius) + 4px);
 
-  /* Status tokens: never used alone (BDA + WCAG 1.4.1) -- always paired with an icon/text in the
-     component that consumes them, never color alone. */
+  /* Base semantic palette — shadcn's exact light OKLCH values (near-monochrome neutral). */
+  --didact-background: oklch(1 0 0);
+  --didact-foreground: oklch(0.145 0 0);
+  --didact-card: oklch(1 0 0);
+  --didact-card-foreground: oklch(0.145 0 0);
+  --didact-popover: oklch(1 0 0);
+  --didact-popover-foreground: oklch(0.145 0 0);
+  --didact-primary: oklch(0.205 0 0);
+  --didact-primary-foreground: oklch(0.985 0 0);
+  --didact-secondary: oklch(0.97 0 0);
+  --didact-secondary-foreground: oklch(0.205 0 0);
+  --didact-muted: oklch(0.97 0 0);
+  --didact-muted-foreground: oklch(0.556 0 0);
+  --didact-accent: oklch(0.97 0 0);
+  --didact-accent-foreground: oklch(0.205 0 0);
+  --didact-destructive: oklch(0.577 0.245 27.325);
+  --didact-border: oklch(0.922 0 0);
+  --didact-input: oklch(0.922 0 0);
+  --didact-ring: oklch(0.708 0 0);
+
+  /* Extra status tokens (ours, not shadcn's): never used alone (BDA + WCAG 1.4.1) -- always
+     paired with an icon/text in the component that consumes them, never color alone. Useful for
+     non-badge components (alerts, toasts); MasteryBadge does NOT use these. */
   --didact-color-success: oklch(45% 0.13 150);
   --didact-color-success-bg: oklch(95% 0.05 150);
   --didact-color-warning: oklch(55% 0.15 80);
   --didact-color-warning-bg: oklch(95% 0.08 80);
   --didact-color-danger: oklch(45% 0.16 25);
   --didact-color-danger-bg: oklch(95% 0.05 25);
-
-  /* Visible focus, WCAG 2.4.7. Never outline:none without this substitute. */
-  --didact-focus-ring: oklch(55% 0.18 260);
-  --didact-focus-ring-width: 2px;
-
-  /* Radii */
-  --didact-radius-sm: 0.25rem;
-  --didact-radius-md: 0.5rem;
-  --didact-radius-lg: 0.75rem;
 
   /* Typography: sans-serif by default (BDA), relative sizes, never fixed px. */
   --didact-font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -78,6 +98,28 @@
   --didact-motion-duration-reduced: 0ms;
 }
 
+.dark {
+  /* shadcn's exact dark OKLCH values (docs/shadcn-visual-reference.md §1). */
+  --didact-background: oklch(0.145 0 0);
+  --didact-foreground: oklch(0.985 0 0);
+  --didact-card: oklch(0.205 0 0);
+  --didact-card-foreground: oklch(0.985 0 0);
+  --didact-popover: oklch(0.205 0 0);
+  --didact-popover-foreground: oklch(0.985 0 0);
+  --didact-primary: oklch(0.922 0 0);
+  --didact-primary-foreground: oklch(0.205 0 0);
+  --didact-secondary: oklch(0.269 0 0);
+  --didact-secondary-foreground: oklch(0.985 0 0);
+  --didact-muted: oklch(0.269 0 0);
+  --didact-muted-foreground: oklch(0.708 0 0);
+  --didact-accent: oklch(0.269 0 0);
+  --didact-accent-foreground: oklch(0.985 0 0);
+  --didact-destructive: oklch(0.704 0.191 22.216);
+  --didact-border: oklch(1 0 0 / 10%);
+  --didact-input: oklch(1 0 0 / 15%);
+  --didact-ring: oklch(0.556 0 0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --didact-motion-duration: var(--didact-motion-duration-reduced);
@@ -85,27 +127,39 @@
 }
 
 /* Tailwind v4 @theme block: exposes the tokens above as Tailwind design tokens (utilities like
-   bg-didact-accent, text-didact-fg, rounded-didact-md) without fixing the value -- Tailwind still
-   reads the CSS variable, which the consumer can override. */
+   bg-didact-primary, text-didact-foreground, rounded-didact-md) without fixing the value --
+   Tailwind still reads the CSS variable, which the consumer can override. */
 @theme {
-  --color-didact-bg: var(--didact-color-bg);
-  --color-didact-fg: var(--didact-color-fg);
-  --color-didact-muted: var(--didact-color-muted);
-  --color-didact-muted-fg: var(--didact-color-muted-fg);
-  --color-didact-border: var(--didact-color-border);
-  --color-didact-accent: var(--didact-color-accent);
-  --color-didact-accent-fg: var(--didact-color-accent-fg);
+  --color-didact-background: var(--didact-background);
+  --color-didact-foreground: var(--didact-foreground);
+  --color-didact-card: var(--didact-card);
+  --color-didact-card-foreground: var(--didact-card-foreground);
+  --color-didact-popover: var(--didact-popover);
+  --color-didact-popover-foreground: var(--didact-popover-foreground);
+  --color-didact-primary: var(--didact-primary);
+  --color-didact-primary-foreground: var(--didact-primary-foreground);
+  --color-didact-secondary: var(--didact-secondary);
+  --color-didact-secondary-foreground: var(--didact-secondary-foreground);
+  --color-didact-muted: var(--didact-muted);
+  --color-didact-muted-foreground: var(--didact-muted-foreground);
+  --color-didact-accent: var(--didact-accent);
+  --color-didact-accent-foreground: var(--didact-accent-foreground);
+  --color-didact-destructive: var(--didact-destructive);
+  --color-didact-border: var(--didact-border);
+  --color-didact-input: var(--didact-input);
+  --color-didact-ring: var(--didact-ring);
+
   --color-didact-success: var(--didact-color-success);
   --color-didact-success-bg: var(--didact-color-success-bg);
   --color-didact-warning: var(--didact-color-warning);
   --color-didact-warning-bg: var(--didact-color-warning-bg);
   --color-didact-danger: var(--didact-color-danger);
   --color-didact-danger-bg: var(--didact-color-danger-bg);
-  --color-didact-focus-ring: var(--didact-focus-ring);
 
   --radius-didact-sm: var(--didact-radius-sm);
   --radius-didact-md: var(--didact-radius-md);
   --radius-didact-lg: var(--didact-radius-lg);
+  --radius-didact-xl: var(--didact-radius-xl);
 
   --font-didact-sans: var(--didact-font-sans);
 }

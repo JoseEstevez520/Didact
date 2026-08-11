@@ -30,25 +30,34 @@ identified:
    restyle, whether or not they use Tailwind (if someone copies a component into a project without
    Tailwind, the variables still work).
 2. **A `@theme` block** that remaps those variables into Tailwind v4 design tokens
-   (`bg-didact-accent`, `rounded-didact-md`, etc.), so `@didact/core`'s components can be written
+   (`bg-didact-primary`, `rounded-didact-md`, etc.), so `@didact/core`'s components can be written
    with Tailwind utilities without fixing values — Tailwind still reads the CSS variable from (1).
 
 ## Contents of `src/tokens.css`
 
-- Base neutral palette (background, text, borders, accent).
-- **Status tokens** (success/warning/danger) explicitly documented as "never used alone" — every
-  component consuming them must pair them with an icon/text, never rely on color alone (British
-  Dyslexia Association Style Guide 2023 + WCAG 1.4.1 Use of Color).
-- Visible focus ring (WCAG 2.4.7).
-- **Sans-serif by default** typography, relative sizes (never fixed `px`), a ~60-70
-  character-per-line limit (BDA Style Guide 2023).
-- Centralized motion duration, overridden under `prefers-reduced-motion` (WCAG 2.3.3 + RF-13).
+Product decision (2026-08-11): Didact's visual style must faithfully reproduce shadcn/ui's (owner
+rejected the previous, invented look). The token set and OKLCH values below now mirror shadcn's
+real defaults exactly (`docs/shadcn-visual-reference.md`), under the same `--didact-*` naming
+contract:
 
-**Honest caveat (same standard as `research.md`):** the concrete OKLCH values are a reasonable
-starting point traced to `research.md` P5's *criteria* (contrast ≥4.5:1 for text, ≥3:1 for
-borders/icons), but **they are not audited with a real tool** (axe, Pa11y, etc.) yet. Don't
-consider contrast satisfied just because the formula suggests it — verify it in Phase 4 before
-freezing the palette.
+- shadcn's full semantic set: `background`/`foreground`, `card`, `popover`, `primary`,
+  `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring` (+ `-foreground` pairs),
+  plus a `.dark` block with shadcn's exact dark values and the `radius`/`radius-sm/md/lg/xl` scale.
+- **Extra status tokens** (`success`/`warning`/`danger-bg`) — NOT part of shadcn's set, kept as
+  EXTRA tokens for non-badge components, explicitly documented as "never used alone": every
+  component consuming them must pair them with an icon/text, never rely on color alone (British
+  Dyslexia Association Style Guide 2023 + WCAG 1.4.1 Use of Color). `MasteryBadge` does not use
+  these; it's neutral-palette only, like shadcn's Badge.
+- **Sans-serif by default** typography, relative sizes (never fixed `px`), a ~60-70
+  character-per-line limit (BDA Style Guide 2023) — genuinely ours, not part of shadcn's tokens.
+- Centralized motion duration, overridden under `prefers-reduced-motion` (WCAG 2.3.3 + RF-13) —
+  also ours.
+
+**Honest caveat (same standard as `research.md`):** shadcn's own OKLCH values are used verbatim,
+but the a11y-specific additions we layered on top (status tokens) are a reasonable starting point
+traced to `research.md` P5's *criteria* (contrast ≥4.5:1 for text, ≥3:1 for borders/icons) and
+**are not audited with a real tool** (axe, Pa11y, etc.) yet. Don't consider contrast satisfied just
+because the formula suggests it — verify it in Phase 4 before freezing the palette.
 
 ## Dependencies
 

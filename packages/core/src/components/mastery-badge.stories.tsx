@@ -19,6 +19,10 @@ const meta = {
       control: "select",
       options: ["beginner", "intermediate", "advanced"],
     },
+    variant: {
+      control: "select",
+      options: ["default", "secondary", "outline"],
+    },
     percent: { control: { type: "range", min: 0, max: 100 } },
   },
 } satisfies Meta<typeof MasteryBadge>;
@@ -60,8 +64,8 @@ export const Interactive: Story = {
       description: {
         story:
           "WCAG 2.4.7 (Focus Visible) + 2.1.1 (Keyboard): a real <button>, reachable by Tab, " +
-          "toggling aria-pressed/aria-expanded, with a visible focus ring drawn from " +
-          "--didact-focus-ring. Try tabbing to it instead of clicking.",
+          "toggling aria-pressed/aria-expanded, with shadcn's 3px/50%-opacity focus ring drawn " +
+          "from --didact-ring. Try tabbing to it instead of clicking.",
       },
     },
   },
@@ -77,4 +81,26 @@ export const AllLevels: Story = {
       <MasteryBadge level="advanced" percent={97} />
     </div>
   ),
+};
+
+export const AllVariants: Story = {
+  name: "All variants (shadcn Badge parity)",
+  args: { level: "beginner" },
+  render: () => (
+    <div style={{ display: "flex", gap: "0.5rem" }}>
+      <MasteryBadge level="beginner" variant="default" percent={12} />
+      <MasteryBadge level="beginner" variant="secondary" percent={12} />
+      <MasteryBadge level="beginner" variant="outline" percent={12} />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The `variant` prop overrides the level-derived default so any level can render in " +
+          "any of shadcn's three neutral looks (default/secondary/outline) -- the customization " +
+          "hook required by docs/shadcn-visual-reference.md §3.2.",
+      },
+    },
+  },
 };
