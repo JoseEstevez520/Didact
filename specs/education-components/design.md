@@ -7,9 +7,11 @@
 > `requirements.md` §0 (product owner) were already closed before Phase 1 and are not reopened
 > here — this document only verified their technical viability and now records the result.
 > Anything still genuinely open is written as an explicit **Phase 3 open item**, not left marked as
-> undecided — `research.md` is honest about what it could not verify (no executed React 19 smoke
-> test, no live `shadcn diff` test against a third-party registry), and this document does not
-> upgrade those into false certainties just to appear fully closed.
+> undecided — `research.md` is honest about what it could not verify at the time (no executed
+> React 19 smoke test, no live `shadcn diff` test against a third-party registry), and this
+> document does not upgrade those into false certainties just to appear fully closed. **Update
+> (2026-08-11): the React 19 smoke test has since been executed — see §2 for the result** (PASS);
+> the `shadcn diff` gap in §3 is still open.
 
 ## 0. Framework: core vs. adapter
 
@@ -74,17 +76,8 @@ of doing it by hand in `openui-adoption.md` §1: 1500+ lines of tests to shield 
 **Resolved (`requirements.md` §6.2, `research.md` Question 2): Radix UI is layer 1's default.**
 Rationale: Radix is the most widely adopted headless primitives library, which maximizes reuse of
 existing patterns and examples — the whole point of building layer 1 on a proven headless
-foundation instead of a custom one (`requirements.md` §0.2). The evidence (`research.md` Q2) is a
-peer-dependency and changelog comparison, not an executed project, and it is reported at that
-confidence level:
+foundation instead of a custom one (`requirements.md` §0.2).
 
-- Radix UI's `latest` npm packages today declare `peerDependencies.react` pinned to
-  `^18.0.0 || ^19.0.0-rc.1` — not `^19.0.0` — so a plain `npm install` on stable React 19 needs
-  `--legacy-peer-deps`/`--force` (confirmed by shadcn's own docs and `radix-ui/primitives#2909`).
-  **This friction is documented here as part of the consumer contract**, not hidden: consumers
-  installing with npm on React 19 must pass `--legacy-peer-deps` (or use pnpm/yarn, which don't
-  enforce the peer range as strictly) until Radix promotes its React-19-clean `v1.2.0` (in RC as
-  of the research date) to `latest`.
 - Base UI (`@base-ui/react`, MUI) already declares a clean `^17 || ^18 || ^19` peer range and comes
   from the team that migrated MUI to React 19. It is **not** chosen as the default now because it
   has less adoption/precedent than Radix, which underlies a large share of today's popular React
@@ -92,12 +85,30 @@ confidence level:
   it has more production usage. React Aria/Ariakit are not adopted as the default layer: React
   Aria shares Radix's peer-dep friction without Radix's wider ecosystem precedent, and Ariakit
   lacks that same precedent.
-- **Open item for Phase 3, not a hidden decision:** none of the above is an executed smoke test.
-  `research.md` Q2 is explicit that no real React 19 project was run against any candidate — the
-  evidence is changelog + peer-dependency-range analysis. Phase 3 must run an actual smoke test
-  (focus management, portals, dialog behavior) against stable React 19 with Radix before treating
-  this as functionally verified, not just contractually documented. Do not claim in any later
-  document that this smoke test happened until it has.
+- **Smoke test executed (2026-08-11, throwaway Vite app outside this workspace, not committed):
+  PASS.** A minimal Vite + React 19 app installed `@radix-ui/react-dialog` and rendered a
+  controlled `Dialog.Root`/`Trigger`/`Portal`/`Content`/`Close`, exercising exactly what was
+  flagged as unverified — focus management, the Portal, and open/close state. Both a `vite build`
+  and a jsdom/vitest + Testing Library test (mount, open via trigger click asserting the portaled
+  content appears with zero `console.error` calls, and close via the close button) passed cleanly.
+  Versions actually installed: **React 19.2.0**, **`@radix-ui/react-dialog` 1.1.23** (npm's
+  `latest` at test time), Vite 6.4.3, Vitest 2.1.9.
+  - **The previously-documented `--legacy-peer-deps` friction did NOT reproduce**: a plain
+    `npm install` (no flags) resolved and installed cleanly, with zero `ERESOLVE`/peer warnings
+    (`npm ls` confirms `react@19.2.0` deduped throughout the Radix dependency tree). Inspecting the
+    installed package directly shows why: `@radix-ui/react-dialog@1.1.23`'s own
+    `peerDependencies.react` is now `"^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"` — Radix has
+    since added a clean, non-RC `^19.0` range to its `1.1.x` line (not only via the `1.2.0` RC that
+    `research.md` Q2 pointed to), so the friction that motivated documenting
+    `--legacy-peer-deps`/`--force` as a consumer-facing caveat is resolved upstream as of this
+    version. **Caveat kept, not deleted, because it can still apply**: consumers pinned to an older
+    Radix version, or installing a different Radix package that hasn't yet picked up the same
+    peer-range fix, may still hit the original RC-only peer range — so the mitigation
+    (`--legacy-peer-deps`/`--force` on npm, or pnpm/yarn's laxer peer enforcement) stays documented
+    as a fallback, just no longer presented as something every consumer will necessarily hit.
+  - Full method, package.json, and test file live (temporarily, gitignored/throwaway) at
+    `C:\Users\sonde\AppData\Local\Temp\didact-radix-smoke` for anyone who wants to reproduce it;
+    it is intentionally not committed to this repo.
 - RNF-5 applies regardless of the outcome: Radix is pinned to an exact version with a drift test,
   since the copy-paste distribution model protects the copied components, not this kind of
   external behavioral dependency (`design.md` §9).

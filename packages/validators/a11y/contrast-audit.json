@@ -1,0 +1,147 @@
+{
+  "generatedAt": "2026-08-11T11:10:41.856Z",
+  "method": "OKLCH -> OKLab -> linear sRGB (Ottosson matrices) -> gamma sRGB; alpha composited over --didact-background in gamma space (CSS Compositing 'over' operator); WCAG 2.1 relative luminance on the composited gamma value; ratio = (L1+0.05)/(L2+0.05).",
+  "source": "packages/theme/src/tokens.css",
+  "summary": {
+    "totalPairs": 12,
+    "textPairs": 8,
+    "nonTextPairs": 4,
+    "allTextPass": true,
+    "allNonTextPass": false,
+    "allPass": false
+  },
+  "results": [
+    {
+      "theme": "light",
+      "pair": "foreground / background",
+      "kind": "text",
+      "foregroundValue": "oklch(0.145 0 0)",
+      "backgroundValue": "oklch(1 0 0)",
+      "ratio": 19.793,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "dark",
+      "pair": "foreground / background",
+      "kind": "text",
+      "foregroundValue": "oklch(0.985 0 0)",
+      "backgroundValue": "oklch(0.145 0 0)",
+      "ratio": 18.958,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "light",
+      "pair": "primary-foreground / primary",
+      "kind": "text",
+      "foregroundValue": "oklch(0.985 0 0)",
+      "backgroundValue": "oklch(0.205 0 0)",
+      "ratio": 17.157,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "dark",
+      "pair": "primary-foreground / primary",
+      "kind": "text",
+      "foregroundValue": "oklch(0.205 0 0)",
+      "backgroundValue": "oklch(0.922 0 0)",
+      "ratio": 14.225,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "light",
+      "pair": "secondary-foreground / secondary",
+      "kind": "text",
+      "foregroundValue": "oklch(0.205 0 0)",
+      "backgroundValue": "oklch(0.97 0 0)",
+      "ratio": 16.424,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "dark",
+      "pair": "secondary-foreground / secondary",
+      "kind": "text",
+      "foregroundValue": "oklch(0.985 0 0)",
+      "backgroundValue": "oklch(0.269 0 0)",
+      "ratio": 14.477,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "light",
+      "pair": "muted-foreground / background",
+      "kind": "text",
+      "foregroundValue": "oklch(0.556 0 0)",
+      "backgroundValue": "oklch(1 0 0)",
+      "ratio": 4.732,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "dark",
+      "pair": "muted-foreground / background",
+      "kind": "text",
+      "foregroundValue": "oklch(0.708 0 0)",
+      "backgroundValue": "oklch(0.145 0 0)",
+      "ratio": 7.633,
+      "threshold": 4.5,
+      "pass": true,
+      "outOfGamut": false
+    },
+    {
+      "theme": "light",
+      "pair": "border / background",
+      "kind": "non-text",
+      "foregroundValue": "oklch(0.922 0 0)",
+      "backgroundValue": "oklch(1 0 0)",
+      "ratio": 1.259,
+      "threshold": 3,
+      "pass": false,
+      "outOfGamut": false
+    },
+    {
+      "theme": "dark",
+      "pair": "border / background",
+      "kind": "non-text",
+      "foregroundValue": "oklch(1 0 0 / 10%)",
+      "backgroundValue": "oklch(0.145 0 0)",
+      "ratio": 1.252,
+      "threshold": 3,
+      "pass": false,
+      "outOfGamut": false
+    },
+    {
+      "theme": "light",
+      "pair": "ring / background",
+      "kind": "non-text",
+      "foregroundValue": "oklch(0.708 0 0)",
+      "backgroundValue": "oklch(1 0 0)",
+      "ratio": 2.593,
+      "threshold": 3,
+      "pass": false,
+      "outOfGamut": false
+    },
+    {
+      "theme": "dark",
+      "pair": "ring / background",
+      "kind": "non-text",
+      "foregroundValue": "oklch(0.556 0 0)",
+      "backgroundValue": "oklch(0.145 0 0)",
+      "ratio": 4.183,
+      "threshold": 3,
+      "pass": true,
+      "outOfGamut": false
+    }
+  ]
+}
