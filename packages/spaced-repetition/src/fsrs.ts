@@ -14,8 +14,8 @@
  * module gets implemented):
  *
  *   (a) Reimplement only the FSRS scheduler with default weights (no optimizer), copied as our
- *       own code — consistent with the shadcn model (RF-15), but is non-trivial numerical
- *       verification work (19 weights, stability/difficulty formulas).
+ *       own code — consistent with Didact's registry-based copy-paste model (RF-15), but is
+ *       non-trivial numerical verification work (19 weights, stability/difficulty formulas).
  *       References: https://github.com/open-spaced-repetition/fsrs4anki ,
  *       https://borretti.me/article/implementing-fsrs-in-100-lines
  *

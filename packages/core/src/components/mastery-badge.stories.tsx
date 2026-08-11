@@ -64,7 +64,7 @@ export const Interactive: Story = {
       description: {
         story:
           "WCAG 2.4.7 (Focus Visible) + 2.1.1 (Keyboard): a real <button>, reachable by Tab, " +
-          "toggling aria-pressed/aria-expanded, with shadcn's 3px/50%-opacity focus ring drawn " +
+          "toggling aria-pressed/aria-expanded, with Didact's 3px/50%-opacity focus ring drawn " +
           "from --didact-ring. Try tabbing to it instead of clicking.",
       },
     },
@@ -84,7 +84,7 @@ export const AllLevels: Story = {
 };
 
 export const AllVariants: Story = {
-  name: "All variants (shadcn Badge parity)",
+  name: "All variants",
   args: { level: "beginner" },
   render: () => (
     <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -98,8 +98,8 @@ export const AllVariants: Story = {
       description: {
         story:
           "The `variant` prop overrides the level-derived default so any level can render in " +
-          "any of shadcn's three neutral looks (default/secondary/outline) -- the customization " +
-          "hook required by docs/shadcn-visual-reference.md §3.2.",
+          "any of Didact's three neutral looks (default/secondary/outline) -- the customization " +
+          "hook described in docs/design-principles.md §2.",
       },
     },
   },

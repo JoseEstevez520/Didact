@@ -9,13 +9,11 @@ import { cn } from "../lib/cn.js";
  * design.md §5. It is named `MasteryBadge` in that same diagram (design.md §2), which is why this
  * component -- not an arbitrary generic Badge -- was picked as the proof.
  *
- * Visual style (product decision, 2026-08-11): must faithfully reproduce shadcn/ui's Badge
- * (owner-rejected the previous look). Anatomy, class list, and variants below are taken verbatim
- * from `docs/shadcn-visual-reference.md` §2 (itself pulled from `shadcn-ui/ui`'s
- * `apps/v4/registry/new-york-v4/ui/badge.tsx` on 2026-08-11): pill shape (`rounded-full`), tiny
- * padding (`px-2 py-0.5`), `text-xs font-medium`, transparent border, and a 3px/50%-opacity focus
- * ring -- not the old 2px outline+offset. shadcn is a visual-style reference here, not a
- * dependency.
+ * Visual style (product decision, 2026-08-11): pill shape (`rounded-full`), tiny padding
+ * (`px-2 py-0.5`), `text-xs font-medium`, transparent border, and a 3px/50%-opacity focus ring --
+ * not the old 2px outline+offset (owner-rejected the previous look). Anatomy, class list, and
+ * variants below implement Didact's neutral visual language, see `docs/visual-language.md`
+ * (shape/scale and focus sections).
  *
  * Layer 2 (styled layer, design.md §2): Tailwind v4 utilities + `cva` variants over
  * `@didact/theme`'s CSS custom properties (`--didact-primary`, `--didact-secondary`,
@@ -27,28 +25,29 @@ import { cn } from "../lib/cn.js";
  *
  * Accessibility (RF-12, "not color-only"): every level renders its own text label
  * (Beginner/Intermediate/Advanced), never only a color swatch -- WCAG 1.4.1 Use of Color. The
- * palette itself is also neutral only (no green/orange status colors on the badge, per the shadcn
- * reference's Badge variants), so level is never implied by hue either. The optional `interactive`
- * mode renders a native `<button>` (keyboard-operable, focusable, with `aria-pressed`) instead of
- * a `<div onClick>`, and its focus-visible style reads `--didact-ring` (WCAG 2.4.7).
+ * palette itself is also neutral only (no green/orange status colors on the badge, per
+ * `docs/visual-language.md`'s badge guidance), so level is never implied by hue either. The
+ * optional `interactive` mode renders a native `<button>` (keyboard-operable, focusable, with
+ * `aria-pressed`) instead of a `<div onClick>`, and its focus-visible style reads `--didact-ring`
+ * (WCAG 2.4.7).
  *
  * Styling reads the tokens through Tailwind v4's `[type:var(--x)]` arbitrary-value syntax
  * (e.g. `bg-[color:var(--didact-primary)]`) instead of named theme-scale utilities like
  * `bg-didact-primary`. This was a deliberate correction made during the Phase 3 registry copy
  * proof (ROADMAP.md block F): `@didact/theme`'s own `@theme` block (which registers those named
  * utilities) is only guaranteed present for a consumer who imports the `@didact/theme` package
- * directly. A consumer who instead copies this component through the registry only receives the
- * raw `--didact-*` custom properties via the item's `cssVars.theme` (verified empirically --
+ * directly. A consumer who instead copies this component through Didact's registry only receives
+ * the raw `--didact-*` custom properties via the item's `cssVars.theme` (verified empirically --
  * `packages/registry/registry.json`'s comment on this item has the detail), not necessarily a
  * matching `@theme` alias. Reading the raw variable directly works in both cases and removes the
- * dependency on shadcn's `cssVars` auto-aliasing heuristic (which only auto-generates a
+ * dependency on the registry CLI's `cssVars` auto-aliasing heuristic (which only auto-generates a
  * `--color-*` alias for values that look like colors, and does nothing for `--radius-*`/
- * `--font-*`-shaped tokens -- confirmed by inspecting its output, not assumed).
+ * `--font-*`-shaped tokens -- confirmed by inspecting its output, not assumed; see
+ * `packages/registry/README.md` for the full empirical writeup).
  *
- * Customization (docs/shadcn-visual-reference.md §3, "the shadcn model we must replicate"): this
- * component accepts `variant` (a named `cva` look, like shadcn) and `className`, merged LAST via
- * `cn()` (`clsx` + `tailwind-merge`, see `../lib/cn.ts`) so a single instance can be restyled
- * inline without fighting the base classes.
+ * Customization (see `docs/design-principles.md` §2-3): this component accepts `variant` (a named
+ * `cva` look) and `className`, merged LAST via `cn()` (`clsx` + `tailwind-merge`, see
+ * `../lib/cn.ts`) so a single instance can be restyled inline without fighting the base classes.
  */
 
 const masteryLevels = ["beginner", "intermediate", "advanced"] as const;
@@ -117,10 +116,10 @@ export interface MasteryBadgeProps
   /** Mastery tier this badge represents. Always rendered as text, never color-only. */
   level: MasteryLevel;
   /**
-   * shadcn-style visual variant (`default` | `secondary` | `outline`). Defaults from `level`
+   * Named visual variant (`default` | `secondary` | `outline`). Defaults from `level`
    * (beginner -> secondary, intermediate -> default, advanced -> outline) but can be set
-   * explicitly to override that mapping -- this is the customization hook shadcn's Badge exposes,
-   * see docs/shadcn-visual-reference.md §3.2.
+   * explicitly to override that mapping -- this is the customization hook described in
+   * `docs/design-principles.md` §2.
    */
   variant?: "default" | "secondary" | "outline";
   /**

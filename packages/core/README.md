@@ -28,16 +28,15 @@ layer 2 of neutral theming and a layer 1 of accessible primitives.
 
 - **Tailwind v4 IS the core's styling layer** — a product decision by Jose (2026-08-11, see
   `research/decisions.md` D1). `specs/education-components/research.md` P3 concluded, with
-  evidence, that shadcn/ui's distribution mechanism **does not require** Tailwind technically (the
+  evidence, that Didact's distribution mechanism **does not require** Tailwind technically (the
   `tailwind` field in `registry-item.json` is deprecated in favor of `cssVars.theme`) — that
   conclusion still stands and is not rewritten. What changes is that Jose chooses to use Tailwind
-  anyway, for visual consistency and as a style reference aligned with shadcn/ui, not because the
-  mechanism forced it. In practice: components are styled with **Tailwind + `cva`**
+  anyway, for visual consistency with Didact's own visual language (see `docs/visual-language.md`),
+  not because the mechanism forced it. In practice: components are styled with **Tailwind + `cva`**
   (`class-variance-authority`) over `@didact/theme`'s tokens (CSS custom properties + Tailwind v4
   `@theme` block) — see that package's README for the detail of the two theming levels.
-- **Radix UI as the default layer 1**, aligned with shadcn/ui, documenting the peer-dependency
-  friction with stable React 19 (research.md P2) and watching Base UI as a cleaner alternative in
-  the medium term.
+- **Radix UI as the default layer 1**, documenting the peer-dependency friction with stable
+  React 19 (research.md P2) and watching Base UI as a cleaner alternative in the medium term.
 - Any external dependency of this layer that isn't copied alongside the component (Radix,
   Tailwind, `cva`) is pinned to an exact version with a drift test (RNF-5) — see
   `@didact/validators/drift`.
@@ -64,8 +63,8 @@ This reverses any earlier "out of v1" framing:
 
 - `@didact/theme` is layer 2: this package consumes it as a dependency for its Tailwind/CSS custom
   property tokens, never redefining colors or radii on its own.
-- Each component in this package is described as an entry in `@didact/registry` for the
-  shadcn/ui-style distribution mechanism (RF-15).
+- Each component in this package is described as an entry in `@didact/registry` for Didact's
+  registry-based distribution mechanism (RF-15).
 - `@didact/validators` provides the data (a11y, pedagogical evidence, schema, drift) against which
   each component is validated before being published in the registry.
 - The SkillNet adapter (`adapters/skillnet/`, outside this monorepo) consumes components from this

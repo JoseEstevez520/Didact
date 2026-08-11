@@ -5,7 +5,7 @@ import { defineConfig } from "tsup";
  *
  * This bundles the package's TypeScript/TSX into a real `dist/` for anyone who imports
  * `@didact/core` as an npm dependency (e.g. this monorepo's own apps/docs Storybook, or the
- * registry item's build step). It does NOT replace the shadcn-style copy-paste distribution
+ * registry item's build step). It does NOT replace Didact's copy-paste distribution
  * (RF-15): a consumer using the registry CLI copies `src/components/*.tsx` directly, never
  * `dist/`. `dist/` exists only so this package is a normal, buildable workspace dependency for
  * Didact's own tooling.

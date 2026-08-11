@@ -17,12 +17,12 @@
  * IMPORTANT: the real implementation of this layer's components is Phase 4 of `ROADMAP.md`
  * (monorepo root), after the Phase 3 scaffold this file lives in. This package exists today only
  * to fix the package/name contract and the entry point that will consume the registry mechanism
- * (`@didact/registry`) and the shadcn/ui-style distribution model (`requirements.md` RF-15).
+ * (`@didact/registry`) and Didact's registry-based distribution model (`requirements.md` RF-15).
  *
  * Decisions that ARE closed for when this layer gets implemented:
  * - Tailwind v4 IS the core's styling layer — a product decision by Jose (2026-08-11, see
  *   `research/decisions.md` D1), even though `research.md` P3 concluded (and it's still true)
- *   that shadcn/ui's registry mechanism doesn't technically require it. Styled with Tailwind +
+ *   that Didact's registry mechanism doesn't technically require it. Styled with Tailwind +
  *   `cva` over `@didact/theme`'s tokens; see that package for the detail of the two levels
  *   (plain CSS custom properties + `@theme` block).
  * - Broad scope, not a "minimal v1": QTI's graphical/image-based and numeric/Likert interactions

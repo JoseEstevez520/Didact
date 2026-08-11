@@ -1,5 +1,5 @@
 {
-  "$comment": "RNF-5 placeholder (requirements.md): any external dependency that is NOT copied alongside the component (unlike RF-15's copy-paste model) must be pinned to an EXACT version with a documented reason + a drift test. Same standard openui-adoption.md already required for @openuidev/react-lang, whose non-compliance was precisely the problem that motivated the shadcn model (requirements.md 0.2).",
+  "$comment": "RNF-5 placeholder (requirements.md): any external dependency that is NOT copied alongside the component (unlike RF-15's copy-paste model) must be pinned to an EXACT version with a documented reason + a drift test. Same standard openui-adoption.md already required for @openuidev/react-lang, whose non-compliance was precisely the problem that motivated Didact's registry-based distribution model (requirements.md 0.2).",
   "schema": {
     "dependency": "npm package name, string",
     "exactVersion": "pinned exact version (no ^ or ~), string",

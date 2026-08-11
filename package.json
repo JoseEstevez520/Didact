@@ -2,7 +2,7 @@
   "name": "didact",
   "private": true,
   "version": "0.0.0",
-  "description": "Didact -- general-purpose education components library, distributed in the shadcn model (registry + copy-paste).",
+  "description": "Didact -- general-purpose education components library, distributed as a registry with copy-paste ownership.",
   "license": "MIT",
   "packageManager": "pnpm@11.9.0",
   "engines": {

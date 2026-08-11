@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/JoseEstevez520/Didact/packages/validators/schema/component.schema.json",
   "title": "DidactComponentDescriptor",
-  "description": "Declarative schema skeleton for describing a Didact component, inspired by H5P semantics.json's dual pattern (research.md 9.2): the same document is used to generate prop documentation/editor AND to validate at runtime. This is not shadcn's registry-item.json (that lives in @didact/registry) -- this schema describes the component's own PROPS, with the RNF-4 detail (props that may arrive incomplete in streaming contexts).",
+  "description": "Declarative schema skeleton for describing a Didact component, inspired by H5P semantics.json's dual pattern (research.md 9.2): the same document is used to generate prop documentation/editor AND to validate at runtime. This is not the registry's own registry-item.json (that lives in @didact/registry) -- this schema describes the component's own PROPS, with the RNF-4 detail (props that may arrive incomplete in streaming contexts).",
   "type": "object",
   "required": ["name", "requirementId", "props"],
   "properties": {

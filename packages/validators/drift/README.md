@@ -4,8 +4,8 @@ Drift control for non-copied external dependencies — RNF-5 in `requirements.md
 
 ## Why it exists
 
-Didact's distribution model (RF-15, shadcn/ui-style) protects the consumer from breaking due to a
-dependency update **for the code it copies**. But not every component is 100% copy-paste: layer 1
+Didact's distribution model (RF-15, registry-based copy-paste) protects the consumer from breaking
+due to a dependency update **for the code it copies**. But not every component is 100% copy-paste: layer 1
 of the architecture (`design.md` §2, "accessible primitives," candidate Radix UI) is a real
 dependency, not code copied alongside the component. `design.md` §9 states this explicitly: *"the
 copy-paste model protects the components, not their internal behavioral dependencies."*
@@ -13,8 +13,8 @@ copy-paste model protects the components, not their internal behavioral dependen
 **RNF-5** requires that any dependency in that situation be pinned to an **exact version** (no
 `^`/`~` range) and carry a **drift test** — the same standard `openui-adoption.md` already
 required for `@openuidev/react-lang`, whose failure to meet it (an external dependency breaking on
-every minor version) is precisely the problem that motivated adopting the shadcn model in the
-first place (`requirements.md` §0.2).
+every minor version) is precisely the problem that motivated adopting Didact's registry-based
+distribution model in the first place (`requirements.md` §0.2).
 
 ## The Radix/React 19 caveat (research.md P2)
 

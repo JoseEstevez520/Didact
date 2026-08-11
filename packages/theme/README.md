@@ -15,13 +15,13 @@ having a real implementation.
 
 ## Product decision: Tailwind v4, yes, despite research.md P3
 
-`specs/education-components/research.md` Question 3 concluded, with evidence, that shadcn/ui's
+`specs/education-components/research.md` Question 3 concluded, with evidence, that Didact's
 distribution mechanism **does not require** Tailwind (the `tailwind` field in
 `registry-item.json` is deprecated in favor of `cssVars.theme`) — that technical conclusion still
 stands and is not rewritten. What changes is a **later product decision** (Jose, 2026-08-11, see
 `../../research/decisions.md` D1): Didact adopts **Tailwind v4** (CSS-first: `@theme`, OKLCH
-colors) as its real styling layer, for visual consistency and as a style reference aligned with
-shadcn/ui — not because the registry mechanism required it.
+colors) as its real styling layer, for visual consistency with Didact's own visual language (see
+`docs/visual-language.md`) — not because the registry mechanism required it.
 
 `src/tokens.css` exposes the theme in **two levels** precisely to not lose the advantage P3
 identified:
@@ -35,29 +35,30 @@ identified:
 
 ## Contents of `src/tokens.css`
 
-Product decision (2026-08-11): Didact's visual style must faithfully reproduce shadcn/ui's (owner
-rejected the previous, invented look). The token set and OKLCH values below now mirror shadcn's
-real defaults exactly (`docs/shadcn-visual-reference.md`), under the same `--didact-*` naming
-contract:
+Product decision (2026-08-11): Didact's visual style is a neutral, low-chroma, high-contrast
+system (owner rejected the previous, invented look). The token set and OKLCH values below
+implement that visual language exactly as specified (`docs/visual-language.md`), under the same
+`--didact-*` naming contract:
 
-- shadcn's full semantic set: `background`/`foreground`, `card`, `popover`, `primary`,
-  `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring` (+ `-foreground` pairs),
-  plus a `.dark` block with shadcn's exact dark values and the `radius`/`radius-sm/md/lg/xl` scale.
-- **Extra status tokens** (`success`/`warning`/`danger-bg`) — NOT part of shadcn's set, kept as
-  EXTRA tokens for non-badge components, explicitly documented as "never used alone": every
-  component consuming them must pair them with an icon/text, never rely on color alone (British
-  Dyslexia Association Style Guide 2023 + WCAG 1.4.1 Use of Color). `MasteryBadge` does not use
-  these; it's neutral-palette only, like shadcn's Badge.
+- The full semantic set: `background`/`foreground`, `card`, `popover`, `primary`, `secondary`,
+  `muted`, `accent`, `destructive`, `border`, `input`, `ring` (+ `-foreground` pairs), plus a
+  `.dark` block with the matching dark values and the `radius`/`radius-sm/md/lg/xl` scale.
+- **Extra status tokens** (`success`/`warning`/`danger-bg`) — not part of that base semantic set,
+  kept as EXTRA tokens for non-badge components, explicitly documented as "never used alone":
+  every component consuming them must pair them with an icon/text, never rely on color alone
+  (British Dyslexia Association Style Guide 2023 + WCAG 1.4.1 Use of Color). `MasteryBadge` does
+  not use these; it's neutral-palette only, per `docs/visual-language.md`'s Badge guidance.
 - **Sans-serif by default** typography, relative sizes (never fixed `px`), a ~60-70
-  character-per-line limit (BDA Style Guide 2023) — genuinely ours, not part of shadcn's tokens.
+  character-per-line limit (BDA Style Guide 2023) — genuinely ours.
 - Centralized motion duration, overridden under `prefers-reduced-motion` (WCAG 2.3.3 + RF-13) —
   also ours.
 
-**Honest caveat (same standard as `research.md`):** shadcn's own OKLCH values are used verbatim,
-but the a11y-specific additions we layered on top (status tokens) are a reasonable starting point
-traced to `research.md` P5's *criteria* (contrast ≥4.5:1 for text, ≥3:1 for borders/icons) and
-**are not audited with a real tool** (axe, Pa11y, etc.) yet. Don't consider contrast satisfied just
-because the formula suggests it — verify it in Phase 4 before freezing the palette.
+**Honest caveat (same standard as `research.md`):** the base OKLCH values were calibrated against
+a well-established neutral design reference and are used verbatim, but the a11y-specific additions
+we layered on top (status tokens) are a reasonable starting point traced to `research.md` P5's
+*criteria* (contrast ≥4.5:1 for text, ≥3:1 for borders/icons) and **are not audited with a real
+tool** (axe, Pa11y, etc.) yet. Don't consider contrast satisfied just because the formula suggests
+it — verify it in Phase 4 before freezing the palette.
 
 ## Dependencies
 

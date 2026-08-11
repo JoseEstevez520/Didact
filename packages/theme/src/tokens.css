@@ -8,7 +8,7 @@
  *
  * Product decision (2026-08-11, see ../../../research/decisions.md D1): Tailwind v4
  * (CSS-first, `@theme`, OKLCH) is the styling layer Jose chose, even though
- * `specs/education-components/research.md` P3 concluded that shadcn/ui's distribution mechanism
+ * `specs/education-components/research.md` P3 concluded that Didact's distribution mechanism
  * doesn't technically require it. That's why this file exposes the theme at TWO levels:
  *
  *   1. Plain CSS custom properties (`:root { --didact-* }`) — the level a consumer overrides to
@@ -18,45 +18,45 @@
  *      can use utilities (`bg-didact-primary`, `rounded-didact-md`, etc.) without fixing values —
  *      the Tailwind utility still reads the CSS variable from (1).
  *
- * Product decision (2026-08-11): Didact's visual style must faithfully reproduce shadcn/ui's
- * (owner-rejected look, see docs/shadcn-visual-reference.md). The semantic token SET and OKLCH
- * VALUES below are shadcn's real defaults (traced to docs/shadcn-visual-reference.md, itself
- * pulled from ui.shadcn.com/docs/theming and the shadcn-ui/ui repo on 2026-08-11), kept under the
- * `--didact-*` naming contract so a consumer can still override without touching Tailwind. shadcn
- * is a visual-style reference here, not a dependency.
+ * Product decision (2026-08-11): Didact's visual style is a neutral, low-chroma, high-contrast
+ * system (owner-rejected the previous, invented look). The semantic token SET and OKLCH VALUES
+ * below implement that visual language exactly as specified (see docs/visual-language.md), kept
+ * under the `--didact-*` naming contract so a consumer can still override without touching
+ * Tailwind.
  *
- * Sources for the a11y-specific additions that are genuinely ours (NOT part of shadcn's token
- * set, kept on top of it):
+ * Sources for the a11y-specific additions that are genuinely ours (on top of the base visual
+ * language):
  * - Sans-serif typography by default, relative sizes (never fixed px) — British Dyslexia
  *   Association Style Guide 2023.
  * - ~60-70 character-per-line limit — BDA Style Guide 2023.
  * - Status tokens (success/warning/danger-bg) that are NEVER used alone: every component
  *   consuming them must pair them with an icon/text, not color alone (BDA + WCAG 1.4.1 Use of
- *   Color). These are EXTRA tokens on top of shadcn's set, useful for future non-badge
+ *   Color). These are EXTRA tokens on top of the base semantic set, useful for future non-badge
  *   components — `MasteryBadge` itself does NOT use them (neutral palette only, see
  *   mastery-badge.tsx).
  * - Target contrast ratios: normal text >=4.5:1 (WCAG 1.4.3), borders/icons/progress bars >=3:1
- *   (WCAG 1.4.11). The OKLCH values below (both shadcn's and ours) are what shadcn/we ship, NOT a
- *   verified contrast audit — pending measurement with a real tool (e.g. axe/Pa11y) before Phase
- *   4, don't treat it as satisfied just because of the formula.
+ *   (WCAG 1.4.11). The OKLCH values below are what we ship, NOT a verified contrast audit —
+ *   pending measurement with a real tool (e.g. axe/Pa11y) before Phase 4, don't treat it as
+ *   satisfied just because of the formula.
  * - `prefers-reduced-motion` (WCAG 2.3.3 + RF-13): motion durations are overridden here at the
  *   token level; each component remains responsible for respecting them.
  *
  * STATUS: scaffold (Phase 1-3). Token NAMES are the contract `@didact/core`'s components consume;
- * values now mirror shadcn exactly (see the reference doc) rather than an invented palette.
+ * values implement Didact's own visual language (see docs/visual-language.md) rather than an
+ * arbitrary invented palette.
  */
 
 @import "tailwindcss";
 
 :root {
-  /* Radius: shadcn's exact default + derived scale (docs/shadcn-visual-reference.md §1). */
+  /* Radius: Didact's default + derived scale (docs/visual-language.md, Shape and scale). */
   --didact-radius: 0.625rem;
   --didact-radius-sm: calc(var(--didact-radius) - 4px);
   --didact-radius-md: calc(var(--didact-radius) - 2px);
   --didact-radius-lg: var(--didact-radius);
   --didact-radius-xl: calc(var(--didact-radius) + 4px);
 
-  /* Base semantic palette — shadcn's exact light OKLCH values (near-monochrome neutral). */
+  /* Base semantic palette — Didact's light OKLCH values (near-monochrome neutral). */
   --didact-background: oklch(1 0 0);
   --didact-foreground: oklch(0.145 0 0);
   --didact-card: oklch(1 0 0);
@@ -76,7 +76,7 @@
   --didact-input: oklch(0.922 0 0);
   --didact-ring: oklch(0.708 0 0);
 
-  /* Extra status tokens (ours, not shadcn's): never used alone (BDA + WCAG 1.4.1) -- always
+  /* Extra status tokens (ours, on top of the base visual language): never used alone (BDA + WCAG 1.4.1) -- always
      paired with an icon/text in the component that consumes them, never color alone. Useful for
      non-badge components (alerts, toasts); MasteryBadge does NOT use these. */
   --didact-color-success: oklch(45% 0.13 150);
@@ -99,7 +99,7 @@
 }
 
 .dark {
-  /* shadcn's exact dark OKLCH values (docs/shadcn-visual-reference.md §1). */
+  /* Didact's dark OKLCH values (docs/visual-language.md, Shape and scale). */
   --didact-background: oklch(0.145 0 0);
   --didact-foreground: oklch(0.985 0 0);
   --didact-card: oklch(0.205 0 0);

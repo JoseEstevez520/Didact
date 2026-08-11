@@ -5,20 +5,19 @@ quiz variants, spaced repetition, glossary, progressive hints, progress/mastery 
 timelines, and rubrics, designed to be usable in **any React project**, not just the project where
 the need was born.
 
-The reference distribution model is **shadcn/ui**'s: not a versioned npm package, but a
-**registry + a source-code copy mechanism** into the consuming project ("copy-paste ownership").
-The consumer owns the code from the moment they copy it; there is no dependency upgrade that can
-break anything without them deciding to take it. This decision is made and justified in
-`specs/education-components/requirements.md` §0.
+Didact's distribution model is **a registry + a source-code copy mechanism** into the consuming
+project ("copy-paste ownership"), not a versioned npm package. The consumer owns the code from the
+moment they copy it; there is no dependency upgrade that can break anything without them deciding
+to take it. This decision is made and justified in `specs/education-components/requirements.md` §0.
 
 ## Why it exists
 
 There is currently no commonly accepted vocabulary of e-learning components, at the level that
-already exists for generic UI (shadcn/ui, Radix, MUI…). Every training platform reinvents
-flashcards, matching exercises, quizzes, or spaced repetition. Didact aims to cover that gap with
-a foundation of good accessibility and good developer ergonomics, using shadcn/ui as a reference
-for **form** (headless + copy-paste + variant composition), not for content — shadcn's components
-are generic; Didact's are pedagogical.
+already exists for generic UI (Radix, MUI…). Every training platform reinvents flashcards,
+matching exercises, quizzes, or spaced repetition. Didact aims to cover that gap with a foundation
+of good accessibility and good developer ergonomics: headless behavior, copy-paste distribution,
+and variant-based composition as the form, with pedagogical (not generic) components as the
+content.
 
 SkillNet (an SME training platform) is the **first real consumer** — where the need was born and
 where it's tested first — but it is not the design criterion. Any coupling to SkillNet-specific
@@ -29,9 +28,9 @@ decisions is treated as an optional adapter (`adapters/skillnet/`), never as par
 Didact is styled with **Tailwind v4** (CSS-first: `@theme`, OKLCH colors) on top of a neutral
 default theme centralized in `@didact/theme` and restyleable via CSS custom properties — a product
 decision by Jose (2026-08-11). `specs/education-components/research.md` P3 investigated and
-documented that shadcn/ui's registry mechanism **does not require** Tailwind technically; that
-conclusion still stands, but Jose chose to use it anyway for visual consistency and as a style
-reference aligned with shadcn/ui — a deliberate choice, not a technical limitation. Full detail in
+documented that Didact's registry mechanism **does not require** Tailwind technically; that
+conclusion still stands, but Jose chose to use it anyway for visual consistency (see
+`docs/visual-language.md`) — a deliberate choice, not a technical limitation. Full detail in
 `research/decisions.md` (D1) and in `packages/theme/README.md`.
 
 ## Scope: broad and ambitious
@@ -70,7 +69,7 @@ scaffold for phases 2-3 (documented design decision + monorepo structure). It co
 │   ├── core/                         @didact/core — layer 3, education components (Phase 4)
 │   ├── theme/                        @didact/theme — layer 2, neutral theme (Tailwind v4 + tokens)
 │   ├── spaced-repetition/            @didact/spaced-repetition — SM-2 / FSRS behind an agnostic interface
-│   ├── registry/                     @didact/registry — shadcn/ui-style registry.json
+│   ├── registry/                     @didact/registry — Didact's registry.json
 │   └── validators/                   @didact/validators — scientific validators (a11y, pedagogy,
 │                                      schema, dependency drift)
 ├── adapters/
@@ -82,6 +81,14 @@ scaffold for phases 2-3 (documented design decision + monorepo structure). It co
     ├── sources/                      Full bibliography
     └── decisions.md                  Product decisions made after Phase 1
 ```
+
+## Philosophy & design
+
+- [`docs/PHILOSOPHY.md`](./docs/PHILOSOPHY.md) — the principles the whole project is held to.
+- [`docs/design-principles.md`](./docs/design-principles.md) — how customization works (tokens,
+  variants, `className`, `asChild`, copy-paste ownership).
+- [`docs/visual-language.md`](./docs/visual-language.md) — Didact's default look (palette, shape,
+  focus, typography, motion).
 
 ## Where to start
 

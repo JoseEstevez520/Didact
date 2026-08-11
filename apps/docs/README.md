@@ -8,8 +8,7 @@ correct/incorrect) and pass automated a11y checks.
 
 `design.md` §8 (Quality and tooling) assigns it two functions that don't compete with each other:
 
-1. **Browsable catalog** for anyone who wants to see what Didact offers before copying it
-   (equivalent to shadcn/ui's site).
+1. **Browsable catalog** for anyone who wants to see what Didact offers before copying it.
 2. **A11y validation surface in CI**: each story runs an automated accessibility addon, instead of
    just documenting "it's accessible" in generic terms — consistent with the risk `design.md` §9
    flags ("well-intentioned accessibility without evidence") and with `packages/validators/`'s

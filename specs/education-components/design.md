@@ -30,7 +30,7 @@ project.
 
 | Constraint | Source |
 |---|---|
-| Distribution model: registry + CLI that copies source code (shadcn/ui style), not a versioned npm dependency as the primary channel | `requirements.md` §0.2, RF-15 |
+| Distribution model: registry + CLI that copies source code (Didact's copy-paste model), not a versioned npm dependency as the primary channel | `requirements.md` §0.2, RF-15 |
 | React as the target framework (to confirm if anything else stays out of scope, §6) | `requirements.md` §2 |
 | Neutral default visual theme, restyleable via tokens/CSS custom properties | `requirements.md` RF-16 |
 | Accessible by default (keyboard, ARIA, `prefers-reduced-motion`) | `requirements.md` §4.2 |
@@ -62,21 +62,21 @@ None of §1.2 applies to the core. A core component does not "know" SkillNet exi
 ├─────────────────────────────────────────────┤
 │ 1. Accessible primitives                     │  Accessible behavior with no styling of its
 │    (headless)                                │  own (focus, keyboard, ARIA). Decided: Radix UI
-│                                               │  (the same base shadcn/ui uses)
+│                                               │
 └─────────────────────────────────────────────┘
 ```
 
-This is deliberately the same layer pattern shadcn/ui uses (headless primitives + Tailwind +
-variant composition), applied to educational vocabulary instead of generic. Layer 3 is where this
-project's real value lives — layers 1 and 2 exist so we don't reinvent accessibility from scratch
-(see the cost of doing it by hand in `openui-adoption.md` §1: 1500+ lines of tests to shield a
-custom parser).
+This is Didact's own layered architecture (headless primitives + Tailwind + variant composition),
+applied to educational vocabulary instead of generic UI. Layer 3 is where this project's real
+value lives — layers 1 and 2 exist so we don't reinvent accessibility from scratch (see the cost
+of doing it by hand in `openui-adoption.md` §1: 1500+ lines of tests to shield a custom parser).
 
 **Resolved (`requirements.md` §6.2, `research.md` Question 2): Radix UI is layer 1's default.**
-Rationale: alignment with shadcn/ui maximizes reuse of patterns/examples, which is the whole point
-of using shadcn as the style/architecture reference (`requirements.md` §0.2). The evidence
-(`research.md` Q2) is a peer-dependency and changelog comparison, not an executed project, and it
-is reported at that confidence level:
+Rationale: Radix is the most widely adopted headless primitives library, which maximizes reuse of
+existing patterns and examples — the whole point of building layer 1 on a proven headless
+foundation instead of a custom one (`requirements.md` §0.2). The evidence (`research.md` Q2) is a
+peer-dependency and changelog comparison, not an executed project, and it is reported at that
+confidence level:
 
 - Radix UI's `latest` npm packages today declare `peerDependencies.react` pinned to
   `^18.0.0 || ^19.0.0-rc.1` — not `^19.0.0` — so a plain `npm install` on stable React 19 needs
@@ -87,10 +87,11 @@ is reported at that confidence level:
   of the research date) to `latest`.
 - Base UI (`@base-ui/react`, MUI) already declares a clean `^17 || ^18 || ^19` peer range and comes
   from the team that migrated MUI to React 19. It is **not** chosen as the default now because it
-  has less adoption/precedent than Radix and shadcn itself is built on Radix — but it is the
-  designated **watch item**: re-evaluate it in 3-6 months once it has more production usage.
-  React Aria/Ariakit are not adopted as the default layer: React Aria shares Radix's peer-dep
-  friction without shadcn's alignment advantage, and Ariakit lacks the shadcn-ecosystem precedent.
+  has less adoption/precedent than Radix, which underlies a large share of today's popular React
+  component libraries — but it is the designated **watch item**: re-evaluate it in 3-6 months once
+  it has more production usage. React Aria/Ariakit are not adopted as the default layer: React
+  Aria shares Radix's peer-dep friction without Radix's wider ecosystem precedent, and Ariakit
+  lacks that same precedent.
 - **Open item for Phase 3, not a hidden decision:** none of the above is an executed smoke test.
   `research.md` Q2 is explicit that no real React 19 project was run against any candidate — the
   evidence is changelog + peer-dependency-range analysis. Phase 3 must run an actual smoke test
@@ -101,7 +102,7 @@ is reported at that confidence level:
   since the copy-paste distribution model protects the copied components, not this kind of
   external behavioral dependency (`design.md` §9).
 
-## 3. Distribution model: shadcn/ui-style registry
+## 3. Distribution model: Didact's registry
 
 **Decided in `requirements.md` §0.2**; this section details the shape, subject to the technical
 verification in §6.1.
@@ -140,8 +141,9 @@ in `registry-item.json`, `tailwind` deprecated in favor of `cssVars.theme`; prec
 `shadcn-css` prove the layer pattern works without Tailwind). That research finding is not being
 reworded or walked back here. **What changes it is a product decision made after Phase 1**: per
 `research/decisions.md` D1, Jose chose to adopt Tailwind v4 anyway, for visual consistency and
-alignment with the shadcn/ui reference (`requirements.md` §0.2), independently of what the
-distribution mechanism strictly requires. Concretely for this design:
+alignment with Didact's own visual-language reference (`requirements.md` §0.2, see
+`docs/visual-language.md`), independently of what the distribution mechanism strictly requires.
+Concretely for this design:
 
 - Layer 2 ("Styled layer" in §2's diagram) is **Tailwind v4 + `class-variance-authority`** applied
   over the neutral tokens exposed by `@didact/theme` (a new package; see D1's scaffold changes).
@@ -235,19 +237,19 @@ No palette or spacing scale of its own imposed on consumers. The core defines **
 default theme** (so it can be shown in the registry/Storybook without depending on any consumer)
 exposed via CSS custom properties, and any project — SkillNet included — overrides it with its
 own. SkillNet, as an adapter, maps `design-system.md` onto those variables (RF-18); this is no
-different from how any project adopts a shadcn/ui theme.
+different from how any project adopts a component library's theme.
 
-**Resolved (`requirements.md` §6): the components' visual style follows shadcn/ui.** This is a
-distinct decision from the styling *mechanism* (§3: Tailwind + `cva`) — it's about spacing scale,
-radii, typography, focus-ring treatment, subtle/no shadows, and a neutral OKLCH palette, matching
-what `requirements.md` §0.2 already named as the style reference. `@didact/theme`'s neutral
-default (D1, `research/decisions.md`) should mirror that shadcn aesthetic as its out-of-the-box
-look, while remaining fully restyleable via the CSS custom properties RF-16 requires — a consumer
-is free to discard the shadcn look entirely by overriding the tokens, exactly as they would with
-any shadcn/ui-derived component. **This reference can and should be calibrated/verified live**
-against `ui.shadcn.com` using browser automation during Phase 3/4 (spacing values, exact radii,
-focus-ring color/width, shadow tokens) rather than approximated from memory — the same "verify,
-don't assume" standard `research.md` applied to the technical questions.
+**Resolved (`requirements.md` §6): the components follow Didact's own neutral visual language.**
+This is a distinct decision from the styling *mechanism* (§3: Tailwind + `cva`) — it's about
+spacing scale, radii, typography, focus-ring treatment, subtle/no shadows, and a neutral OKLCH
+palette (see `docs/visual-language.md` for the full specification). `@didact/theme`'s neutral
+default (D1, `research/decisions.md`) implements that visual language as its out-of-the-box look,
+while remaining fully restyleable via the CSS custom properties RF-16 requires — a consumer is
+free to discard the default look entirely by overriding the tokens. **The token values were
+calibrated during Phase 3/4** (spacing values, exact radii, focus-ring color/width, shadow tokens)
+against a well-established neutral design reference, verified rather than approximated from
+memory — the same "verify, don't assume" standard `research.md` applied to the technical
+questions.
 
 ## 7. Project location — **decided**
 
@@ -255,10 +257,10 @@ Independent repo (where it lives today, `Anfaia/library`), published as its own 
 consumed via CLI from any project — not as a package inside `repo/packages/`.
 
 This is no longer an open decision: it follows directly from `requirements.md` §0.1 ("must be
-usable in any project") and §0.2 (shadcn model, which is intrinsically multi-project: a registry
-makes no sense if only one repo consumes it). SkillNet consumes this library just like it would
-consume any third-party shadcn registry: by copying components, without publishing or depending
-on an npm version.
+usable in any project") and §0.2 (a registry-based distribution model, which is intrinsically
+multi-project: a registry makes no sense if only one repo consumes it). SkillNet consumes this
+library just like it would consume any third-party component registry: by copying components,
+without publishing or depending on an npm version.
 
 The **exact mechanism** (`requirements.md` §6.1) is resolved in §3 above: shadcn's official CLI
 and schema, with a custom versioning convention and `shadcn diff` still to be empirically verified
@@ -276,7 +278,7 @@ in Phase 3 — that residual verification does not reopen the general shape deci
 
 ## 9. Risks
 
-- **shadcn's third-party registry mechanism doesn't support what we need** (§6.1) — `research.md`
+- **The chosen CLI's third-party registry mechanism doesn't support what we need** (§6.1) — `research.md`
   Q1 found this **not confirmed**: the mechanism is explicitly built for third-party registries.
   Residual risk downgraded to two narrower, tracked items: no native `version` field (mitigated
   with our own versioning convention, §3) and `shadcn diff` against third-party registries being
