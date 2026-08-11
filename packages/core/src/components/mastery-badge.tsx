@@ -19,6 +19,19 @@ import { cva, type VariantProps } from "class-variance-authority";
  * rule @didact/theme's tokens.css documents for its status tokens. The optional `interactive`
  * mode renders a native `<button>` (keyboard-operable, focusable, with `aria-pressed`) instead of
  * a `<div onClick>`, and its focus-visible style reads `--didact-focus-ring` (WCAG 2.4.7).
+ *
+ * Styling reads the tokens through Tailwind v4's `[type:var(--x)]` arbitrary-value syntax
+ * (e.g. `bg-[color:var(--didact-color-muted)]`) instead of named theme-scale utilities like
+ * `bg-didact-muted`. This was a deliberate correction made during the Phase 3 registry copy
+ * proof (ROADMAP.md block F): `@didact/theme`'s own `@theme` block (which registers those named
+ * utilities) is only guaranteed present for a consumer who imports the `@didact/theme` package
+ * directly. A consumer who instead copies this component through the registry only receives the
+ * raw `--didact-*` custom properties via the item's `cssVars.theme` (verified empirically --
+ * `packages/registry/registry.json`'s comment on this item has the detail), not necessarily a
+ * matching `@theme` alias. Reading the raw variable directly works in both cases and removes the
+ * dependency on shadcn's `cssVars` auto-aliasing heuristic (which only auto-generates a
+ * `--color-*` alias for values that look like colors, and does nothing for `--radius-*`/
+ * `--font-*`-shaped tokens -- confirmed by inspecting its output, not assumed).
  */
 
 const masteryLevels = ["beginner", "intermediate", "advanced"] as const;
@@ -33,23 +46,37 @@ const masteryLevelLabel: Record<MasteryLevel, string> = {
 
 const masteryBadgeVariants = cva(
   [
-    "inline-flex items-center gap-1.5 rounded-didact-md border px-2.5 py-1",
-    "font-didact-sans text-sm font-medium leading-none",
+    "inline-flex items-center gap-1.5 border px-2.5 py-1",
+    "rounded-[length:var(--didact-radius-md)]",
+    "text-sm font-medium leading-none",
     "transition-colors duration-[var(--didact-motion-duration)]",
   ].join(" "),
   {
     variants: {
       level: {
-        beginner: "bg-didact-muted text-didact-muted-fg border-didact-border",
-        intermediate:
-          "bg-didact-warning-bg text-didact-warning border-didact-warning/30",
-        advanced: "bg-didact-success-bg text-didact-success border-didact-success/30",
+        beginner: [
+          "bg-[color:var(--didact-color-muted)]",
+          "text-[color:var(--didact-color-muted-fg)]",
+          "border-[color:var(--didact-color-border)]",
+        ].join(" "),
+        intermediate: [
+          "bg-[color:var(--didact-color-warning-bg)]",
+          "text-[color:var(--didact-color-warning)]",
+          "border-[color:var(--didact-color-warning)]",
+        ].join(" "),
+        advanced: [
+          "bg-[color:var(--didact-color-success-bg)]",
+          "text-[color:var(--didact-color-success)]",
+          "border-[color:var(--didact-color-success)]",
+        ].join(" "),
       },
       interactive: {
         true: [
           "cursor-pointer select-none",
-          "focus-visible:outline-none focus-visible:ring-[length:var(--didact-focus-ring-width)]",
-          "focus-visible:ring-didact-focus-ring focus-visible:ring-offset-2",
+          "focus-visible:outline-none",
+          "focus-visible:ring-[length:var(--didact-focus-ring-width)]",
+          "focus-visible:ring-[color:var(--didact-focus-ring)]",
+          "focus-visible:ring-offset-2",
           "hover:brightness-95",
         ].join(" "),
         false: "",
@@ -61,6 +88,8 @@ const masteryBadgeVariants = cva(
     },
   },
 );
+
+const masteryBadgeFontFamily = "var(--didact-font-sans)";
 
 export interface MasteryBadgeProps
   extends Omit<React.ComponentPropsWithoutRef<"button">, "onClick">,
@@ -89,7 +118,7 @@ function describeMastery(level: MasteryLevel, percent?: number): string {
 
 export const MasteryBadge = React.forwardRef<HTMLButtonElement | HTMLSpanElement, MasteryBadgeProps>(
   function MasteryBadge(
-    { level, percent, interactive = false, className, ...props },
+    { level, percent, interactive = false, className, style, ...props },
     ref,
   ) {
     const [expanded, setExpanded] = React.useState(false);
@@ -98,12 +127,17 @@ export const MasteryBadge = React.forwardRef<HTMLButtonElement | HTMLSpanElement
     const classes = [masteryBadgeVariants({ level, interactive }), className]
       .filter(Boolean)
       .join(" ");
+    const mergedStyle: React.CSSProperties = {
+      fontFamily: masteryBadgeFontFamily,
+      ...style,
+    };
 
     if (!interactive) {
       return (
         <span
           ref={ref as React.Ref<HTMLSpanElement>}
           className={classes}
+          style={mergedStyle}
           data-level={level}
         >
           {summary}
@@ -116,6 +150,7 @@ export const MasteryBadge = React.forwardRef<HTMLButtonElement | HTMLSpanElement
         ref={ref as React.Ref<HTMLButtonElement>}
         type="button"
         className={classes}
+        style={mergedStyle}
         data-level={level}
         aria-pressed={expanded}
         aria-expanded={expanded}
@@ -124,7 +159,10 @@ export const MasteryBadge = React.forwardRef<HTMLButtonElement | HTMLSpanElement
       >
         <span>{label}</span>
         {expanded && percent !== undefined ? (
-          <span className="font-normal text-didact-muted-fg">
+          <span
+            className="font-normal"
+            style={{ color: "var(--didact-color-muted-fg)" }}
+          >
             {Math.max(0, Math.min(100, Math.round(percent)))}% mastery
           </span>
         ) : null}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "didact",
+  "homepage": "https://github.com/JoseEstevez520/Didact",
+  "items": [
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "mastery-badge",
+      "type": "registry:ui",
+      "title": "Mastery Badge",
+      "description": "A skill-mastery status badge (beginner/intermediate/advanced, optional percent) styled with Tailwind v4 + class-variance-authority over @didact/theme's tokens. The ROADMAP.md Phase 3 scaffold proof component -- see packages/core/src/components/mastery-badge.tsx for the full rationale.",
+      "dependencies": ["class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/core/src/components/mastery-badge.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-color-bg": "oklch(100% 0 0)",
+          "didact-color-fg": "oklch(20% 0 0)",
+          "didact-color-muted": "oklch(96% 0 0)",
+          "didact-color-muted-fg": "oklch(40% 0 0)",
+          "didact-color-border": "oklch(88% 0 0)",
+          "didact-color-warning": "oklch(55% 0.15 80)",
+          "didact-color-warning-bg": "oklch(95% 0.08 80)",
+          "didact-color-success": "oklch(45% 0.13 150)",
+          "didact-color-success-bg": "oklch(95% 0.05 150)",
+          "didact-focus-ring": "oklch(55% 0.18 260)",
+          "didact-focus-ring-width": "2px",
+          "didact-radius-md": "0.5rem",
+          "didact-motion-duration": "200ms",
+          "didact-font-sans": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
+        }
+      }
+    }
+  ]
+}

@@ -35,9 +35,46 @@ confirmed by the research.
   Didact consumers' update mechanism, test it empirically.
 - **Authentication** is native via HTTP headers + environment variables (Bearer token, API key).
   No OAuth/OIDC or automatic discovery — relevant only if this registry stops being public.
+- **`cssVars.theme`'s auto-generated Tailwind alias only triggers for color-shaped values, and
+  its naming isn't collision-safe.** Verified empirically in the Phase 3 registry copy proof
+  (`shadcn add` against `mastery-badge.json` in a throwaway consumer): when the CLI merges
+  `cssVars.theme` into the consumer's `@theme` block, it inserts the literal `--<key>: <value>`
+  declaration, and separately auto-generates a `--color-<key>: var(--<key>)` alias **only** when
+  `<value>` looks like a color (oklch/hsl/rgb/hex). It does this unconditionally, without checking
+  whether `<key>` already contains the word "color" — so a key like `didact-color-bg` (this
+  registry's own naming convention, matching `@didact/theme`) becomes the useless
+  `--color-didact-color-bg`, not a usable `--color-didact-bg`. Non-color-shaped tokens
+  (`didact-radius-md`, `didact-font-sans`, `didact-motion-duration`) get **no** alias at all, so a
+  Tailwind theme-scale utility built on their name (e.g. a `rounded-didact-md` utility) silently
+  fails to resolve for a consumer who only copied the component through the registry (as opposed
+  to importing the `@didact/theme` package directly, which defines its own correct `@theme` block
+  by hand). Also verified: trying to work around this with the item's own `css` field (injecting a
+  hand-written `@theme` block with the correct alias names) does not work either -- the CLI's `css`
+  merger treats every key nested under an at-rule like `"@theme"` as a CSS **selector**, not a flat
+  custom-property declaration (confirmed by reading the relevant merge function in
+  `shadcn@4.16.2`'s bundled source, `chunk-Q6Y23SOV.js`), so `"css": { "@theme": { "--foo": "var(--bar)" } }`
+  throws a `CssSyntaxError` trying to parse `.temp{var(--bar)}` as a declaration body.
+  **Consequence / mitigation applied:** `packages/core/src/components/mastery-badge.tsx` does not
+  rely on any named theme-scale utility (`bg-didact-*`, `rounded-didact-*`) at all -- it reads the
+  raw custom properties directly via Tailwind v4's `[type:var(--x)]` arbitrary-value syntax (e.g.
+  `bg-[color:var(--didact-color-muted)]`), which only needs the plain `--didact-*` declaration
+  `cssVars.theme` reliably delivers, not the fragile alias. Future components should do the same
+  unless/until this gets a cleaner fix (e.g. renaming this registry's `cssVars.theme` keys to
+  avoid embedding "color"/"radius" as a prefix of the key itself, so the CLI's own alias no longer
+  collides).
 
 ## Status
 
-Valid `registry.json` with `items: []` — Phase 1-3 scaffold. Entries get added as `packages/core`
-implements real components in Phase 4, and this registry gets published in a consumable form
-(`shadcn build`, hosting the JSON) in Phase 6 of `ROADMAP.md`.
+`registry.json` has one real item (`mastery-badge`, Phase 3's scaffold proof component). The built,
+servable JSON lives in `public/r/` and IS committed (same reasoning as `pnpm-lock.yaml`: it's
+generated, but it's the actual artifact a static host would serve, not throwaway build junk) --
+regenerate it after any change to `registry.json` or the files it points at with:
+
+```
+pnpm dlx shadcn@latest build packages/registry/registry.json -o packages/registry/public/r --cwd <repo root>
+```
+
+The registry copy mechanism itself is verified end to end (ROADMAP.md Phase 3 block F): `shadcn
+add` against the built item JSON, from a throwaway consumer project outside this workspace,
+produces a byte-identical copy of the real source file and a working Vite build. Real components
+beyond this one proof arrive in Phase 4; this registry gets published for real hosting in Phase 6.
