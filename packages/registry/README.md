@@ -68,8 +68,21 @@ confirmed by the research.
 `registry.json` has `mastery-badge` (Phase 3's scaffold proof component), `flashcard` (RF-1, the
 first real Phase 4 component), and the Phase 3.5 `@didact/ui` primitive kit -- `button`, `card`,
 `badge`, `separator`, `toggle`, `toggle-group` (the last depends on `toggle` via
-`registryDependencies` rather than duplicating its file). The built, servable JSON lives in
-`public/r/` and IS committed
+`registryDependencies` rather than duplicating its file). Since both `@didact/core` items were
+rebuilt (2026-08-11) to compose from `@didact/ui` (docs/interface-norms.md), their own
+`registryDependencies` now reach across layers too -- `flashcard` depends on `card`, `button`, and
+`toggle-group`; `mastery-badge` depends on `badge` -- and each item's own `cssVars.theme` only
+lists the `--didact-*` tokens its own file references directly, not the ones its
+`registryDependencies` already bring along (mirroring `toggle-group`/`toggle`'s existing pattern).
+One residual gap worth flagging: `flashcard.tsx`'s and `mastery-badge.tsx`'s source imports
+`@didact/ui` as a real package specifier (needed for the actual pnpm workspace build), whereas
+`registryDependencies` only copies the *source files* of `card`/`button`/`toggle-group`/`badge`
+into a copy-paste consumer's project -- unlike `toggle-group`'s relative `"./toggle.js"` import,
+that package import will not resolve for a consumer who copies `flashcard`/`mastery-badge` without
+also installing `@didact/ui` as a real npm dependency. Not solved here; a future pass should either
+publish `@didact/ui` as an installable package for that path or rewrite these two items' registry
+copies to relative imports at build time. The built, servable JSON lives in `public/r/` and IS
+committed
 (same reasoning as `pnpm-lock.yaml`: it's generated, but it's the actual artifact a static host
 would serve, not throwaway build junk) -- regenerate it after any change to `registry.json` or the
 files it points at with:

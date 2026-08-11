@@ -8,8 +8,9 @@
       "name": "mastery-badge",
       "type": "registry:ui",
       "title": "Mastery Badge",
-      "description": "A skill-mastery status badge (beginner/intermediate/advanced, optional percent) styled with Tailwind v4 + class-variance-authority over @didact/theme's tokens. The ROADMAP.md Phase 3 scaffold proof component -- see packages/core/src/components/mastery-badge.tsx for the full rationale.",
-      "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
+      "description": "A skill-mastery status badge (beginner/intermediate/advanced, optional percent) composed from @didact/ui's Badge (level maps to Badge's variant), with an optional interactive expand-on-click mode rendered onto a real <button> via Badge's asChild. The ROADMAP.md Phase 3 scaffold proof component -- see packages/core/src/components/mastery-badge.tsx for the full rationale.",
+      "registryDependencies": ["badge"],
+      "dependencies": ["clsx", "tailwind-merge"],
       "files": [
         {
           "path": "packages/core/src/components/mastery-badge.tsx",
@@ -22,16 +23,7 @@
       ],
       "cssVars": {
         "theme": {
-          "didact-background": "oklch(1 0 0)",
-          "didact-foreground": "oklch(0.145 0 0)",
-          "didact-primary": "oklch(0.205 0 0)",
-          "didact-primary-foreground": "oklch(0.985 0 0)",
-          "didact-secondary": "oklch(0.97 0 0)",
-          "didact-secondary-foreground": "oklch(0.205 0 0)",
-          "didact-border": "oklch(0.922 0 0)",
-          "didact-ring": "oklch(0.62 0 0)",
           "didact-muted-foreground": "oklch(0.556 0 0)",
-          "didact-motion-duration": "200ms",
           "didact-font-sans": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
         }
       }
@@ -241,7 +233,8 @@
       "name": "flashcard",
       "type": "registry:ui",
       "title": "Flashcard",
-      "description": "A front/back flashcard (RF-1) with a 3D flip interaction and a known/needs-review mark, both controllable or left to the component's own state. Presentation only -- no scheduling or persistence, see packages/core/src/components/flashcard.tsx for the full rationale.",
+      "description": "A front/back flashcard (RF-1) with a 3D flip interaction, rebuilt on @didact/ui's Card/Button/ToggleGroup: a single primary 'Reveal answer' Button discloses the back face, and only then does a segmented ToggleGroup rating control (Known / Needs review) appear in the CardFooter -- reveal-then-rate, with one action hierarchy tier per docs/interface-norms.md. Both flip and rating are controllable or left to the component's own state. Presentation only -- no scheduling or persistence, see packages/core/src/components/flashcard.tsx for the full rationale.",
+      "registryDependencies": ["card", "button", "toggle-group"],
       "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
       "files": [
         {
@@ -255,16 +248,6 @@
       ],
       "cssVars": {
         "theme": {
-          "didact-card": "oklch(1 0 0)",
-          "didact-card-foreground": "oklch(0.145 0 0)",
-          "didact-primary": "oklch(0.205 0 0)",
-          "didact-primary-foreground": "oklch(0.985 0 0)",
-          "didact-secondary": "oklch(0.97 0 0)",
-          "didact-secondary-foreground": "oklch(0.205 0 0)",
-          "didact-border": "oklch(0.922 0 0)",
-          "didact-ring": "oklch(0.62 0 0)",
-          "didact-radius-lg": "0.625rem",
-          "didact-radius-md": "calc(0.625rem - 2px)",
           "didact-motion-duration": "200ms",
           "didact-font-sans": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
         }

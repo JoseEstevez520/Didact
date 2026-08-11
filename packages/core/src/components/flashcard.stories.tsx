@@ -3,10 +3,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Flashcard } from "./flashcard.js";
 
 /**
- * Storybook story for `Flashcard` (RF-1, the first real Phase 4 component). Per design.md §8 /
- * apps/docs' README plan, this documents one story per relevant state and pairs each with the
- * WCAG criterion it exercises -- see the per-story `parameters.docs.description` below instead of
- * a bare "it's accessible" claim.
+ * Storybook story for `Flashcard` (RF-1). Rebuilt (2026-08-11) on `@didact/ui` with a
+ * reveal -> rate flow -- see flashcard.tsx's header comment for the two product-owner-flagged
+ * problems this fixes (no action hierarchy, rating shown before the answer was revealed). Per
+ * design.md §8 / apps/docs' README plan, this documents one story per relevant state and pairs
+ * each with the WCAG criterion it exercises instead of a bare "it's accessible" claim.
  */
 const meta = {
   title: "Core/Flashcard",
@@ -30,15 +31,26 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  name: "Default (front)",
+  name: "Default (front, before reveal)",
   args: {
     front: "What is the capital of France?",
     back: "Paris",
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Exactly one `default`-variant Button ('Reveal answer') is visible -- " +
+          "docs/interface-norms.md's Action hierarchy rule (at most one primary action per view). " +
+          "The rating control does not exist in the tree yet: rating before the answer is " +
+          "revealed was the flagged bad flow.",
+      },
+    },
+  },
 };
 
-export const Flipped: Story = {
-  name: "Flipped (back)",
+export const Revealed: Story = {
+  name: "Revealed (back, unrated)",
   args: {
     front: "What is the capital of France?",
     back: "Paris",
@@ -48,38 +60,41 @@ export const Flipped: Story = {
     docs: {
       description: {
         story:
-          "The flip control's accessible name and `aria-pressed` reflect state (WCAG 4.1.2), " +
-          "and the previously-showing face leaves the accessibility tree via `aria-hidden` + " +
-          "`inert` instead of staying reachable underneath the visible one.",
+          "Only once revealed does the rating control appear, in the CardFooter -- a single " +
+          "segmented ToggleGroup ('pick your rating'), not two equal-weight competing buttons. " +
+          "The front face (and its reveal button) has left the accessibility tree via " +
+          "aria-hidden + inert (WCAG 4.1.2).",
       },
     },
   },
 };
 
 export const Known: Story = {
-  name: "Marked known",
+  name: "Revealed, marked known",
   args: {
     front: "What is the capital of France?",
     back: "Paris",
+    defaultFlipped: true,
     defaultStatus: "known",
   },
   parameters: {
     docs: {
       description: {
         story:
-          "WCAG 1.4.1 (Use of Color): the mark is a real button labelled \"Known\" with a " +
-          "checkmark icon, not a color change alone -- try this story with grayscale vision " +
-          "simulation and the state still reads clearly.",
+          "WCAG 1.4.1 (Use of Color): the selected rating is a real radio-role control labelled " +
+          "\"Known\" with a checkmark icon, not a color change alone -- try this story with " +
+          "grayscale vision simulation and the state still reads clearly.",
       },
     },
   },
 };
 
 export const NeedsReview: Story = {
-  name: "Marked needs review",
+  name: "Revealed, marked needs review",
   args: {
     front: "What is the capital of France?",
     back: "Paris",
+    defaultFlipped: true,
     defaultStatus: "review",
   },
 };
@@ -96,6 +111,7 @@ export const LongContent: Story = {
       "practice). This counteracts the forgetting curve described by Ebbinghaus: without review, " +
       "recall drops fastest right after learning and levels off later -- spaced review targets " +
       "each review right around the point recall would otherwise fail.",
+    defaultFlipped: true,
   },
   parameters: {
     docs: {
@@ -116,17 +132,17 @@ export const AllVariants: Story = {
   },
   render: () => (
     <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-      <Flashcard variant="default" front="Default variant" back="Back" />
-      <Flashcard variant="outline" front="Outline variant" back="Back" />
+      <Flashcard variant="default" front="Default variant" back="Back" defaultFlipped />
+      <Flashcard variant="outline" front="Outline variant" back="Back" defaultFlipped />
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "The `variant` prop overrides the neutral card look (docs/design-principles.md §2) -- " +
-          "`default` uses the `--didact-card` fill, `outline` is transparent with just the " +
-          "hairline border.",
+          "The `variant` prop overrides the neutral Card look (docs/design-principles.md §2) on " +
+          "top of `@didact/ui`'s Card -- `default` keeps Card's own fill/shadow, `outline` turns " +
+          "it transparent and shadow-less while keeping the hairline border.",
       },
     },
   },
@@ -140,9 +156,19 @@ export const AllSizes: Story = {
   },
   render: () => (
     <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start", flexWrap: "wrap" }}>
-      <Flashcard size="sm" front="Small" back="Back" />
-      <Flashcard size="md" front="Medium" back="Back" />
-      <Flashcard size="lg" front="Large" back="Back" />
+      <Flashcard size="sm" front="Small" back="Back" defaultFlipped />
+      <Flashcard size="md" front="Medium" back="Back" defaultFlipped />
+      <Flashcard size="lg" front="Large" back="Back" defaultFlipped />
     </div>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`size` scales the max-width and face text/height, and also picks a matching " +
+          "reveal-Button / rating-ToggleGroup control size (sm/default/lg) so the two line up -- " +
+          "interface-norms.md's 'Spacing & sizing' (pick a size scale for the whole view).",
+      },
+    },
+  },
 };
