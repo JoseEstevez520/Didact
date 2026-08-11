@@ -65,10 +65,11 @@ confirmed by the research.
 
 ## Status
 
-`registry.json` has one real item (`mastery-badge`, Phase 3's scaffold proof component). The built,
-servable JSON lives in `public/r/` and IS committed (same reasoning as `pnpm-lock.yaml`: it's
-generated, but it's the actual artifact a static host would serve, not throwaway build junk) --
-regenerate it after any change to `registry.json` or the files it points at with:
+`registry.json` has `mastery-badge` (Phase 3's scaffold proof component) and `flashcard` (RF-1,
+the first real Phase 4 component). The built, servable JSON lives in `public/r/` and IS committed
+(same reasoning as `pnpm-lock.yaml`: it's generated, but it's the actual artifact a static host
+would serve, not throwaway build junk) -- regenerate it after any change to `registry.json` or the
+files it points at with:
 
 ```
 pnpm dlx shadcn@latest build packages/registry/registry.json -o packages/registry/public/r --cwd <repo root>
@@ -76,5 +77,6 @@ pnpm dlx shadcn@latest build packages/registry/registry.json -o packages/registr
 
 The registry copy mechanism itself is verified end to end (ROADMAP.md Phase 3 block F): `shadcn
 add` against the built item JSON, from a throwaway consumer project outside this workspace,
-produces a byte-identical copy of the real source file and a working Vite build. Real components
-beyond this one proof arrive in Phase 4; this registry gets published for real hosting in Phase 6.
+produces a byte-identical copy of the real source file and a working Vite build. Further Phase 4
+components keep arriving alongside `flashcard`; this registry gets published for real hosting in
+Phase 6.

@@ -35,6 +35,40 @@
           "didact-font-sans": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
         }
       }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "flashcard",
+      "type": "registry:ui",
+      "title": "Flashcard",
+      "description": "A front/back flashcard (RF-1) with a 3D flip interaction and a known/needs-review mark, both controllable or left to the component's own state. Presentation only -- no scheduling or persistence, see packages/core/src/components/flashcard.tsx for the full rationale.",
+      "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/flashcard.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-card": "oklch(1 0 0)",
+          "didact-card-foreground": "oklch(0.145 0 0)",
+          "didact-primary": "oklch(0.205 0 0)",
+          "didact-primary-foreground": "oklch(0.985 0 0)",
+          "didact-secondary": "oklch(0.97 0 0)",
+          "didact-secondary-foreground": "oklch(0.205 0 0)",
+          "didact-border": "oklch(0.922 0 0)",
+          "didact-ring": "oklch(0.62 0 0)",
+          "didact-radius-lg": "0.625rem",
+          "didact-radius-md": "calc(0.625rem - 2px)",
+          "didact-motion-duration": "200ms",
+          "didact-font-sans": "ui-sans-serif, system-ui, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
+        }
+      }
     }
   ]
 }

@@ -46,3 +46,9 @@ export {
   type MasteryBadgeProps,
   type MasteryLevel,
 } from "./components/mastery-badge.js";
+
+export {
+  Flashcard,
+  type FlashcardProps,
+  type FlashcardStatus,
+} from "./components/flashcard.js";
