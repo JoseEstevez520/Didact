@@ -293,11 +293,11 @@ export const Flashcard = React.forwardRef<HTMLDivElement, FlashcardProps>(functi
             aria-label="Rate your recall"
           >
             <ToggleGroupItem value="known" aria-label="Known">
-              <CheckIcon />
+              <CheckIcon className="size-4" />
               Known
             </ToggleGroupItem>
             <ToggleGroupItem value="review" aria-label="Needs review">
-              <RepeatIcon />
+              <RepeatIcon className="size-4" />
               Needs review
             </ToggleGroupItem>
           </ToggleGroup>
