@@ -77,9 +77,17 @@
   --didact-accent: oklch(0.97 0 0);
   --didact-accent-foreground: oklch(0.205 0 0);
   --didact-destructive: oklch(0.577 0.245 27.325);
+  --didact-destructive-foreground: oklch(0.985 0 0); /* added for the @didact/ui primitive kit (Button/Badge destructive variant, 2026-08-11): text on a destructive fill, kept near-white and token-driven rather than a hardcoded `text-white` so it still restyles with the rest of the palette. */
   --didact-border: oklch(0.922 0 0);
   --didact-input: oklch(0.922 0 0);
   --didact-ring: oklch(0.62 0 0); /* darkened from a lighter neutral so the solid focus indicator meets WCAG 1.4.11 (>=3:1) in light mode; see docs/visual-language.md */
+
+  /* Elevation (added for the @didact/ui primitive kit, 2026-08-11): a subtle, low-opacity shadow
+     pair for the Card default look and Button's outline variant. Values are Tailwind's own default
+     `shadow-xs`/`shadow-sm` box-shadows, kept as tokens (not a bare Tailwind utility) so a consumer
+     can override elevation the same way they override color, per docs/design-principles.md §1. */
+  --didact-shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --didact-shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
 
   /* Extra status tokens (ours, on top of the base visual language): never used alone (BDA + WCAG 1.4.1) -- always
      paired with an icon/text in the component that consumes them, never color alone. Useful for
@@ -120,9 +128,16 @@
   --didact-accent: oklch(0.269 0 0);
   --didact-accent-foreground: oklch(0.985 0 0);
   --didact-destructive: oklch(0.704 0.191 22.216);
+  --didact-destructive-foreground: oklch(0.985 0 0); /* stays near-white: readable against dark mode's translucent destructive fill (bg-destructive/60), see the button/badge destructive variant. */
   --didact-border: oklch(1 0 0 / 10%);
   --didact-input: oklch(1 0 0 / 15%);
   --didact-ring: oklch(0.556 0 0);
+
+  /* Elevation stays the same shadow values in dark mode -- a shadow reads as elevation, not as a
+     status color, so there is no dark-specific hue/lightness to recompute here (unlike the
+     semantic palette above); only the surface it is cast on changes. */
+  --didact-shadow-xs: 0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --didact-shadow-sm: 0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -150,9 +165,13 @@
   --color-didact-accent: var(--didact-accent);
   --color-didact-accent-foreground: var(--didact-accent-foreground);
   --color-didact-destructive: var(--didact-destructive);
+  --color-didact-destructive-foreground: var(--didact-destructive-foreground);
   --color-didact-border: var(--didact-border);
   --color-didact-input: var(--didact-input);
   --color-didact-ring: var(--didact-ring);
+
+  --shadow-didact-xs: var(--didact-shadow-xs);
+  --shadow-didact-sm: var(--didact-shadow-sm);
 
   --color-didact-success: var(--didact-color-success);
   --color-didact-success-bg: var(--didact-color-success-bg);
