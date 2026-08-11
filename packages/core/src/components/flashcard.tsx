@@ -41,12 +41,11 @@ import { cn } from "../lib/cn.js";
  * explicitly liked the 3D flip. A real 3D transform (`rotateY`), not a crossfade -- the front and
  * back are two faces of one rotating element (`backface-visibility: hidden` on each), stacked in
  * the same grid cell (`col-start-1 row-start-1` on both) so the card's height follows whichever
- * face is currently larger. The rotation duration reads `--didact-motion-duration` (never a
- * hardcoded duration), which the theme already collapses to 0ms under `prefers-reduced-motion`
- * (RF-13, `packages/theme/src/tokens.css`), so the flip becomes an instant state change with no
- * separate reduced-motion branch needed here. Motion carries no information of its own: the
- * revealed face's presence in the accessibility tree and the rating control's appearance are what
- * convey the state change, not the animation.
+ * face is currently larger. The rotation uses a standard Tailwind duration utility (`duration-200`)
+ * with `motion-reduce:transition-none` so `prefers-reduced-motion` (RF-13, WCAG 2.3.3) turns the
+ * flip into an instant state change, with no separate reduced-motion branch needed in this file.
+ * Motion carries no information of its own: the revealed face's presence in the accessibility tree
+ * and the rating control's appearance are what convey the state change, not the animation.
  *
  * Accessibility:
  * - The reveal control is a real `@didact/ui` `Button` (`variant="default"`, native keyboard
@@ -69,9 +68,9 @@ import { cn } from "../lib/cn.js";
  *   (`aria-hidden`) icon, and the selected item is only ever reinforced, never carried solely, by
  *   `Toggle`'s background-color change for `data-state=on`.
  * - Every interactive element's focus style comes from `@didact/ui`'s `Button`/`Toggle`, which
- *   already read `--didact-ring` with the same 3px/50%-opacity ring plus ring-colored border used
- *   across Didact (docs/visual-language.md, "Focus") -- WCAG 2.4.7. Nothing in this file
- *   reimplements or overrides that.
+ *   already read the theme's ring token with the same 3px/50%-opacity ring plus ring-colored
+ *   border used across Didact (docs/visual-language.md, "Focus") -- WCAG 2.4.7. Nothing in this
+ *   file reimplements or overrides that.
  *
  * Customization (docs/design-principles.md §1-3): `variant` (`default` | `outline`) and `size`
  * (`sm` | `md` | `lg`) are `cva`-driven named looks layered on top of `Card`'s own styling;
@@ -123,8 +122,6 @@ const flashcardFaceVariants = cva(
     },
   },
 );
-
-const flashcardFontFamily = "var(--didact-font-sans)";
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -204,7 +201,6 @@ export const Flashcard = React.forwardRef<HTMLDivElement, FlashcardProps>(functi
     variant,
     size,
     className,
-    style,
     ...props
   },
   ref,
@@ -238,16 +234,11 @@ export const Flashcard = React.forwardRef<HTMLDivElement, FlashcardProps>(functi
 
   const resolvedSize = size ?? "md";
   const controlSize = flashcardSizeToControlSize[resolvedSize];
-  const mergedStyle: React.CSSProperties = {
-    fontFamily: flashcardFontFamily,
-    ...style,
-  };
 
   return (
     <Card
       ref={ref}
       className={cn(flashcardVariants({ variant, size }), className)}
-      style={mergedStyle}
       data-flipped={flipped}
       data-status={status ?? "unmarked"}
       {...props}
@@ -256,8 +247,7 @@ export const Flashcard = React.forwardRef<HTMLDivElement, FlashcardProps>(functi
         <div className="[perspective:1000px]">
           <div
             className={cn(
-              "grid [transform-style:preserve-3d] transition-transform ease-in-out",
-              "duration-[var(--didact-motion-duration)]",
+              "grid [transform-style:preserve-3d] transition-transform duration-200 ease-in-out motion-reduce:transition-none",
               flipped ? "[transform:rotateY(180deg)]" : "[transform:rotateY(0deg)]",
             )}
           >

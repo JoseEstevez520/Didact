@@ -65,7 +65,7 @@ export const Interactive: Story = {
         story:
           "WCAG 2.4.7 (Focus Visible) + 2.1.1 (Keyboard): a real <button>, reachable by Tab, " +
           "toggling aria-pressed/aria-expanded, with Didact's 3px/50%-opacity focus ring drawn " +
-          "from --didact-ring. Try tabbing to it instead of clicking.",
+          "from the theme's ring token. Try tabbing to it instead of clicking.",
       },
     },
   },
