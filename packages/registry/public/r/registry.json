@@ -38,6 +38,206 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Didact's foundational action primitive (@didact/ui, layers 1-2 of the 3-layer architecture): variants default/destructive/outline/secondary/ghost/link, sizes default/xs/sm/lg/icon/icon-xs/icon-sm/icon-lg, asChild via Radix Slot. Ported faithfully from a proven headless-primitives + Tailwind + class-variance-authority reference kit, reading @didact/theme's tokens instead of hardcoded values -- see packages/ui/src/components/button.tsx and docs/interface-norms.md's Action hierarchy for the full rationale.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-slot"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/components/button.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-background": "oklch(1 0 0)",
+          "didact-primary": "oklch(0.205 0 0)",
+          "didact-primary-foreground": "oklch(0.985 0 0)",
+          "didact-secondary": "oklch(0.97 0 0)",
+          "didact-secondary-foreground": "oklch(0.205 0 0)",
+          "didact-accent": "oklch(0.97 0 0)",
+          "didact-accent-foreground": "oklch(0.205 0 0)",
+          "didact-destructive": "oklch(0.577 0.245 27.325)",
+          "didact-destructive-foreground": "oklch(0.985 0 0)",
+          "didact-border": "oklch(0.922 0 0)",
+          "didact-input": "oklch(0.922 0 0)",
+          "didact-ring": "oklch(0.62 0 0)",
+          "didact-radius-md": "calc(0.625rem - 2px)",
+          "didact-shadow-xs": "0 1px 2px 0 oklch(0 0 0 / 0.05)",
+          "didact-motion-duration": "200ms"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "The Card family (@didact/ui, layers 1-2): Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent, CardFooter. Title/description/optional action in the header, body in content, actions in the footer -- see docs/interface-norms.md's Card composition for when to use each slot.",
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/ui/src/components/card.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-card": "oklch(1 0 0)",
+          "didact-card-foreground": "oklch(0.145 0 0)",
+          "didact-border": "oklch(0.922 0 0)",
+          "didact-muted-foreground": "oklch(0.556 0 0)",
+          "didact-radius-xl": "calc(0.625rem + 4px)",
+          "didact-shadow-sm": "0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "A generic label/status primitive (@didact/ui, layers 1-2): variants default/secondary/destructive/outline, asChild via Radix Slot. Distinct from packages/core's domain-specific MasteryBadge -- see packages/ui/src/components/badge.tsx for how they differ.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-slot"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/components/badge.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-foreground": "oklch(0.145 0 0)",
+          "didact-primary": "oklch(0.205 0 0)",
+          "didact-primary-foreground": "oklch(0.985 0 0)",
+          "didact-secondary": "oklch(0.97 0 0)",
+          "didact-secondary-foreground": "oklch(0.205 0 0)",
+          "didact-accent": "oklch(0.97 0 0)",
+          "didact-accent-foreground": "oklch(0.205 0 0)",
+          "didact-destructive": "oklch(0.577 0.245 27.325)",
+          "didact-destructive-foreground": "oklch(0.985 0 0)",
+          "didact-border": "oklch(0.922 0 0)",
+          "didact-ring": "oklch(0.62 0 0)",
+          "didact-motion-duration": "200ms"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "A thin visual/semantic divider (@didact/ui, layers 1-2), backed by @radix-ui/react-separator for role=separator/aria-orientation instead of a bare <hr>/<div>.",
+      "dependencies": ["clsx", "tailwind-merge", "@radix-ui/react-separator"],
+      "files": [
+        {
+          "path": "packages/ui/src/components/separator.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-border": "oklch(0.922 0 0)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "A two-state pressed/unpressed button (@didact/ui, layers 1-2), backed by @radix-ui/react-toggle for aria-pressed/data-state. toggleVariants (variants default/outline, sizes default/sm/lg) is reused directly by the toggle-group item instead of being duplicated.",
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-toggle"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/components/toggle.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-muted": "oklch(0.97 0 0)",
+          "didact-muted-foreground": "oklch(0.556 0 0)",
+          "didact-accent": "oklch(0.97 0 0)",
+          "didact-accent-foreground": "oklch(0.205 0 0)",
+          "didact-destructive": "oklch(0.577 0.245 27.325)",
+          "didact-border": "oklch(0.922 0 0)",
+          "didact-input": "oklch(0.922 0 0)",
+          "didact-ring": "oklch(0.62 0 0)",
+          "didact-radius-md": "calc(0.625rem - 2px)",
+          "didact-shadow-xs": "0 1px 2px 0 oklch(0 0 0 / 0.05)",
+          "didact-motion-duration": "200ms"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "A roving-tabindex group of Toggles (@didact/ui, layers 1-2), single or multiple selection, backed by @radix-ui/react-toggle-group. Depends on the toggle item for its shared toggleVariants and variant/size context.",
+      "registryDependencies": ["toggle"],
+      "dependencies": [
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "@radix-ui/react-toggle-group"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/components/toggle-group.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "didact-radius-md": "calc(0.625rem - 2px)",
+          "didact-shadow-xs": "0 1px 2px 0 oklch(0 0 0 / 0.05)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "flashcard",
       "type": "registry:ui",
       "title": "Flashcard",

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "title": "Separator",
+  "description": "A thin visual/semantic divider (@didact/ui, layers 1-2), backed by @radix-ui/react-separator for role=separator/aria-orientation instead of a bare <hr>/<div>.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "@radix-ui/react-separator"
+  ],
+  "files": [
+    {
+      "path": "packages/ui/src/components/separator.tsx",
+      "content": "import * as React from \"react\";\nimport * as SeparatorPrimitive from \"@radix-ui/react-separator\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Separator -- a thin visual/semantic divider, ported from the same reference kit as Button (see\n * button.tsx's header comment). Backed by the accessible-primitives layer (`@radix-ui/react-separator`)\n * rather than a bare `<hr>`/`<div>`: Radix's `Root` sets `role=\"separator\"` (or `none` when\n * `decorative`) and `aria-orientation` for us, so a screen reader gets the right semantics without\n * this component having to reimplement them.\n */\n\nfunction Separator({\n  className,\n  orientation = \"horizontal\",\n  decorative = true,\n  ...props\n}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {\n  return (\n    <SeparatorPrimitive.Root\n      data-slot=\"separator\"\n      decorative={decorative}\n      orientation={orientation}\n      className={cn(\n        \"shrink-0 bg-[color:var(--didact-border)]\",\n        \"data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full\",\n        \"data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Separator };\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "packages/ui/src/lib/cn.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "didact-border": "oklch(0.922 0 0)"
+    }
+  },
+  "type": "registry:ui"
+}
