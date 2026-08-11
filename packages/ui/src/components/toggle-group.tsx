@@ -1,16 +1,16 @@
 import * as React from "react";
 import { type VariantProps } from "class-variance-authority";
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
+import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
 
 import { cn } from "../lib/cn.js";
 import { toggleVariants } from "./toggle.js";
 
 /**
  * ToggleGroup / ToggleGroupItem -- a roving-tabindex group of `Toggle`s (single or multiple
- * selection), ported from the same reference kit as Button (see button.tsx's header comment).
- * Backed by `@radix-ui/react-toggle-group`, which owns the keyboard roving/selection behavior;
- * this layer only supplies the shared `variant`/`size`/`spacing` styling via context, so every
- * `ToggleGroupItem` matches the group's look unless it overrides its own.
+ * selection), ported verbatim from the same reference kit as Button (see button.tsx's header
+ * comment). Backed by `radix-ui`'s `ToggleGroup`, which owns the keyboard roving/selection
+ * behavior; this layer only supplies the shared `variant`/`size`/`spacing` styling via context, so
+ * every `ToggleGroupItem` matches the group's look unless it overrides its own.
  */
 
 const ToggleGroupContext = React.createContext<
@@ -42,9 +42,7 @@ function ToggleGroup({
       data-spacing={spacing}
       style={{ "--gap": spacing } as React.CSSProperties}
       className={cn(
-        "group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))]",
-        "rounded-[var(--didact-radius-md)]",
-        "data-[spacing=default]:data-[variant=outline]:shadow-[var(--didact-shadow-xs)]",
+        "group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs",
         className,
       )}
       {...props}
@@ -77,9 +75,7 @@ function ToggleGroupItem({
           size: context.size || size,
         }),
         "w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10",
-        "data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none",
-        "data-[spacing=0]:first:rounded-l-[var(--didact-radius-md)] data-[spacing=0]:last:rounded-r-[var(--didact-radius-md)]",
-        "data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l",
+        "data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l",
         className,
       )}
       {...props}

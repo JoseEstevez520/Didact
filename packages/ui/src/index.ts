@@ -7,12 +7,12 @@
  * make possible by construction (action hierarchy, card composition, spacing/sizing, focus/state
  * treatment, motion strategy).
  *
- * Every primitive here is a faithful port of a proven headless-primitives + Tailwind + `cva`
- * reference kit (the style/architecture reference named in `requirements.md` §0.2): same
- * variant/size sets, same class structure, same `data-slot`/`data-variant`/`data-size`
- * attributes, same `asChild`/Slot escape hatch where it applies -- only the token source changed,
- * to `@didact/theme`'s `--didact-*` custom properties. See each component file for the specific
- * porting notes and any token this kit added to the theme (`packages/theme/src/tokens.css`).
+ * Every primitive here is a verbatim port of the reference headless-primitives + Tailwind + `cva`
+ * kit named in `requirements.md` §0.2: same variant/size sets, same class structure (standard
+ * Tailwind utilities reading `@didact/theme`'s CSS custom properties, e.g. `bg-primary`,
+ * `text-muted-foreground`), same `data-slot`/`data-variant`/`data-size` attributes, same
+ * `asChild`/Slot escape hatch where it applies, and the same unified `radix-ui` package import.
+ * See each component file for the specific porting notes.
  *
  * Product-owner decision recorded in `requirements.md` §2 (2026-08-11): this package revisits the
  * original "generic primitives are out of scope" scope line -- Didact now ships its own minimal

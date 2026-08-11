@@ -3,12 +3,12 @@ import * as React from "react";
 import { cn } from "../lib/cn.js";
 
 /**
- * Card family -- ported faithfully from the same reference kit as Button (see button.tsx's
- * header comment for the general porting rationale). Anatomy and slot names are unchanged:
- * `Card` (the surface) > `CardHeader` (title + description + optional action, laid out with a
- * container-query grid so the action column only appears when a `CardAction` child is present) >
- * `CardTitle` / `CardDescription` / `CardAction` > `CardContent` (body) > `CardFooter` (actions).
- * See docs/interface-norms.md, "Card composition" for when to use each slot.
+ * Card family -- ported verbatim from the same reference kit as Button (see button.tsx's header
+ * comment for the porting rationale). Anatomy and slot names are unchanged: `Card` (the surface) >
+ * `CardHeader` (title + description + optional action, laid out with a container-query grid so the
+ * action column only appears when a `CardAction` child is present) > `CardTitle` / `CardDescription`
+ * / `CardAction` > `CardContent` (body) > `CardFooter` (actions). See docs/interface-norms.md,
+ * "Card composition" for when to use each slot.
  *
  * Every slot carries a `data-slot` attribute (unchanged from the reference) so a consumer can
  * target a specific slot (e.g. `[data-slot=card-header]`) without relying on class names, and so
@@ -21,9 +21,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "flex flex-col gap-6 rounded-[var(--didact-radius-xl)] border border-[color:var(--didact-border)]",
-        "bg-[color:var(--didact-card)] py-6 text-[color:var(--didact-card-foreground)]",
-        "shadow-[var(--didact-shadow-sm)]",
+        "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm",
         className,
       )}
       {...props}
@@ -36,9 +34,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6",
-        "has-data-[slot=card-action]:grid-cols-[1fr_auto]",
-        "[.border-b]:pb-6",
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
         className,
       )}
       {...props}
@@ -60,7 +56,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-sm text-[color:var(--didact-muted-foreground)]", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   );

@@ -22,12 +22,11 @@ ad hoc.
 ## What's here
 
 - `Button` -- variants `default`/`destructive`/`outline`/`secondary`/`ghost`/`link`, sizes
-  `default`/`xs`/`sm`/`lg`/`icon`/`icon-xs`/`icon-sm`/`icon-lg`, `asChild` via `@radix-ui/react-slot`.
+  `default`/`xs`/`sm`/`lg`/`icon`/`icon-xs`/`icon-sm`/`icon-lg`, `asChild` via `radix-ui`'s `Slot`.
 - `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardAction`, `CardContent`, `CardFooter`.
-- `Badge` -- variants `default`/`secondary`/`destructive`/`outline`, `asChild`.
-- `Separator` -- backed by `@radix-ui/react-separator`.
-- `Toggle` / `ToggleGroup`, `ToggleGroupItem` -- backed by `@radix-ui/react-toggle` and
-  `@radix-ui/react-toggle-group`.
+- `Badge` -- variants `default`/`secondary`/`destructive`/`outline`/`ghost`/`link`, `asChild`.
+- `Separator` -- backed by `radix-ui`'s `Separator`.
+- `Toggle` / `ToggleGroup`, `ToggleGroupItem` -- backed by `radix-ui`'s `Toggle` and `ToggleGroup`.
 
 See [`docs/interface-norms.md`](../../docs/interface-norms.md) for the composition norms this kit
 exists to make possible by construction (action hierarchy, card slot usage, spacing/sizing scale,
@@ -35,29 +34,21 @@ focus/state treatment, motion strategy).
 
 ## How each primitive was built
 
-Every component here is a **faithful port** of a proven headless-primitives + Tailwind + `cva`
-reference kit (the style/architecture reference `specs/education-components/requirements.md` §0.2
-names for Didact's distribution model) — not invented from scratch. Same variant/size sets, same
-class structure, same `data-slot`/`data-variant`/`data-size` attributes, same `asChild`/Slot escape
-hatch where it applies. What changed is only the token source: every color/radius/shadow/motion
-value reads Didact's own `--didact-*` custom properties (`@didact/theme`) through Tailwind v4's
-arbitrary-value syntax (`bg-[color:var(--didact-primary)]`), the same convention already used by
-`packages/core/src/components/mastery-badge.tsx`, and for the same reason: a consumer who copies a
-component through Didact's registry only receives the raw `--didact-*` variables via the item's
-`cssVars.theme`, not necessarily a matching Tailwind `@theme` alias.
-
-Two tokens didn't exist yet in `@didact/theme` before this kit and were added
-(`packages/theme/src/tokens.css`, light + dark): `--didact-destructive-foreground` (text on a
-destructive fill, kept token-driven instead of a hardcoded white) and `--didact-shadow-xs`/
-`--didact-shadow-sm` (the subtle elevation the outline Button and default Card need).
+Every component here is a **verbatim port** of the reference headless-primitives + Tailwind +
+`cva` kit (the style/architecture reference `specs/education-components/requirements.md` §0.2
+names for Didact's distribution model) -- not invented from scratch, and not re-tokenized. Same
+variant/size sets, same class structure, same standard Tailwind utility classes (`bg-primary`,
+`text-muted-foreground`, `rounded-xl`, `shadow-sm`, `focus-visible:ring-ring/50`, etc.) reading
+`@didact/theme`'s CSS custom properties, same `data-slot`/`data-variant`/`data-size` attributes,
+same `asChild`/Slot escape hatch where it applies, same unified `radix-ui` package import. The only
+change from the reference source in every file is the `cn` import path.
 
 ## Pinned dependencies (RNF-5)
 
-`@radix-ui/react-slot`, `@radix-ui/react-toggle`, `@radix-ui/react-toggle-group`,
-`@radix-ui/react-separator` are pinned to exact versions in `package.json`, each verified to
-install cleanly against React 19 with no `--legacy-peer-deps`/`--force` flag needed (see
-`design.md` §2 for the same verification already done for the Radix packages this repo uses
-elsewhere).
+`radix-ui` (the unified package bundling `Slot`, `Separator`, `Toggle`, `ToggleGroup`, etc.) is
+pinned to an exact version in `package.json`, verified to install cleanly against React 19 with no
+`--legacy-peer-deps`/`--force` flag needed (see `design.md` §2 for the same verification already
+done for the Radix packages this repo uses elsewhere).
 
 ## Relationship to the rest of the monorepo
 
