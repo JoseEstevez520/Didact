@@ -27,6 +27,24 @@ mechanism actually allow building a real, non-official registry? does the primit
 shadcn relies on — Radix UI — work well on React 19?) but **the direction is not open for debate**
 except if research finds a real technical impediment.
 
+3. **Revisited (2026-08-11, Phase 3.5 "design foundations"): Didact ships its own minimal
+   primitive kit (`@didact/ui`), reversing the original §2 "generic primitives are out of scope"
+   line.** The original reasoning — "for generic UI, the consumer uses shadcn/ui directly" — held
+   while the library had no components at all to be inconsistent with. Once real components
+   (`MasteryBadge`, `Flashcard`) started shipping in `@didact/core`, each one was independently
+   inventing its own button/card/badge treatment, which is exactly the "every training platform
+   reinvents X" problem this library exists to fix, just moved one layer down. The revised
+   decision: `@didact/ui` provides a small, general-purpose set of primitives (Button, Card family,
+   ToggleGroup/Toggle, Separator, Badge) that `@didact/core`'s education molecules compose from, so
+   every component is consistent by construction (see `docs/interface-norms.md`) instead of by
+   convention every author has to remember. This does not walk back §0.2's distribution model or
+   §0.1's "general-purpose, not SkillNet-specific" framing — `@didact/ui` is still copy-paste
+   distributed like everything else, still theme-driven via `@didact/theme`'s tokens, and still
+   usable standalone by a consumer who only wants the primitives. It is a scope correction, not a
+   reversal of the product's identity: Didact remains about pedagogical components first: the
+   primitive kit exists **in service of** making those components self-contained and consistent,
+   not as a competing generic-UI-library ambition.
+
 ## 1. Context and problem
 
 While building content in SkillNet (`../../repo`, a training platform for SMEs that converts
@@ -61,6 +79,12 @@ This is origin context and a real test case, not the definition of the product.
 - A **neutral default visual theme**, not SkillNet's or any specific consumer's, with theming via
   tokens/CSS custom properties so each project can adapt it to its brand (just like a shadcn
   component adopts the theme of whoever copies it).
+- A **minimal, general-purpose primitive kit** (`@didact/ui`: Button, Card family, ToggleGroup/
+  Toggle, Separator, Badge) that the pedagogical components compose from, so every component is
+  consistent by construction instead of each one inventing its own button/card/focus treatment.
+  Product-owner decision, 2026-08-11 (§0.3): this revises the line that previously put generic
+  primitives out of scope — see §0.3 for the full reasoning and `docs/interface-norms.md` for the
+  norms this kit exists to make possible.
 - First-class accessibility, including neurodiversity (see §4.2), independent of who consumes the
   library.
 - Living documentation (Storybook or equivalent) that serves both as a browsable catalog and as
@@ -80,9 +104,16 @@ This is origin context and a real test case, not the definition of the product.
 - `Mutation`/`Query`/`$state`-style reactivity in any generative variant (see
   `openui-adoption.md` §6 for the conditions if it is ever activated — that is not a decision of
   this library).
-- Generic UI primitives already covered by shadcn/ui itself (Button, Input, Dialog…). This library
-  is about **pedagogical components**; for generic ones, the consumer uses shadcn/ui directly, and
-  this library relies on the same primitives when it makes sense (to confirm in research).
+- ~~Generic UI primitives already covered by shadcn/ui itself (Button, Input, Dialog…). This
+  library is about pedagogical components; for generic ones, the consumer uses shadcn/ui directly,
+  and this library relies on the same primitives when it makes sense.~~ **Revised 2026-08-11, see
+  §0.3**: this line is no longer accurate. Didact now ships `@didact/ui`, its own minimal
+  primitive kit, as the base its pedagogical components compose from — not as a generic-UI-library
+  ambition, but because self-contained quality and consistent interface norms across
+  `@didact/core`'s components required it. Still out of scope: a *broad*, general-purpose UI
+  library competing with shadcn/ui's own breadth (Dialog, Input, Select, Combobox, etc.) — `@didact/
+  ui` stays deliberately minimal, adding a primitive only when an education component in
+  `@didact/core` actually needs it.
 - Authoring pedagogical content (question banks, curricula).
 - Backend / progress persistence. The components are for presentation and interaction.
 

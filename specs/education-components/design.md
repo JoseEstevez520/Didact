@@ -57,14 +57,15 @@ None of §1.2 applies to the core. A core component does not "know" SkillNet exi
 ┌─────────────────────────────────────────────┐
 │ 3. Education molecules                       │  Flashcard, MatchingExercise, QuizItem*,
 │    (components with pedagogical meaning)     │  SpacedRepetitionDeck, Glossary, Hint,
-│                                               │  Timeline, Rubric, MasteryBadge…
+│    package: @didact/core                     │  Timeline, Rubric, MasteryBadge…
+│    composes from @didact/ui (layers 1-2)     │
 ├─────────────────────────────────────────────┤
 │ 2. Styled layer                               │  Tailwind + variants (cva or similar) over
 │    (neutral theme, restyleable)              │  the primitives. A single place for theming.
-├─────────────────────────────────────────────┤
-│ 1. Accessible primitives                     │  Accessible behavior with no styling of its
-│    (headless)                                │  own (focus, keyboard, ARIA). Decided: Radix UI
-│                                               │
+├─────────────────────────────────────────────┤  Layers 1-2 both live in package: @didact/ui
+│ 1. Accessible primitives                     │  (Button, Card family, ToggleGroup/Toggle,
+│    (headless)                                │  Separator, Badge). Accessible behavior with
+│                                               │  no styling of its own. Decided: Radix UI
 └─────────────────────────────────────────────┘
 ```
 
@@ -72,6 +73,23 @@ This is Didact's own layered architecture (headless primitives + Tailwind + vari
 applied to educational vocabulary instead of generic UI. Layer 3 is where this project's real
 value lives — layers 1 and 2 exist so we don't reinvent accessibility from scratch (see the cost
 of doing it by hand in `openui-adoption.md` §1: 1500+ lines of tests to shield a custom parser).
+
+**Updated (2026-08-11, Phase 3.5 "design foundations"): layers 1-2 are no longer only an abstract
+diagram tier — they materialize as `@didact/ui`, a real, general-purpose primitive kit (Button,
+Card family, ToggleGroup/Toggle, Separator, Badge), and layer 3 is concretely `@didact/core`,
+which composes its education molecules from `@didact/ui` instead of each molecule styling its own
+button/card ad hoc.** This is the same product-owner decision recorded in `requirements.md` §0.3,
+which also revises that document's §2 line that previously put generic primitives out of scope.
+Two packages, not one, because they have different audiences and change at different rates:
+`@didact/ui` is general-purpose (any React project could use just the primitive kit, with no
+pedagogical content at all) and stable once a primitive's variant/size set is set; `@didact/core`
+is where the pedagogical vocabulary — and the actual churn — lives. Each primitive in `@didact/ui`
+is a faithful port of a proven headless-primitives + Tailwind + `cva` reference kit (same
+variant/size sets, same `data-slot`/`data-variant`/`data-size` contract, same `asChild`/Slot escape
+hatch), with only the token source changed to `@didact/theme`'s `--didact-*` custom properties —
+see `packages/ui/src/components/*.tsx` for the per-primitive porting notes and
+`docs/interface-norms.md` for the composition norms this now makes possible by construction
+(action hierarchy, card slot usage, spacing/sizing scale, focus/state treatment, motion strategy).
 
 **Resolved (`requirements.md` §6.2, `research.md` Question 2): Radix UI is layer 1's default.**
 Rationale: Radix is the most widely adopted headless primitives library, which maximizes reuse of
