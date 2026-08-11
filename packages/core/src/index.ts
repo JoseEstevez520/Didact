@@ -35,7 +35,14 @@
  * - Every component must be describable with complete or incomplete props without assuming they
  *   all arrive at once (RNF-4, designed for streaming consumption).
  *
- * Nothing is exported yet: there are no real components to export at this stage.
+ * Phase 3 exit criterion (ROADMAP.md): `MasteryBadge` below is the trivial component that proves
+ * this scaffold works end to end (build, test, Storybook, registry entry, copy mechanism) before
+ * Phase 4 builds the rest of design.md §5's inventory. It is intentionally simple -- see
+ * `src/components/mastery-badge.tsx` for why it needs no layer-1 primitive.
  */
 
-export {};
+export {
+  MasteryBadge,
+  type MasteryBadgeProps,
+  type MasteryLevel,
+} from "./components/mastery-badge.js";

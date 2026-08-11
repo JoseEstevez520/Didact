@@ -4,18 +4,21 @@
   "version": "0.0.0",
   "description": "Didact -- general-purpose education components library, distributed in the shadcn model (registry + copy-paste).",
   "license": "MIT",
-  "packageManager": "pnpm@9",
+  "packageManager": "pnpm@11.9.0",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "build-storybook": "turbo run build-storybook"
   },
   "devDependencies": {
-    "tailwindcss": "4.1.11",
-    "@tailwindcss/postcss": "4.1.11",
-    "postcss": "8.4.49"
+    "turbo": "2.10.9",
+    "typescript": "5.9.3",
+    "tailwindcss": "4.3.3",
+    "@tailwindcss/postcss": "4.3.3",
+    "postcss": "8.5.26"
   }
 }

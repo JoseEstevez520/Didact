@@ -10,11 +10,14 @@
     "./tokens.css": "./src/tokens.css"
   },
   "devDependencies": {
-    "tailwindcss": "4.1.11"
+    "@tailwindcss/postcss": "4.3.3",
+    "postcss": "8.5.26",
+    "postcss-cli": "11.0.1",
+    "tailwindcss": "4.3.3"
   },
   "scripts": {
-    "build": "echo \"@didact/theme: no real build yet (ROADMAP Phase 4)\"",
-    "lint": "echo \"@didact/theme: no real lint yet (ROADMAP Phase 4)\"",
-    "test": "echo \"@didact/theme: no real tests yet (ROADMAP Phase 4)\""
+    "build": "postcss src/tokens.css -o dist/tokens.css --config ../../postcss.config.mjs",
+    "lint": "echo \"@didact/theme: no static lint yet -- build IS the compile check (Tailwind v4 @theme block)\"",
+    "test": "echo \"@didact/theme: no behavior to test -- tokens.css compiling under Tailwind v4 is verified by the build step\""
   }
 }

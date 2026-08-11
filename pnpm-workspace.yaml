@@ -2,3 +2,12 @@ packages:
   - "packages/*"
   - "apps/*"
   - "adapters/*"
+
+# esbuild (transitive dep of tsup/vite/vitest) has a postinstall script that downloads its
+# platform binary. pnpm blocks postinstall scripts by default; this is the well-known, narrowly
+# scoped exception every package in this toolchain needs, allow-listed so a fresh clone doesn't
+# have to run the interactive `pnpm approve-builds` prompt by hand.
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: true
