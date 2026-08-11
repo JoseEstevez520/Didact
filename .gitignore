@@ -10,6 +10,10 @@ node_modules/
 dist/
 .turbo/
 *.tsbuildinfo
+storybook-static/
+
+# Throwaway consumer smoke test (ROADMAP.md Phase 3, block F) -- never a real package of this repo
+examples/
 
 # Environment
 .env

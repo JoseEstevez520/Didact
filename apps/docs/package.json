@@ -1,0 +1,34 @@
+{
+  "name": "@didact/docs",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Didact's browsable Storybook catalog + a11y validation surface (design.md §8, apps/docs/README.md).",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@didact/core": "workspace:*",
+    "@didact/theme": "workspace:*",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.5.7",
+    "@storybook/react-vite": "10.5.7",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "postcss": "8.5.26",
+    "storybook": "10.5.7",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.1"
+  },
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build": "echo \"@didact/docs: no npm-consumable dist -- see build-storybook\"",
+    "build-storybook": "storybook build",
+    "lint": "tsc --noEmit",
+    "test": "echo \"@didact/docs: no behavior of its own to test -- it hosts packages/core's stories\""
+  }
+}

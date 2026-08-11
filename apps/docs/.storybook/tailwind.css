@@ -1,0 +1,12 @@
+/*
+ * Storybook-only entry point for Tailwind + @didact/theme.
+ *
+ * @didact/theme's tokens.css (imported below) stays consumer-agnostic -- it does not know which
+ * files use its utility classes. Tailwind v4's automatic content detection scans from where the
+ * CSS file lives outward, which would miss packages/core/src (a sibling package, not a
+ * descendant of packages/theme). The @source line below is apps/docs' own concern: it tells
+ * Tailwind where THIS app's markup lives, same as any consumer of @didact/theme would need to do
+ * for their own component files.
+ */
+@import "@didact/theme/tokens.css";
+@source "../../../packages/core/src/**/*.{ts,tsx}";
