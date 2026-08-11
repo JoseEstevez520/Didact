@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 
 import {
   FillInTheBlankQuiz,
@@ -23,12 +23,23 @@ const singleChoiceOptions: QuizOption[] = [
   { value: "mars", label: "Mars" },
 ];
 
+// Storybook's "centered" layout shrink-wraps its child, so a `w-full max-w-md` card would collapse
+// to its min-content width (the question wrapping one word per line). Give the card a definite-width
+// parent so `w-full` resolves to the intended `max-w-md`, matching how it renders inside a real page
+// column. `maxWidth: 100%` keeps it responsive in the narrow docs viewport.
+const withFixedWidth: Decorator = (Story) => (
+  <div style={{ width: "28rem", maxWidth: "100%" }}>
+    <Story />
+  </div>
+);
+
 const meta = {
   title: "Core/QuizItem",
   component: SingleChoiceQuiz,
   parameters: {
     layout: "centered",
   },
+  decorators: [withFixedWidth],
   args: {
     question: "Which planet is closest to the Sun?",
     options: singleChoiceOptions,

@@ -41,9 +41,11 @@ behavior/a11y tests + a registry item:
   **RF-8 Timeline / Steps**, **RF-10 Rubric**.
 
 **Known issues to fix:**
-- **`QuizItem` layout is broken/cramped** — the card renders too narrow, so the question wraps
-  awkwardly and the variants look off. Needs a sensible card width/`max-width` + spacing pass, and
-  a re-check of the answered / correct / incorrect states. (The rest of the catalog renders fine.)
+- ~~**`QuizItem` layout is broken/cramped**~~ — ✅ fixed (2026-08-11). Root cause was not the
+  component: Storybook's `layout: "centered"` shrink-wraps its child, so the card's `w-full max-w-md`
+  collapsed to min-content (the question wrapping one word per line). Fixed with a story decorator
+  giving the card a definite-width (`28rem`) parent, so it renders at its intended `max-w-md`;
+  verified live in Storybook across all variants incl. the answered / correct / incorrect states.
 - **Copy-paste publication gaps (Phase 6):** education components import `@didact/ui` as a package
   specifier (must be rewritten to local paths for pure copy-paste), and the `radius` token doesn't
   propagate via `cssVars` alone (a consumer needs `@didact/theme`). Detail in
