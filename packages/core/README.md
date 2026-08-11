@@ -1,77 +1,75 @@
 # @didact/core
 
-Capa 3 de la arquitectura de 3 capas de Didact (`specs/education-components/design.md` §2):
-los **componentes educativos** con significado pedagógico (Flashcard, MatchingExercise, QuizItem,
-SpacedRepetitionDeck, Glossary, Hint/Reveal, Timeline, Rubric, MasteryBadge…), construidos sobre
-una capa 2 de theming neutro y una capa 1 de primitivos accesibles.
+Layer 3 of Didact's 3-layer architecture (`specs/education-components/design.md` §2): the
+**education components** with pedagogical meaning (Flashcard, MatchingExercise, QuizItem,
+SpacedRepetitionDeck, Glossary, Hint/Reveal, Timeline, Rubric, MasteryBadge…), built on top of a
+layer 2 of neutral theming and a layer 1 of accessible primitives.
 
 ```
 ┌─────────────────────────────────────────────┐
 │ 3. Education molecules                       │  Flashcard, MatchingExercise, QuizItem,
-│    (componentes con significado pedagógico)  │  SpacedRepetitionDeck, Glossary, Hint,
+│    (components with pedagogical meaning)     │  SpacedRepetitionDeck, Glossary, Hint,
 │                                               │  Timeline, Rubric, MasteryBadge…
 ├─────────────────────────────────────────────┤
-│ 2. Styled layer                               │  Tailwind v4 + cva sobre los tokens de
-│    (tema neutro, restyleable)                │  @didact/theme. Un solo lugar de theming.
+│ 2. Styled layer                               │  Tailwind v4 + cva over @didact/theme's
+│    (neutral theme, restyleable)              │  tokens. A single place for theming.
 ├─────────────────────────────────────────────┤
-│ 1. Accessible primitives                     │  Comportamiento accesible sin estilo propio
-│    (headless)                                │  (foco, teclado, ARIA). Radix UI por defecto.
+│ 1. Accessible primitives                     │  Accessible behavior with no styling of its
+│    (headless)                                │  own (focus, keyboard, ARIA). Radix UI by default.
 └─────────────────────────────────────────────┘
 ```
 
-## Estado
+## Status
 
-**Scaffold (Fase 1-3 del `ROADMAP.md`). La implementación real de los componentes es la Fase 4.**
-`src/index.ts` no exporta componentes todavía — solo documenta el contrato de entrada.
+**Scaffold (Phase 1-3 of `ROADMAP.md`). Real component implementation is Phase 4.**
+`src/index.ts` doesn't export any components yet — it only documents the entry-point contract.
 
-## Decisiones ya cerradas (no se reabren al implementar)
+## Decisions already closed (not reopened during implementation)
 
-- **Tailwind v4 SÍ es la capa de estilo del núcleo** — decisión de producto de Jose (2026-08-11,
-  ver `research/decisions.md` D1). `specs/education-components/research.md` P3 concluyó, con
-  evidencia, que el mecanismo de distribución de shadcn/ui **no exige** Tailwind técnicamente (el
-  campo `tailwind` de `registry-item.json` está deprecated a favor de `cssVars.theme`) — esa
-  conclusión sigue siendo cierta y no se reescribe. Lo que cambia es que Jose elige usar Tailwind
-  de todos modos, por consistencia visual y como referencia de estilo alineada con shadcn/ui, no
-  porque el mecanismo lo obligara. En la práctica: los componentes se estilizan con **Tailwind +
-  `cva`** (`class-variance-authority`) sobre los tokens de `@didact/theme` (CSS custom properties
-  + bloque `@theme` de Tailwind v4) — ver el README de ese paquete para el detalle de los dos
-  niveles de theming.
-- **Radix UI como capa 1 por defecto**, alineado con shadcn/ui, documentando la fricción de
-  peer-dependency con React 19 estable (research.md P2) y vigilando Base UI como alternativa más
-  limpia a medio plazo.
-- Cualquier dependencia externa de esta capa que no se copie junto con el componente (Radix,
-  Tailwind, `cva`) se fija con versión exacta y lleva un test de deriva (RNF-5) — ver
+- **Tailwind v4 IS the core's styling layer** — a product decision by Jose (2026-08-11, see
+  `research/decisions.md` D1). `specs/education-components/research.md` P3 concluded, with
+  evidence, that shadcn/ui's distribution mechanism **does not require** Tailwind technically (the
+  `tailwind` field in `registry-item.json` is deprecated in favor of `cssVars.theme`) — that
+  conclusion still stands and is not rewritten. What changes is that Jose chooses to use Tailwind
+  anyway, for visual consistency and as a style reference aligned with shadcn/ui, not because the
+  mechanism forced it. In practice: components are styled with **Tailwind + `cva`**
+  (`class-variance-authority`) over `@didact/theme`'s tokens (CSS custom properties + Tailwind v4
+  `@theme` block) — see that package's README for the detail of the two theming levels.
+- **Radix UI as the default layer 1**, aligned with shadcn/ui, documenting the peer-dependency
+  friction with stable React 19 (research.md P2) and watching Base UI as a cleaner alternative in
+  the medium term.
+- Any external dependency of this layer that isn't copied alongside the component (Radix,
+  Tailwind, `cva`) is pinned to an exact version with a drift test (RNF-5) — see
   `@didact/validators/drift`.
 
-## Alcance: amplio y por oleadas de complejidad, no "v1 mínimo"
+## Scope: broad and organized in complexity waves, not a "minimal v1"
 
-Decisión de producto de Jose (2026-08-11, ver `research/decisions.md` D2): Didact aspira a cubrir
-**todo lo educativo que se pueda**, con buen estilo — desde ejercicios de emparejar/arrastrar
-hasta ejercicios de código y componentes complejos — no un recorte mínimo pensado solo para el
-primer consumidor. Esto revierte cualquier framing anterior de "fuera de v1":
+Product decision by Jose (2026-08-11, see `research/decisions.md` D2): Didact aims to cover **as
+much educational ground as possible**, with good style — from matching/drag exercises to code
+exercises and complex components — not a minimal cutdown designed only for the first consumer.
+This reverses any earlier "out of v1" framing:
 
-- Las interacciones **gráficas/sobre imagen** de QTI (`hotspot`, `hot-text`, `graphic-order`,
-  `graphic-associate`, `graphic-gap-match`, `position-object`, `select-point`, `drawing`) y de
-  **respuesta numérica/slider** (research.md §9.2) están **en alcance**, como una oleada de mayor
-  complejidad — no descartadas. Ver `packages/validators/pedagogy/qti-mapping.json`
-  (`scope: "planned"`, `phase: "oleada-avanzada"`).
-- **RF-11 (ejercicio de código)**, apoyado en Sandpack para la ejecución (research.md §9.3, la
-  comprobación sigue siendo trabajo propio), está en alcance, priorizado detrás de los
-  componentes con evidencia pedagógica más fuerte (RF-2/RF-4, ver
-  `packages/validators/pedagogy/evidence.json`) pero no descartado.
-- El orden de implementación real sigue basándose en evidencia y precedente (research.md §9.1 y
-  Pregunta 7), no en "lo fácil primero" — pero "más complejo" ya no significa "fuera de alcance".
+- QTI's **graphical/image-based** interactions (`hotspot`, `hot-text`, `graphic-order`,
+  `graphic-associate`, `graphic-gap-match`, `position-object`, `select-point`, `drawing`) and
+  **numeric/slider response** (research.md §9.2) are **in scope**, as a higher-complexity wave —
+  not dropped. See `packages/validators/pedagogy/qti-mapping.json`
+  (`scope: "planned"`, `phase: "advanced-wave"`).
+- **RF-11 (code exercise)**, backed by Sandpack for execution (research.md §9.3, checking remains
+  our own work), is in scope, prioritized behind the components with the strongest pedagogical
+  evidence (RF-2/RF-4, see `packages/validators/pedagogy/evidence.json`) but not dropped.
+- The real implementation order still relies on evidence and precedent (research.md §9.1 and
+  Question 7), not on "easiest first" — but "more complex" no longer means "out of scope."
 
-## Relación con el resto del monorepo
+## Relationship to the rest of the monorepo
 
-- `@didact/theme` es la capa 2: este paquete la consume como dependencia para sus tokens
-  Tailwind/CSS custom properties, nunca redefine colores o radios por su cuenta.
-- Cada componente de este paquete se describe como una entrada en `@didact/registry` para el
-  mecanismo de distribución estilo shadcn/ui (RF-15).
-- `@didact/validators` aporta los datos (a11y, evidencia pedagógica, esquema, deriva) contra los
-  que se valida cada componente antes de publicarse en la registry.
-- El adaptador SkillNet (`adapters/skillnet/`, fuera de este monorepo) consume componentes de esta
-  capa; ninguna decisión de SkillNet debe filtrarse aquí.
+- `@didact/theme` is layer 2: this package consumes it as a dependency for its Tailwind/CSS custom
+  property tokens, never redefining colors or radii on its own.
+- Each component in this package is described as an entry in `@didact/registry` for the
+  shadcn/ui-style distribution mechanism (RF-15).
+- `@didact/validators` provides the data (a11y, pedagogical evidence, schema, drift) against which
+  each component is validated before being published in the registry.
+- The SkillNet adapter (`adapters/skillnet/`, outside this monorepo) consumes components from this
+  layer; no SkillNet decision should leak in here.
 
-Ver `specs/education-components/design.md` para la arquitectura completa y `research.md` para la
-evidencia detrás de cada decisión.
+See `specs/education-components/design.md` for the full architecture and `research.md` for the
+evidence behind each decision.

@@ -1,15 +1,15 @@
 {
-  "$comment": "Placeholder de RNF-5 (requirements.md): toda dependencia externa que NO se copia junto con el componente (a diferencia del modelo copy-paste de RF-15) debe fijarse con version EXACTA y llevar un motivo documentado + un test de deriva. Mismo estandar que openui-adoption.md ya exigia para @openuidev/react-lang, cuyo incumplimiento fue precisamente el problema que motivo el modelo shadcn (requirements.md 0.2).",
+  "$comment": "RNF-5 placeholder (requirements.md): any external dependency that is NOT copied alongside the component (unlike RF-15's copy-paste model) must be pinned to an EXACT version with a documented reason + a drift test. Same standard openui-adoption.md already required for @openuidev/react-lang, whose non-compliance was precisely the problem that motivated the shadcn model (requirements.md 0.2).",
   "schema": {
-    "dependency": "nombre del paquete npm, string",
-    "exactVersion": "version exacta fijada (sin ^ ni ~), string",
-    "reason": "por que esta dependencia no se copia y se fija en su lugar, string"
+    "dependency": "npm package name, string",
+    "exactVersion": "pinned exact version (no ^ or ~), string",
+    "reason": "why this dependency isn't copied and is pinned instead, string"
   },
   "pinned": [
     {
       "dependency": "@radix-ui/react-dialog",
-      "exactVersion": "EJEMPLO-NO-INSTALADO-1.1.23",
-      "reason": "EJEMPLO comentado, no una dependencia real instalada todavia. Capa 1 (primitivos accesibles) de design.md 2. research.md P2: Radix declara su peer de React 19 anclado a 19.0.0-rc.1 (no ^19.0.0) en su version latest de hoy -- friccion de instalacion documentada, no bloqueo funcional. Se fijaria version exacta (no rango) precisamente porque Radix no se copia como codigo propio, sigue siendo una dependencia real (design.md 9: 'el modelo copy-paste protege a los componentes, no a sus dependencias internas de comportamiento')."
+      "exactVersion": "EXAMPLE-NOT-INSTALLED-1.1.23",
+      "reason": "Commented EXAMPLE, not a real dependency installed yet. Layer 1 (accessible primitives) from design.md 2. research.md P2: Radix declares its React 19 peer pinned to 19.0.0-rc.1 (not ^19.0.0) in its latest version today -- documented installation friction, not a functional blocker. It would be pinned to an exact version (not a range) precisely because Radix isn't copied as our own code, it remains a real dependency (design.md 9: 'the copy-paste model protects the components, not their internal behavioral dependencies')."
     }
   ]
 }

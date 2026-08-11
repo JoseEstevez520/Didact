@@ -1,27 +1,27 @@
 /**
- * SM-2 — algoritmo de repetición espaciada por defecto de Didact.
+ * SM-2 — Didact's default spaced-repetition algorithm.
  *
- * Fuente: `specs/education-components/research.md` Pregunta 4. Fórmulas verificadas contra:
- * - https://www.supermemo.com/en/archives1990-2015/english/ol/sm2 (especificación original)
+ * Source: `specs/education-components/research.md` Question 4. Formulas verified against:
+ * - https://www.supermemo.com/en/archives1990-2015/english/ol/sm2 (original specification)
  * - https://en.wikipedia.org/wiki/SM-2_(algorithm)
  *
- * Por qué SM-2 es el default (research.md P4):
- * - ~40-60 líneas de aritmética pura, cero dependencias externas.
- * - 35+ años en producción (SuperMemo, Anki hasta 2023, y aún hoy como opción).
- * - Evidencia "media" en la tabla de research.md (frente a "alta" en FSRS, pero FSRS cuesta
- *   100-250 líneas y una elección de librería externa — ver `fsrs.ts`).
+ * Why SM-2 is the default (research.md P4):
+ * - ~40-60 lines of pure arithmetic, zero external dependencies.
+ * - 35+ years in production (SuperMemo, Anki until 2023, and still an option today).
+ * - "Medium" evidence in research.md's table (vs. "high" for FSRS, but FSRS costs 100-250 lines
+ *   and an external library choice — see `fsrs.ts`).
  *
- * Parámetros del algoritmo (verificados en las fuentes de arriba):
- * - Factor de facilidad (EF) inicial: 2.5, con suelo de 1.3 (nunca baja de ahí).
- * - Calificación de calidad de respuesta q en [0,5] en la especificación original; este módulo
- *   la deriva del vocabulario `ReviewGrade` de `types.ts` (again/hard/good/easy) para mantener
- *   una única escala de calificación en toda la librería (ver mapeo abajo).
- * - q >= 3 (acierto): se recalcula EF y crece el intervalo (I) multiplicándolo por EF.
- * - q < 3 (fallo): se reinicia el contador de repeticiones y el intervalo vuelve a 1 día.
+ * Algorithm parameters (verified against the sources above):
+ * - Initial easiness factor (EF): 2.5, with a floor of 1.3 (never goes below that).
+ * - Answer quality rating q in [0,5] in the original specification; this module derives it from
+ *   the `ReviewGrade` vocabulary in `types.ts` (again/hard/good/easy) to keep a single rating
+ *   scale across the whole library (see the mapping below).
+ * - q >= 3 (success): EF is recalculated and the interval (I) grows by multiplying it by EF.
+ * - q < 3 (failure): the repetition counter resets and the interval goes back to 1 day.
  *
- * ESTADO: stub documentado. La implementación aritmética completa es trabajo de Fase 4 del
- * `ROADMAP.md` (primera oleada de componentes); este fichero fija el contrato de tipos y las
- * fórmulas de referencia para que esa implementación no tenga que re-investigarlas.
+ * STATUS: documented stub. The full arithmetic implementation is Phase 4 work in `ROADMAP.md`
+ * (first wave of components); this file fixes the type contract and reference formulas so that
+ * implementation doesn't have to re-research them.
  */
 
 import type {
@@ -31,13 +31,13 @@ import type {
   SpacedRepetitionScheduler,
 } from "./types";
 
-/** Forma interna del estado SM-2, ver research.md P4 (tabla de algoritmos). */
+/** Internal shape of SM-2 state, see research.md P4 (algorithm table). */
 export interface SM2State extends ReviewState {
-  /** Número de repeticiones correctas consecutivas. */
+  /** Number of consecutive correct repetitions. */
   repetitions: number;
-  /** Factor de facilidad. Inicial 2.5, suelo 1.3. */
+  /** Easiness factor. Initial 2.5, floor 1.3. */
   easinessFactor: number;
-  /** Intervalo actual en días hasta la próxima revisión. */
+  /** Current interval in days until the next review. */
   intervalDays: number;
 }
 
@@ -45,9 +45,9 @@ const INITIAL_EASINESS_FACTOR = 2.5;
 const MINIMUM_EASINESS_FACTOR = 1.3;
 
 /**
- * Mapeo de `ReviewGrade` (vocabulario común de la librería) a la escala de calidad q∈[0,5] de la
- * especificación SM-2 original. "again"/"hard" caen por debajo del umbral q=3 (fallo, reinicia
- * repeticiones); "good"/"easy" lo superan (acierto, crece el intervalo).
+ * Mapping from `ReviewGrade` (the library's common vocabulary) to the q∈[0,5] quality scale of
+ * the original SM-2 specification. "again"/"hard" fall below the q=3 threshold (failure, resets
+ * repetitions); "good"/"easy" clear it (success, grows the interval).
  */
 export const SM2_GRADE_TO_QUALITY: Record<ReviewGrade, number> = {
   again: 0,
@@ -57,8 +57,8 @@ export const SM2_GRADE_TO_QUALITY: Record<ReviewGrade, number> = {
 };
 
 /**
- * Scheduler SM-2. Implementación pendiente (Fase 4) — de momento lanza si se invoca, para que un
- * consumo accidental en tiempo de ejecución sea explícito en vez de devolver datos incorrectos.
+ * SM-2 scheduler. Implementation pending (Phase 4) — for now it throws if invoked, so that
+ * accidental use at runtime is explicit instead of returning incorrect data.
  */
 export const sm2Scheduler: SpacedRepetitionScheduler = {
   createInitialState(): SM2State {
@@ -71,12 +71,12 @@ export const sm2Scheduler: SpacedRepetitionScheduler = {
 
   schedule(_state: ReviewState, _grade: ReviewGrade, _now?: Date): ReviewResult {
     throw new Error(
-      "@didact/spaced-repetition/sm2: implementacion pendiente (Fase 4 del ROADMAP). " +
-        "Formulas de referencia y contrato de tipos ya fijados en este fichero y en research.md P4.",
+      "@didact/spaced-repetition/sm2: implementation pending (ROADMAP Phase 4). " +
+        "Reference formulas and type contract already fixed in this file and in research.md P4.",
     );
   },
 };
 
-// Reexportado para dejar constancia del suelo documentado en research.md, aunque no se use aún
-// en la rama de implementación (evita que quede "mágico" cuando se implemente schedule()).
+// Re-exported to record the floor documented in research.md, even though it isn't used yet in
+// the implementation branch (avoids it feeling "magic" once schedule() gets implemented).
 export const __SM2_MINIMUM_EASINESS_FACTOR = MINIMUM_EASINESS_FACTOR;

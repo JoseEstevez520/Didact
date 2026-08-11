@@ -1,53 +1,52 @@
 # @didact/validators/a11y
 
-Datos machine-readable de accesibilidad, derivados de `specs/education-components/research.md`
-Pregunta 5. `wcag-criteria.json` es el contrato mínimo no negociable del núcleo: WCAG 2.2 AA
-completo, tratando el criterio AAA 2.3.3 como obligatorio también.
+Machine-readable accessibility data, derived from `specs/education-components/research.md`
+Question 5. `wcag-criteria.json` is the core's non-negotiable minimum contract: full WCAG 2.2 AA,
+also treating the AAA criterion 2.3.3 as mandatory.
 
-## Por qué WCAG 2.2 (y no solo "buenas intenciones")
+## Why WCAG 2.2 (and not just "good intentions")
 
-`design.md` §9 marca explícitamente el riesgo de "accesibilidad de buena intención sin evidencia".
-`research.md` responde con evidencia jerarquizada por fuerza probatoria:
+`design.md` §9 explicitly flags the risk of "well-intentioned accessibility without evidence."
+`research.md` responds with evidence ranked by evidentiary strength:
 
-1. **WCAG 2.2** (normativo) — la evidencia más fuerte, con nivel A/AA/AAA explícito.
-2. **CAST/UDL 3.0** (marco de investigación de neurociencia, no checklist).
-3. **W3C WAI-COGA** (guía suplementaria a WCAG, consenso de grupo de trabajo con investigación de
-   usuarios sobre TDAH/autismo/dislexia/discalculia).
-4. **British Dyslexia Association** (guía de estilo práctica, respaldo institucional, sin ensayos
-   citados punto por punto).
+1. **WCAG 2.2** (normative) — the strongest evidence, with an explicit A/AA/AAA level.
+2. **CAST/UDL 3.0** (neuroscience research framework, not a checklist).
+3. **W3C WAI-COGA** (guidance supplementary to WCAG, working-group consensus with user research on
+   ADHD/autism/dyslexia/dyscalculia).
+4. **British Dyslexia Association** (practical style guide, institutional backing, no
+   point-by-point cited trials).
 
-Las cuatro son evidencia real pero de distinto peso — `wcag-criteria.json` documenta solo la
-categoría 1 (normativa) en detalle estructurado; las categorías 2-4 informan requisitos como
-densidad visual, tipografía y control de ritmo (RF-14) mencionados en `research.md` §5.2-5.4 pero
-no se han convertido aún a JSON en este scaffold.
+All four are real evidence but of different weight — `wcag-criteria.json` documents only category
+1 (normative) in structured detail; categories 2-4 inform requirements like visual density,
+typography, and pacing control (RF-14) mentioned in `research.md` §5.2-5.4 but not yet converted
+to JSON in this scaffold.
 
-## El caso 2.5.7 Dragging Movements
+## The 2.5.7 Dragging Movements case
 
-Incluido explícitamente porque `research.md` §9.4 lo señala como un matiz que es fácil pasar por
-alto: RF-3 pide "soporte de teclado, no solo drag-and-drop", pero **teclado no es lo mismo que
-"single pointer sin arrastre"**. `dnd-kit` da navegación por teclado de serie, pero eso no
-garantiza automáticamente el patrón que 2.5.7 exige en sentido estricto: "seleccionar origen →
-seleccionar destino" con un solo clic/toque cada vez, sin necesidad de mantener presionado ni
-arrastrar. Ese patrón debe implementarse explícitamente en los ejercicios de emparejar/ordenar de
-RF-3; no se puede dar 2.5.7 por cumplido solo porque el componente responde a teclado.
+Included explicitly because `research.md` §9.4 flags it as a nuance that's easy to overlook: RF-3
+asks for "keyboard support, not just drag-and-drop," but **keyboard is not the same as "a single
+pointer without dragging."** `dnd-kit` gives keyboard navigation out of the box, but that doesn't
+automatically guarantee the pattern 2.5.7 strictly requires: "select source → select target" with
+a single click/tap each time, with no need to hold down or drag. That pattern must be implemented
+explicitly in RF-3's matching/ordering exercises; 2.5.7 cannot be considered satisfied just
+because the component responds to keyboard.
 
-## El ángulo legal: EN 301 549 / European Accessibility Act
+## The legal angle: EN 301 549 / European Accessibility Act
 
-`research.md` §9.4 documenta que la accesibilidad deja de ser solo un compromiso ético y pasa a
-ser un **requisito de venta**: EN 301 549 es el estándar europeo armonizado que referencia WCAG en
-su capítulo 9, y desde el **28 de junio de 2025** es exigible bajo la European Accessibility Act
-(EAA) también a empresas privadas que venden a consumidores en la UE. Esto refuerza RF-12–17 como
-requisitos de primera clase, no aspiracionales.
+`research.md` §9.4 documents that accessibility stops being just an ethical commitment and becomes
+a **sales requirement**: EN 301 549 is the harmonized European standard that references WCAG in
+its Chapter 9, and since **June 28, 2025** it's enforceable under the European Accessibility Act
+(EAA) also for private companies selling to consumers in the EU. This reinforces RF-12–17 as
+first-class requirements, not aspirational ones.
 
-**No verificado (dicho explícitamente, como exige el estándar de honestidad de `research.md`):**
-según fuentes secundarias, la versión de EN 301 549 actualmente vigente referenciaría WCAG **2.1**,
-anterior a 2.2 — por lo que el criterio 2.5.7 (introducido en 2.2) podría no estar todavía
-incorporado literalmente al texto legal armonizado. Antes de usar EN 301 549 como argumento legal
-preciso ante un cliente, confirmar contra el texto oficial de EN 301 549 qué versión de WCAG
-referencia exactamente.
+**Not verified (stated explicitly, as `research.md`'s honesty standard requires):** according to
+secondary sources, the currently-in-force version of EN 301 549 would reference WCAG **2.1**,
+earlier than 2.2 — so criterion 2.5.7 (introduced in 2.2) might not yet be literally incorporated
+into the harmonized legal text. Before using EN 301 549 as a precise legal argument with a client,
+confirm against EN 301 549's official text exactly which WCAG version it references.
 
-## Estado
+## Status
 
-Datos completos para la categoría normativa (WCAG). Sin validador ejecutable todavía (Fase 4): la
-intención es que estos datos alimenten un lint/test de a11y automatizado por componente (RF-17),
-no solo servir de documentación.
+Complete data for the normative category (WCAG). No executable validator yet (Phase 4): the
+intent is for this data to feed an automated per-component a11y lint/test (RF-17), not just serve
+as documentation.

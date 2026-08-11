@@ -1,52 +1,55 @@
-# Contribuir a Didact
+# Contributing to Didact
 
-Este repositorio es hoy (Fase 1-3 del `ROADMAP.md`) un **scaffold documental**: contiene la
-investigación que fundamenta el diseño, los validadores científicos (datos machine-readable) y
-la estructura de paquetes del monorepo, pero todavía no la implementación de los componentes
-educativos (eso es la Fase 4).
+This repository is today (Phase 1-3 of `ROADMAP.md`) a **documentation scaffold**: it contains the
+research that grounds the design, the scientific validators (machine-readable data), and the
+monorepo's package structure, but not yet the implementation of the education components (that's
+Phase 4).
 
-## Antes de proponer un cambio
+**Repository language: English.** All documentation, code, comments, specs, research, and commit
+messages are in English. This applies to every future contribution — do not add Spanish (or any
+other language) content to this repo going forward.
 
-1. Lee `ROADMAP.md` para entender en qué fase está el proyecto y qué se espera de cada una.
-2. Lee `specs/education-components/requirements.md`, `design.md` y `research.md` — son la fuente
-   de verdad de qué se construye y por qué. No se acepta un componente o una decisión de diseño
-   que contradiga `requirements.md` §0 (propósito general, modelo shadcn) sin abrir antes una
-   discusión que actualice el spec.
-3. Cualquier acoplamiento a SkillNet (tokens de `design-system.md`, el catálogo generativo v2,
-   idioma, supuestos de producto) va en `adapters/skillnet/`, nunca en `packages/*`. La pregunta
-   de guarda es siempre: "¿esto tiene sentido para alguien que nunca ha oído hablar de SkillNet?".
+## Before proposing a change
 
-## Estructura del monorepo
+1. Read `ROADMAP.md` to understand what phase the project is in and what's expected of each one.
+2. Read `specs/education-components/requirements.md`, `design.md`, and `research.md` — they are
+   the source of truth for what's being built and why. A component or design decision that
+   contradicts `requirements.md` §0 (general purpose, shadcn model) is not accepted without first
+   opening a discussion that updates the spec.
+3. Any coupling to SkillNet (tokens from `design-system.md`, the v2 generative catalog, language,
+   product assumptions) goes in `adapters/skillnet/`, never in `packages/*`. The guard question is
+   always: "does this make sense to someone who has never heard of SkillNet?".
 
-- `packages/core` — capa 3 (componentes educativos) y su relación con la capa 2 (theming) y la
-  capa 1 (primitivos accesibles).
-- `packages/theme` — capa 2 (theming): tema neutro por defecto en CSS custom properties + bloque
-  `@theme` de Tailwind v4 (RF-16).
-- `packages/spaced-repetition` — algoritmos de repetición espaciada tras una interfaz agnóstica.
-- `packages/registry` — el `registry.json` que describe el catálogo de componentes distribuible
-  vía el mecanismo estilo shadcn/ui.
-- `packages/validators` — los validadores científicos: datos de accesibilidad, evidencia
-  pedagógica, esquema declarativo de componentes y control de deriva de dependencias.
-- `adapters/skillnet` — documentación de la frontera con SkillNet (sin código; el código del
-  adaptador vive en el repo de SkillNet).
-- `apps/docs` — plan de documentación viva (Storybook), pendiente de Fase 3.
-- `research/` — artefactos de investigación (informes crudos + bibliografía + registro de
-  decisiones de producto posteriores a la Fase 1, ver `research/decisions.md`).
+## Monorepo structure
 
-## Convenciones
+- `packages/core` — layer 3 (education components) and its relationship to layer 2 (theming) and
+  layer 1 (accessible primitives).
+- `packages/theme` — layer 2 (theming): neutral default theme in CSS custom properties + a
+  Tailwind v4 `@theme` block (RF-16).
+- `packages/spaced-repetition` — spaced repetition algorithms behind an agnostic interface.
+- `packages/registry` — the `registry.json` describing the component catalog distributable via the
+  shadcn/ui-style mechanism.
+- `packages/validators` — the scientific validators: accessibility data, pedagogical evidence,
+  declarative component schema, and dependency drift control.
+- `adapters/skillnet` — documentation of the boundary with SkillNet (no code; the adapter code
+  lives in the SkillNet repo).
+- `apps/docs` — living documentation plan (Storybook), pending Phase 3.
+- `research/` — research artifacts (raw reports + bibliography + a log of product decisions made
+  after Phase 1, see `research/decisions.md`).
 
-- Cada paquete es `"private": true`, versión `0.0.0` hasta que exista un mecanismo de publicación
-  real (ver `packages/registry/README.md`).
-- No se añaden dependencias externas sin fijar versión exacta y documentar el motivo (RNF-5,
-  ver `packages/validators/drift/`).
-- **Tailwind v4 es la capa de estilo de Didact** (decisión de producto de Jose, 2026-08-11 — ver
-  `research/decisions.md` D1), con el tema neutro centralizado en `@didact/theme`, restyleable vía
-  CSS custom properties. `research.md` P3 documentó que el mecanismo de registry de shadcn/ui no
-  exige Tailwind técnicamente — eso sigue siendo cierto, pero es una elección deliberada de estilo
-  y no un límite técnico: se adopta igualmente por consistencia visual.
-- Alcance amplio y ambicioso, no "v1 recortado" (decisión de producto de Jose, 2026-08-11 — ver
-  `research/decisions.md` D2): las interacciones gráficas/numéricas de QTI (research.md §9.2) y el
-  ejercicio de código (RF-11) están en alcance como oleadas de mayor complejidad, no descartadas.
-- Commits y PRs en español o inglés, indistintamente, pero consistentes dentro de un mismo PR.
-- No se incluyen archivos de configuración de asistentes de IA en el repo (`.gitignore` los
-  excluye explícitamente).
+## Conventions
+
+- Every package is `"private": true`, version `0.0.0` until a real publication mechanism exists
+  (see `packages/registry/README.md`).
+- No external dependency is added without pinning an exact version and documenting the reason
+  (RNF-5, see `packages/validators/drift/`).
+- **Tailwind v4 is Didact's styling layer** (product decision by Jose, 2026-08-11 — see
+  `research/decisions.md` D1), with the neutral theme centralized in `@didact/theme`, restyleable
+  via CSS custom properties. `research.md` P3 documented that shadcn/ui's registry mechanism does
+  not technically require Tailwind — that's still true, but it's a deliberate style choice, not a
+  technical limit: it's adopted anyway for visual consistency.
+- Broad and ambitious scope, not a "cut-down v1" (product decision by Jose, 2026-08-11 — see
+  `research/decisions.md` D2): QTI's graphical/numeric interactions (`research.md` §9.2) and the
+  code exercise (RF-11) are in scope as higher-complexity waves, not dropped.
+- No AI-assistant configuration files are included in the repo (`.gitignore` excludes them
+  explicitly).

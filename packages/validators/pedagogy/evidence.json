@@ -1,105 +1,105 @@
 {
-  "source": "specs/education-components/research.md, seccion 9.1 (evidencia pedagogica, lote D)",
-  "note": "Fuerza de evidencia por requisito funcional (RF), tal como concluye research.md. 'no-evaluada' significa que las fuentes citadas en research.md 9.1 no se pronuncian sobre ese RF, NO que el RF carezca de valor pedagogico.",
-  "strengthScale": ["alta", "moderada", "baja", "no-evaluada"],
+  "source": "specs/education-components/research.md, section 9.1 (pedagogical evidence, batch D)",
+  "note": "Evidence strength per functional requirement (RF), as concluded by research.md. 'not-evaluated' means the sources cited in research.md 9.1 do not make a claim about that RF, NOT that the RF lacks pedagogical value.",
+  "strengthScale": ["high", "moderate", "low", "not-evaluated"],
   "byRequirement": [
     {
       "rf": "RF-2",
       "component": "SpacedRepetitionDeck",
-      "strength": "alta",
-      "source": "Dunlosky et al. 2013 (SAGE 403, reconstruido via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
-      "note": "Distributed practice es una de solo dos de las 10 tecnicas de estudio evaluadas con utilidad alta. Tiene el respaldo mas fuerte del inventario junto a RF-4."
+      "strength": "high",
+      "source": "Dunlosky et al. 2013 (SAGE 403, reconstructed via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
+      "note": "Distributed practice is one of only two of the 10 study techniques evaluated with high utility. It has the strongest backing in the inventory alongside RF-4."
     },
     {
       "rf": "RF-4",
-      "component": "Variantes de quiz",
-      "strength": "alta",
-      "source": "Dunlosky et al. 2013 (SAGE 403, reconstruido via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
-      "note": "Practice testing es la otra tecnica con utilidad alta en Dunlosky et al. Usado como practice testing (no solo evaluacion), RF-4 comparte el respaldo mas fuerte del inventario.",
+      "component": "Quiz variants",
+      "strength": "high",
+      "source": "Dunlosky et al. 2013 (SAGE 403, reconstructed via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
+      "note": "Practice testing is the other technique with high utility in Dunlosky et al. Used as practice testing (not just assessment), RF-4 shares the strongest backing in the inventory.",
       "informativeFeedbackRequired": true,
       "informativeFeedbackSource": "Wisniewski, Zierer & Hattie 2019 (https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full)"
     },
     {
       "rf": "RF-5",
       "component": "Glossary/Term",
-      "strength": "baja",
-      "source": "Dunlosky et al. 2013, por analogia con las tecnicas de utilidad baja (rereading/highlighting)",
-      "note": "Consulta pasiva de un termino (tooltip/popover) no exige recuperacion activa. research.md recomienda que RF-5 fuerce recall activo en vez de ser solo consulta, para no quedarse en la categoria de utilidad baja."
+      "strength": "low",
+      "source": "Dunlosky et al. 2013, by analogy with the low-utility techniques (rereading/highlighting)",
+      "note": "Passive lookup of a term (tooltip/popover) does not require active recall. research.md recommends RF-5 force active recall instead of being just a lookup, so it doesn't stay in the low-utility category."
     },
     {
       "rf": "RF-6",
       "component": "Hint/Reveal",
-      "strength": "no-evaluada",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "No evaluado explicitamente por las fuentes de research.md 9.1. Si requiere feedback informativo, igual que RF-4.",
+      "note": "Not explicitly evaluated by research.md 9.1's sources. Requires informative feedback, same as RF-4.",
       "informativeFeedbackRequired": true,
       "informativeFeedbackSource": "Wisniewski, Zierer & Hattie 2019 (https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full)"
     },
     {
       "rf": "RF-1",
       "component": "Flashcard",
-      "strength": "no-evaluada",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "No evaluado explicitamente en research.md 9.1 como tecnica independiente; su valor depende de si se usa dentro de RF-2 (distributed practice, evidencia alta)."
+      "note": "Not explicitly evaluated in research.md 9.1 as an independent technique; its value depends on whether it's used within RF-2 (distributed practice, high evidence)."
     },
     {
       "rf": "RF-3",
       "component": "Matching/Sort/Categorize",
-      "strength": "no-evaluada",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "No evaluado explicitamente en research.md 9.1."
+      "note": "Not explicitly evaluated in research.md 9.1."
     },
     {
       "rf": "RF-7",
-      "component": "Progreso/mastery",
-      "strength": "no-evaluada",
+      "component": "Progress/mastery",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "No evaluado explicitamente en research.md 9.1."
+      "note": "Not explicitly evaluated in research.md 9.1."
     },
     {
       "rf": "RF-8",
       "component": "Timeline/Steps",
-      "strength": "no-evaluada",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "No evaluado explicitamente en research.md 9.1."
+      "note": "Not explicitly evaluated in research.md 9.1."
     },
     {
       "rf": "RF-9",
-      "component": "Checkpoint sobre video",
-      "strength": "no-evaluada",
+      "component": "Video checkpoint",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "Explicitamente senalado en research.md 9.1 como no evaluado por estas fuentes."
+      "note": "Explicitly flagged in research.md 9.1 as not evaluated by these sources."
     },
     {
       "rf": "RF-10",
-      "component": "Rubric/autoevaluacion",
-      "strength": "no-evaluada",
+      "component": "Rubric/self-assessment",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "Explicitamente senalado en research.md 9.1 como no evaluado por estas fuentes."
+      "note": "Explicitly flagged in research.md 9.1 as not evaluated by these sources."
     },
     {
       "rf": "RF-11",
-      "component": "Ejercicio de codigo",
-      "strength": "no-evaluada",
+      "component": "Code exercise",
+      "strength": "not-evaluated",
       "source": "n/a",
-      "note": "Explicitamente senalado en research.md 9.1 como no evaluado por estas fuentes."
+      "note": "Explicitly flagged in research.md 9.1 as not evaluated by these sources."
     }
   ],
-  "candidatosFueraDeInventario": [
+  "outOfInventoryCandidates": [
     {
       "name": "SelfExplanation",
       "source": "Fiorella & Mayer 2016 (via ERIC: https://eric.ed.gov/?id=EJ1120458)",
-      "note": "Una de 8 estrategias generativas. No existe en el inventario actual de requirements.md 4.1 -- propuesta v2, no implementar ya."
+      "note": "One of 8 generative strategies. Does not exist in the current requirements.md 4.1 inventory -- v2 proposal, not to implement yet."
     },
     {
       "name": "ConceptMap",
       "source": "Fiorella & Mayer 2016 (via ERIC: https://eric.ed.gov/?id=EJ1120458)",
-      "note": "Estrategia generativa de mapeo. No existe en el inventario actual -- propuesta v2, no implementar ya."
+      "note": "Generative mapping strategy. Does not exist in the current inventory -- v2 proposal, not to implement yet."
     },
     {
-      "name": "Escenario ramificado (branching scenario, ver Ink/inkjs en research.md 9.3)",
-      "source": "Sitzmann 2011 (via resumen del abstract, Wiley 402: https://onlinelibrary.wiley.com/doi/10.1111/j.1744-6570.2011.01190.x)",
-      "note": "Simulation games con efecto positivo pero moderado (d 0.22-0.52) y sesgo de publicacion declarado por la propia fuente. Pesa contra sobrepriorizar este componente: prioridad media-baja si se construye."
+      "name": "Branching scenario (see Ink/inkjs in research.md 9.3)",
+      "source": "Sitzmann 2011 (via the abstract's summary, Wiley 402: https://onlinelibrary.wiley.com/doi/10.1111/j.1744-6570.2011.01190.x)",
+      "note": "Simulation games with a positive but moderate effect (d 0.22-0.52) and a publication bias declared by the source itself. Weighs against over-prioritizing this component: medium-low priority if built."
     }
   ]
 }

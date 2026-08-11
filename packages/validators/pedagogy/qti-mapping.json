@@ -1,6 +1,6 @@
 {
-  "source": "specs/education-components/research.md, Pregunta 6 y seccion 9.2 (IMS QTI 3.0: https://www.imsglobal.org/spec/qti/v3p0/oview , https://www.imsglobal.org/spec/qti/v3p0/impl)",
-  "note": "QTI 3.0 define 21 interacciones. Se adopta su vocabulario de nombres como referencia de naming (research.md P6), no se implementa el binding XML de QTI. RF-3/RF-4 cubren las interacciones textuales/de lista; la familia grafica/sobre-imagen y la numerica/slider NO tienen RF asignado todavia en requirements.md (hallazgo de alcance, no de nomenclatura) y se marcan con gap:true. Decision de producto de Jose (2026-08-11, research/decisions.md D2): alcance amplio -- estas interacciones estan PLANIFICADAS como oleada avanzada (scope:'planned'), no descartadas.",
+  "source": "specs/education-components/research.md, Question 6 and section 9.2 (IMS QTI 3.0: https://www.imsglobal.org/spec/qti/v3p0/oview , https://www.imsglobal.org/spec/qti/v3p0/impl)",
+  "note": "QTI 3.0 defines 21 interactions. Its naming vocabulary is adopted as a naming reference (research.md P6); QTI's XML binding is not implemented. RF-3/RF-4 cover the textual/list-based interactions; the graphical/image-based and numeric/slider family have NO assigned RF yet in requirements.md (a scope finding, not a naming one) and are marked with gap:true. Jose's product decision (2026-08-11, research/decisions.md D2): broad scope -- these interactions are PLANNED as an advanced wave (scope:'planned'), not dropped.",
   "mappings": [
     {
       "rf": "RF-3",
@@ -10,7 +10,7 @@
     },
     {
       "rf": "RF-3",
-      "variant": "Sort / ordenar secuencia",
+      "variant": "Sort / sequence ordering",
       "qtiInteraction": "orderInteraction",
       "gap": false
     },
@@ -19,53 +19,53 @@
       "variant": "Categorize",
       "qtiInteraction": "gapMatchInteraction",
       "gap": false,
-      "note": "Mapeo aproximado: clasificar en categorias se modela en QTI como asociar elementos a huecos/contenedores."
+      "note": "Approximate mapping: categorizing is modeled in QTI as associating elements with gaps/containers."
     },
     {
       "rf": "RF-4",
-      "variant": "Multi-respuesta (multi-select)",
+      "variant": "Multi-answer (multi-select)",
       "qtiInteraction": "choiceInteraction (cardinality multiple)",
       "gap": false
     },
     {
       "rf": "RF-4",
-      "variant": "Verdadero/Falso",
-      "qtiInteraction": "choiceInteraction (2 opciones)",
+      "variant": "True/False",
+      "qtiInteraction": "choiceInteraction (2 options)",
       "gap": false,
-      "note": "QTI no tiene una interaccion 'true-false' dedicada; se modela como choiceInteraction binaria. xAPI si tiene un interactionType 'true-false' dedicado (ver xapi-mapping.json)."
+      "note": "QTI has no dedicated 'true-false' interaction; it's modeled as a binary choiceInteraction. xAPI does have a dedicated 'true-false' interactionType (see xapi-mapping.json)."
     },
     {
       "rf": "RF-4",
-      "variant": "Rellenar hueco",
-      "qtiInteraction": "gapMatchInteraction (arrastrar) o textEntryInteraction (tecleado)",
+      "variant": "Fill-in-the-blank",
+      "qtiInteraction": "gapMatchInteraction (drag) or textEntryInteraction (typed)",
       "gap": false,
-      "note": "Dos sub-variantes de QTI segun si el hueco se completa arrastrando una opcion o escribiendo texto libre."
+      "note": "Two QTI sub-variants depending on whether the blank is completed by dragging an option or typing free text."
     },
     {
       "rf": "RF-4",
-      "variant": "Respuesta abierta corta con verificacion asistida",
+      "variant": "Short open answer with assisted verification",
       "qtiInteraction": "extendedTextInteraction / inlineChoiceInteraction",
       "gap": false
     }
   ],
-  "gapsPlanificados": {
-    "note": "research.md 9.2: familia entera de interacciones graficas/sobre imagen que QTI si tiene y requirements.md 4.1 no. gap:true sigue siendo cierto (hoy no tienen RF asignado en requirements.md), pero decision de producto de Jose (2026-08-11, ver research/decisions.md D2) las declara PLANIFICADAS como oleada avanzada, no descartadas -- revierte la nota anterior de 'fuera de v1'.",
+  "plannedGaps": {
+    "note": "research.md 9.2: an entire family of graphical/image-based interactions that QTI has and requirements.md 4.1 does not. gap:true remains true (no assigned RF today), but Jose's product decision (2026-08-11, see research/decisions.md D2) declares them PLANNED as an advanced wave, not dropped -- reverses the earlier 'out of v1' note.",
     "interactions": [
-      { "qtiInteraction": "hotspotInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "hotTextInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "graphicOrderInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "graphicAssociateInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "graphicGapMatchInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "positionObjectInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "selectPointInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "drawingInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
-      { "qtiInteraction": "sliderInteraction (respuesta numerica/slider)", "gap": true, "scope": "planned", "phase": "oleada-avanzada" }
+      { "qtiInteraction": "hotspotInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "hotTextInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "graphicOrderInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "graphicAssociateInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "graphicGapMatchInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "positionObjectInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "selectPointInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "drawingInteraction", "gap": true, "scope": "planned", "phase": "advanced-wave" },
+      { "qtiInteraction": "sliderInteraction (numeric/slider response)", "gap": true, "scope": "planned", "phase": "advanced-wave" }
     ]
   },
   "codeExercise": {
-    "note": "RF-11 (ejercicio de codigo) no es una interaccion QTI -- se registra aqui por la misma decision de producto D2 (alcance amplio, no v1 minimo). Apoyado en Sandpack para la ejecucion (research.md 9.3); la comprobacion sigue siendo trabajo propio.",
+    "note": "RF-11 (code exercise) is not a QTI interaction -- registered here under the same D2 product decision (broad scope, not a minimal v1). Backed by Sandpack for execution (research.md 9.3); checking remains our own work.",
     "rf": "RF-11",
     "scope": "planned",
-    "phase": "oleada-avanzada"
+    "phase": "advanced-wave"
   }
 }

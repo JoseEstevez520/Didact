@@ -1,42 +1,41 @@
 /**
  * @didact/core
  *
- * Punto de entrada de la capa 3 (education molecules) de la arquitectura de 3 capas descrita en
+ * Entry point for layer 3 (education molecules) of the 3-layer architecture described in
  * `specs/education-components/design.md` §2:
  *
  *   3. Education molecules  — Flashcard, MatchingExercise, QuizItem, SpacedRepetitionDeck,
- *                              Glossary, Hint, Timeline, Rubric, MasteryBadge, ejercicio de
- *                              código (RF-11, Sandpack), interacciones gráficas/numéricas de
- *                              QTI (research.md §9.2) — alcance amplio por oleadas de
- *                              complejidad, ver README.md de este paquete y research/decisions.md
- *   2. Styled layer         — Tailwind v4 + `cva` (class-variance-authority) sobre los tokens de
- *                              `@didact/theme` (CSS custom properties + bloque `@theme`)
- *   1. Accessible primitives — comportamiento accesible sin estilo propio (Radix UI por defecto,
- *                              ver research.md P2; Base UI vigilado como alternativa)
+ *                              Glossary, Hint, Timeline, Rubric, MasteryBadge, code exercise
+ *                              (RF-11, Sandpack), QTI graphical/numeric interactions
+ *                              (research.md §9.2) — broad scope organized in complexity waves,
+ *                              see this package's README.md and research/decisions.md
+ *   2. Styled layer         — Tailwind v4 + `cva` (class-variance-authority) over
+ *                              `@didact/theme`'s tokens (CSS custom properties + `@theme` block)
+ *   1. Accessible primitives — accessible behavior with no styling of its own (Radix UI by
+ *                              default, see research.md P2; Base UI watched as an alternative)
  *
- * IMPORTANTE: la implementación real de los componentes de esta capa es la Fase 4 del
- * `ROADMAP.md` (raíz del monorepo), posterior al scaffold de Fase 3 en el que vive este fichero.
- * Este paquete existe hoy solo para fijar el contrato de nombres/paquete y el punto de entrada
- * que consumirá el mecanismo de registry (`@didact/registry`) y el modelo de distribución estilo
- * shadcn/ui (`requirements.md` RF-15).
+ * IMPORTANT: the real implementation of this layer's components is Phase 4 of `ROADMAP.md`
+ * (monorepo root), after the Phase 3 scaffold this file lives in. This package exists today only
+ * to fix the package/name contract and the entry point that will consume the registry mechanism
+ * (`@didact/registry`) and the shadcn/ui-style distribution model (`requirements.md` RF-15).
  *
- * Decisiones que sí están cerradas para cuando se implemente esta capa:
- * - Tailwind v4 SÍ es la capa de estilo del núcleo — decisión de producto de Jose (2026-08-11,
- *   ver `research/decisions.md` D1), pese a que `research.md` P3 concluyó (y sigue siendo cierto)
- *   que el mecanismo de registry de shadcn/ui no la exige técnicamente. Estilizado con Tailwind +
- *   `cva` sobre los tokens de `@didact/theme`; ver ese paquete para el detalle de los dos niveles
- *   (CSS custom properties planas + bloque `@theme`).
- * - Alcance amplio, no "v1 mínimo": las interacciones gráficas/sobre imagen y numéricas/Likert de
- *   QTI (research.md §9.2) y el ejercicio de código (RF-11, apoyado en Sandpack para la
- *   ejecución) SÍ están en alcance, como oleadas de mayor complejidad — no descartadas. Ver
- *   `research/decisions.md` D2 y `packages/validators/pedagogy/qti-mapping.json`
- *   (`scope: "planned"` en las interacciones antes marcadas como fuera de v1).
- * - Cualquier dependencia externa no copiada (p. ej. la capa de primitivos, o Tailwind/cva en sí)
- *   se fija con versión exacta + test de deriva (RNF-5, ver `@didact/validators/drift`).
- * - Cada componente debe poder describirse con props completas o incompletas sin asumir que
- *   llegan de una vez (RNF-4, pensado para consumo en streaming).
+ * Decisions that ARE closed for when this layer gets implemented:
+ * - Tailwind v4 IS the core's styling layer — a product decision by Jose (2026-08-11, see
+ *   `research/decisions.md` D1), even though `research.md` P3 concluded (and it's still true)
+ *   that shadcn/ui's registry mechanism doesn't technically require it. Styled with Tailwind +
+ *   `cva` over `@didact/theme`'s tokens; see that package for the detail of the two levels
+ *   (plain CSS custom properties + `@theme` block).
+ * - Broad scope, not a "minimal v1": QTI's graphical/image-based and numeric/Likert interactions
+ *   (research.md §9.2) and the code exercise (RF-11, backed by Sandpack for execution) ARE in
+ *   scope, as higher-complexity waves — not dropped. See `research/decisions.md` D2 and
+ *   `packages/validators/pedagogy/qti-mapping.json` (`scope: "planned"` on the interactions
+ *   previously marked as out of v1).
+ * - Any non-copied external dependency (e.g. the primitives layer, or Tailwind/cva themselves) is
+ *   pinned to an exact version + drift test (RNF-5, see `@didact/validators/drift`).
+ * - Every component must be describable with complete or incomplete props without assuming they
+ *   all arrive at once (RNF-4, designed for streaming consumption).
  *
- * No se exporta nada todavía: no hay componentes reales que exportar en esta fase.
+ * Nothing is exported yet: there are no real components to export at this stage.
  */
 
 export {};

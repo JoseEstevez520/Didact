@@ -1,49 +1,48 @@
 # @didact/validators/drift
 
-Control de deriva de dependencias externas no copiadas — RNF-5 de `requirements.md`.
+Drift control for non-copied external dependencies — RNF-5 in `requirements.md`.
 
-## Por qué existe
+## Why it exists
 
-El modelo de distribución de Didact (RF-15, estilo shadcn/ui) protege al consumidor de romperse
-por una actualización de dependencia **para el código que copia**. Pero no todos los componentes
-son 100% copy-paste: la capa 1 de la arquitectura (`design.md` §2, "accessible primitives",
-candidata Radix UI) es una dependencia real, no código que se copie junto al componente. `design.md`
-§9 lo dice explícitamente: *"el modelo copy-paste protege a los componentes, no a sus dependencias
-internas de comportamiento"*.
+Didact's distribution model (RF-15, shadcn/ui-style) protects the consumer from breaking due to a
+dependency update **for the code it copies**. But not every component is 100% copy-paste: layer 1
+of the architecture (`design.md` §2, "accessible primitives," candidate Radix UI) is a real
+dependency, not code copied alongside the component. `design.md` §9 states this explicitly: *"the
+copy-paste model protects the components, not their internal behavioral dependencies."*
 
-**RNF-5** exige que cualquier dependencia en esa situación se fije con **versión exacta** (no
-rango `^`/`~`) y lleve un **test de deriva** — el mismo estándar que `openui-adoption.md` ya exigía
-para `@openuidev/react-lang`, cuyo incumplimiento (una dependencia externa que rompía en cada
-versión menor) es precisamente el problema que motivó adoptar el modelo shadcn en primer lugar
-(`requirements.md` §0.2).
+**RNF-5** requires that any dependency in that situation be pinned to an **exact version** (no
+`^`/`~` range) and carry a **drift test** — the same standard `openui-adoption.md` already
+required for `@openuidev/react-lang`, whose failure to meet it (an external dependency breaking on
+every minor version) is precisely the problem that motivated adopting the shadcn model in the
+first place (`requirements.md` §0.2).
 
-## El caveat Radix/React 19 (research.md P2)
+## The Radix/React 19 caveat (research.md P2)
 
-`research.md` Pregunta 2 documenta, con `peerDependencies.react` consultado en vivo contra
-`registry.npmjs.org`, que **hoy** la versión `latest` de Radix UI (`@radix-ui/react-dialog`
-1.1.23) declara su peer de React 19 anclado a `19.0.0-rc.1`, no a `^19.0.0` — con `npm` (no
-pnpm/yarn) esto exige `--legacy-peer-deps`/`--force` para instalar en un proyecto con React 19
-estable. La propia documentación de shadcn/ui lo confirma
-(https://ui.shadcn.com/docs/react-19), y Radix ya tiene el fix en una v1.2.0 **en RC**, no
-promovida a `latest` a fecha de la investigación (2026-08-11).
+`research.md` Question 2 documents, with `peerDependencies.react` checked live against
+`registry.npmjs.org`, that **today** Radix UI's `latest` version (`@radix-ui/react-dialog`
+1.1.23) declares its React 19 peer pinned to `19.0.0-rc.1`, not `^19.0.0` — with `npm` (not
+pnpm/yarn) this requires `--legacy-peer-deps`/`--force` to install in a stable-React-19 project.
+shadcn/ui's own documentation confirms this
+(https://ui.shadcn.com/docs/react-19), and Radix already has the fix in a v1.2.0 **in RC**, not
+promoted to `latest` as of the research date (2026-08-11).
 
-**Consecuencia práctica para este validador:** si Radix UI (u otra dependencia de la capa 1) se
-adopta como dependencia fijada, `pinned-deps.json` debe registrar no solo la versión exacta sino
-el **motivo** (aquí: fricción de peer-dependency conocida, no bloqueo funcional), para que quien
-actualice la fije con conocimiento de causa y no como una actualización rutinaria. Lo mismo
-aplicaría a `ts-fsrs` si se elige como dependencia fijada para el modo avanzado de repetición
-espaciada (ver `@didact/spaced-repetition/src/fsrs.ts`), o a `dnd-kit` si se adopta para mitigar
-el incumplimiento de WCAG 2.5.7 en RF-3 (`research.md` §9.3 — compatibilidad con React 19 **no
-confirmada** en documentación oficial, solo en fuente secundaria).
+**Practical consequence for this validator:** if Radix UI (or another layer-1 dependency) is
+adopted as a pinned dependency, `pinned-deps.json` must record not just the exact version but the
+**reason** (here: known peer-dependency friction, not a functional blocker), so whoever updates it
+does so knowingly rather than as a routine bump. The same would apply to `ts-fsrs` if chosen as a
+pinned dependency for the advanced spaced-repetition mode (see
+`@didact/spaced-repetition/src/fsrs.ts`), or to `dnd-kit` if adopted to mitigate the WCAG 2.5.7
+non-compliance in RF-3 (`research.md` §9.3 — React 19 compatibility **not confirmed** in official
+documentation, only in a secondary source).
 
 ## `pinned-deps.json`
 
-Placeholder con la estructura `{dependency, exactVersion, reason}` y un ejemplo **comentado**, no
-una dependencia real instalada — no hay dependencias externas todavía en este scaffold (Fase
-1-3). Se puebla en Fase 4 a medida que `packages/core` adopte primitivos reales.
+A placeholder with the `{dependency, exactVersion, reason}` structure and a **commented** example,
+not a real installed dependency — there are no external dependencies yet in this scaffold
+(Phase 1-3). It gets populated in Phase 4 as `packages/core` adopts real primitives.
 
-## Estado
+## Status
 
-Sin test de deriva ejecutable todavía. La intención (Fase 4) es un test en CI que compare la
-versión instalada de cada dependencia listada aquí contra `exactVersion` y falle si difieren,
-obligando a una actualización deliberada (revisar changelog, no solo `npm update`).
+No executable drift test yet. The intent (Phase 4) is a CI test that compares each dependency's
+installed version listed here against `exactVersion` and fails if they differ, forcing a
+deliberate update (review the changelog, not just `npm update`).

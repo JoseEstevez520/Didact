@@ -1,213 +1,209 @@
-# Requirements — Librería de Componentes de Educación
+# Requirements — Education Components Library
 
-> Spec-Driven Development (SDD). Este documento fija el **qué** y el **por qué** antes de
-> diseñar (`design.md`) o planificar tareas (`../../ROADMAP.md`). No prescribe implementación.
+> Spec-Driven Development (SDD). This document fixes the **what** and the **why** before
+> designing (`design.md`) or planning tasks (`../../ROADMAP.md`). It does not prescribe
+> implementation.
 
-## 0. Decisiones del dueño del producto (2026-08-11)
+## 0. Product owner decisions (2026-08-11)
 
-Registradas aquí porque acotan todo lo que sigue — no son conclusiones de investigación, son
-dirección de producto:
+Recorded here because they bound everything that follows — they are not research conclusions,
+they are product direction:
 
-1. **Es una librería de propósito general, no un módulo de SkillNet.** Debe poder usarse "en
-   cualquier proyecto", no solo en `repo/` (SkillNet). SkillNet es el **primer consumidor real**
-   (donde nació la necesidad y donde se probará primero), pero no es el criterio de diseño.
-   Cualquier acoplamiento a decisiones específicas de SkillNet (tokens de
-   `design-system.md`, el catálogo generativo v2) se trata como **adaptador opcional**, nunca
-   como parte del núcleo.
-2. **Estilo y modelo de distribución de referencia: shadcn/ui.** No como paquete npm
-   versionado, sino como **registry + CLI que copia el código fuente del componente al
-   proyecto consumidor** ("copy-paste ownership"). Motivo explícito: evita exactamente el
-   riesgo que SkillNet ya vivió con `@openuidev/react-lang` 0.2.x
-   (`repo/docs/design/openui-adoption.md` §1, §3) — una dependencia externa que rompe en cada
-   versión menor. Con el modelo shadcn, el consumidor es dueño del código desde el momento en
-   que lo copia; no hay upgrade que le rompa nada sin que él lo decida.
+1. **This is a general-purpose library, not a SkillNet module.** It must be usable "in any
+   project," not just in `repo/` (SkillNet). SkillNet is the **first real consumer** (where the
+   need was born and where it will be tested first), but it is not the design criterion. Any
+   coupling to SkillNet-specific decisions (tokens from `design-system.md`, the generative v2
+   catalog) is treated as an **optional adapter**, never as part of the core.
+2. **Style and distribution model reference: shadcn/ui.** Not as a versioned npm package, but as a
+   **registry + CLI that copies the component's source code into the consuming project**
+   ("copy-paste ownership"). Explicit motivation: this avoids exactly the risk SkillNet already
+   lived through with `@openuidev/react-lang` 0.2.x (`repo/docs/design/openui-adoption.md` §1,
+   §3) — an external dependency that broke on every minor version. With the shadcn model, the
+   consumer owns the code from the moment they copy it; there is no upgrade that can break
+   anything without the consumer deciding to take it.
 
-Estas dos decisiones se verifican con evidencia en la fase de investigación (¿el mecanismo de
-"registry" de shadcn permite de verdad construir una registry propia, no oficial? ¿la capa de
-primitivos en la que se apoya shadcn —Radix UI— funciona bien en React 19?) pero **la dirección
-no está abierta a debate** salvo que la investigación encuentre un impedimento técnico real.
+These two decisions are verified with evidence in the research phase (does shadcn's "registry"
+mechanism actually allow building a real, non-official registry? does the primitives layer that
+shadcn relies on — Radix UI — work well on React 19?) but **the direction is not open for debate**
+except if research finds a real technical impediment.
 
-## 1. Contexto y problema
+## 1. Context and problem
 
-Construyendo contenido en SkillNet (`../../repo`, plataforma de formación para pymes que
-convierte documentos internos en cursos) se topó un hueco general de la industria, no solo de
-ese proyecto:
+While building content in SkillNet (`../../repo`, a training platform for SMEs that converts
+internal documents into courses), we ran into a general industry gap, not just one specific to
+that project:
 
-1. **No hay un vocabulario de componentes de e-learning comúnmente aceptado**, al nivel en que
-   sí existe para UI genérica (shadcn/ui, Radix, MUI…). Cada plataforma de formación reinventa
-   flashcards, ejercicios de emparejar, quizzes, repetición espaciada, etc.
-2. **No hay una base "famosa" que sirva de referencia de estilo y arquitectura** para construir
-   ese vocabulario con buena accesibilidad y buena ergonomía de desarrollo — de ahí la decisión
-   §0.2 de usar shadcn/ui como referencia de forma (headless + Tailwind + copy-paste), no de
-   contenido (los componentes de shadcn son genéricos, no educativos).
+1. **There is no commonly accepted vocabulary of e-learning components**, at the level that
+   already exists for generic UI (shadcn/ui, Radix, MUI…). Every training platform reinvents
+   flashcards, matching exercises, quizzes, spaced repetition, etc.
+2. **There is no "famous" base that serves as a style and architecture reference** for building
+   that vocabulary with good accessibility and good developer ergonomics — hence the §0.2 decision
+   to use shadcn/ui as a reference for **form** (headless + Tailwind + copy-paste), not for
+   **content** (shadcn's components are generic, not educational).
 
-SkillNet, en concreto, tiene además:
-- v1 (estático): lecciones en Markdown + ejercicios fijos.
-- v2 (dinámico): catálogo cerrado de bloques (`apps/skillnet-web/src/components/courses/kit/`)
-  para generación de UI por agente, sin reactividad (`openui-adoption.md`).
+SkillNet, specifically, additionally has:
+- v1 (static): lessons in Markdown + fixed exercises.
+- v2 (dynamic): a closed catalog of blocks (`apps/skillnet-web/src/components/courses/kit/`) for
+  agent-driven UI generation, without reactivity (`openui-adoption.md`).
 
-Esto es contexto de origen y un caso de prueba real, no la definición del producto.
+This is origin context and a real test case, not the definition of the product.
 
-## 2. Alcance
+## 2. Scope
 
-### Dentro de alcance (núcleo)
+### In scope (core)
 
-- Un **vocabulario de componentes educativos** (flashcards, ejercicios de emparejar/arrastrar,
-  variantes de quiz, repetición espaciada, glosario, hints, progreso/mastery, timeline, rúbrica,
-  etc.) reutilizable en cualquier proyecto React.
-- Un **modelo de distribución estilo shadcn**: registry (catálogo descriptivo, JSON o
-  equivalente) + mecanismo para copiar el código fuente al proyecto consumidor, sin dependencia
-  npm versionada como forma primaria de consumo.
-- Un **tema visual neutro por defecto**, no el de SkillNet ni el de ningún consumidor concreto,
-  con theming vía tokens/CSS custom properties para que cada proyecto lo adapte a su marca
-  (igual que un componente de shadcn adopta el tema de quien lo copia).
-- Accesibilidad de primera clase, incluida neurodiversidad (ver §4.2), independiente de quién
-  consuma la librería.
-- Documentación viva (Storybook o equivalente) que sirva tanto de catálogo navegable como de
-  registry para el mecanismo de copia.
+- A **vocabulary of educational components** (flashcards, matching/drag-and-drop exercises, quiz
+  variants, spaced repetition, glossary, hints, progress/mastery, timeline, rubric, etc.) reusable
+  in any React project.
+- A **shadcn-style distribution model**: a registry (descriptive catalog, JSON or equivalent) +
+  a mechanism to copy the source code into the consuming project, without a versioned npm
+  dependency as the primary way to consume it.
+- A **neutral default visual theme**, not SkillNet's or any specific consumer's, with theming via
+  tokens/CSS custom properties so each project can adapt it to its brand (just like a shadcn
+  component adopts the theme of whoever copies it).
+- First-class accessibility, including neurodiversity (see §4.2), independent of who consumes the
+  library.
+- Living documentation (Storybook or equivalent) that serves both as a browsable catalog and as
+  the registry for the copy mechanism.
 
-### Adaptador SkillNet (opcional, fuera del núcleo)
+### SkillNet adapter (optional, outside the core)
 
-- Mapeo del tema neutro del núcleo a los tokens de `../../repo/docs/design/design-system.md`.
-- Registro de los componentes que sean estáticamente seguros como bloques del catálogo
-  generativo v2 de SkillNet (`apps/skillnet-web/src/components/courses/kit/`), sujeto a las
-  reglas de `openui-adoption.md` — esto vive documentado como **integración de un consumidor
-  concreto**, no como requisito de la librería.
+- Mapping the core's neutral theme to the tokens in
+  `../../repo/docs/design/design-system.md`.
+- Registering the components that are statically safe as blocks in SkillNet's v2 generative
+  catalog (`apps/skillnet-web/src/components/courses/kit/`), subject to the rules in
+  `openui-adoption.md` — this lives documented as **a specific consumer's integration**, not as a
+  requirement of the library.
 
-### Fuera de alcance (por ahora)
+### Out of scope (for now)
 
-- Reactividad tipo `Mutation`/`Query`/`$state` en cualquier variante generativa (ver
-  `openui-adoption.md` §6 para las condiciones si algún día se activa — no es una decisión de
-  esta librería).
-- Primitivos de UI genérica ya cubiertos por shadcn/ui mismo (Button, Input, Dialog…). Esta
-  librería es de **componentes pedagógicos**; para lo genérico, el consumidor usa shadcn/ui
-  directamente y esta librería se apoya en los mismos primitivos cuando tenga sentido (a
-  confirmar en investigación).
-- Autoría de contenido pedagógico (bancos de preguntas, currícula).
-- Backend / persistencia de progreso. Los componentes son de presentación e interacción.
+- `Mutation`/`Query`/`$state`-style reactivity in any generative variant (see
+  `openui-adoption.md` §6 for the conditions if it is ever activated — that is not a decision of
+  this library).
+- Generic UI primitives already covered by shadcn/ui itself (Button, Input, Dialog…). This library
+  is about **pedagogical components**; for generic ones, the consumer uses shadcn/ui directly, and
+  this library relies on the same primitives when it makes sense (to confirm in research).
+- Authoring pedagogical content (question banks, curricula).
+- Backend / progress persistence. The components are for presentation and interaction.
 
-## 3. Interesados
+## 3. Stakeholders
 
-- **Jose (product owner).** Decide alcance, estilo de referencia (§0) y prioridad.
-- **Agentes implementadores** (fase de ejecución, otra sesión). Consumen este spec y
-  `../../ROADMAP.md` como contrato de trabajo.
-- **Cualquier proyecto consumidor**, empezando por SkillNet pero sin limitarse a él — incluye
-  potenciales usuarios open source si la librería se publica como registry pública.
-- **Alumnos finales** de los proyectos que la consuman, incluyendo perfiles neurodivergentes.
+- **Jose (product owner).** Decides scope, reference style (§0), and priority.
+- **Implementing agents** (execution phase, a different session). Consume this spec and
+  `../../ROADMAP.md` as their work contract.
+- **Any consuming project**, starting with SkillNet but not limited to it — including potential
+  open source users if the library is published as a public registry.
+- **End learners** of the projects that consume it, including neurodivergent profiles.
 
-## 4. Requisitos funcionales
+## 4. Functional requirements
 
-Formato EARS. IDs estables para referenciar desde `design.md` y desde las tareas del roadmap.
+EARS format. Stable IDs for referencing from `design.md` and from the roadmap's tasks.
 
-### 4.1 Vocabulario de componentes (núcleo, agnóstico de consumidor)
+### 4.1 Component vocabulary (core, consumer-agnostic)
 
-- **RF-1**: EL SISTEMA DEBERÁ proveer un componente `Flashcard` (frente/dorso, volteo, marcar
-  como "sabido"/"repasar").
-- **RF-2**: EL SISTEMA DEBERÁ proveer un componente de **repetición espaciada** que ordene un
-  mazo de `Flashcard`s según un algoritmo de revisión (SM-2 o equivalente), desacoplado del
-  almacenamiento (recibe/devuelve estado, no lo persiste — cada proyecto consumidor decide dónde
-  guardarlo).
-- **RF-3**: EL SISTEMA DEBERÁ proveer componentes de **ejercicio de emparejar/arrastrar**
-  (matching, ordenar secuencia, clasificar en categorías) con soporte de teclado, no solo
-  drag-and-drop de ratón.
-- **RF-4**: EL SISTEMA DEBERÁ proveer variantes de quiz más allá de opción múltiple única:
-  multi-respuesta, verdadero/falso, rellenar hueco, respuesta abierta corta con verificación
-  asistida.
-- **RF-5**: EL SISTEMA DEBERÁ proveer un componente `Glossary`/`Term` con tooltip o popover que
-  no requiera navegación fuera del contenido.
-- **RF-6**: EL SISTEMA DEBERÁ proveer un componente `Hint`/`Reveal` (pista progresiva,
-  mostrar/ocultar solución) que no filtre la respuesta correcta en el DOM hasta que el usuario
-  la solicite explícitamente.
-- **RF-7**: EL SISTEMA DEBERÁ proveer indicadores de **progreso/mastery** (por lección, por
-  skill) con un tema visual neutro, restyleable.
-- **RF-8**: EL SISTEMA DEBERÁ proveer un componente `Timeline`/`Steps` para procesos
-  secuenciales (protocolos, procedimientos paso a paso).
-- **RF-9**: EL SISTEMA DEBERÁ proveer un componente de **checkpoint sobre vídeo** (pausa en un
-  timestamp y plantea una pregunta), agnóstico del reproductor concreto en la medida de lo
-  posible (a confirmar en investigación, ver §6).
-- **RF-10**: EL SISTEMA DEBERÁ proveer un componente `Rubric`/autoevaluación (checklist de
-  criterios con niveles, sin nota automática si el criterio es subjetivo).
-- **RF-11**: EL SISTEMA PODRÁ proveer un componente de **ejercicio de código** (editor con
-  resaltado + comprobación) — prioridad baja hasta validar interés real.
+- **RF-1**: THE SYSTEM SHALL provide a `Flashcard` component (front/back, flip, mark as
+  "known"/"review").
+- **RF-2**: THE SYSTEM SHALL provide a **spaced repetition** component that orders a deck of
+  `Flashcard`s according to a review algorithm (SM-2 or equivalent), decoupled from storage
+  (receives/returns state, does not persist it — each consuming project decides where to store
+  it).
+- **RF-3**: THE SYSTEM SHALL provide **matching/drag exercise** components (matching, sequence
+  ordering, categorizing) with keyboard support, not just mouse drag-and-drop.
+- **RF-4**: THE SYSTEM SHALL provide quiz variants beyond single-choice: multi-answer, true/false,
+  fill-in-the-blank, short open answer with assisted verification.
+- **RF-5**: THE SYSTEM SHALL provide a `Glossary`/`Term` component with a tooltip or popover that
+  does not require navigating away from the content.
+- **RF-6**: THE SYSTEM SHALL provide a `Hint`/`Reveal` component (progressive hint, show/hide
+  solution) that does not leak the correct answer into the DOM until the user explicitly requests
+  it.
+- **RF-7**: THE SYSTEM SHALL provide **progress/mastery** indicators (per lesson, per skill) with
+  a neutral, restyleable visual theme.
+- **RF-8**: THE SYSTEM SHALL provide a `Timeline`/`Steps` component for sequential processes
+  (protocols, step-by-step procedures).
+- **RF-9**: THE SYSTEM SHALL provide a **video checkpoint** component (pauses at a timestamp and
+  poses a question), player-agnostic to the extent possible (to confirm in research, see §6).
+- **RF-10**: THE SYSTEM SHALL provide a `Rubric`/self-assessment component (checklist of criteria
+  with levels, without automatic grading if the criterion is subjective).
+- **RF-11**: THE SYSTEM MAY provide a **code exercise** component (editor with syntax highlighting
+  + verification) — low priority until real interest is validated.
 
-*(Lista de alcance, no la priorización final — eso lo fija `design.md` tras investigación.)*
+*(Scope list, not the final prioritization — that is fixed by `design.md` after research.)*
 
-### 4.2 Accesibilidad y neurodiversidad (núcleo)
+### 4.2 Accessibility and neurodiversity (core)
 
-- **RF-12**: CUANDO un componente tenga estado interactivo, EL SISTEMA DEBERÁ exponerlo vía
-  ARIA de forma operable con teclado y lector de pantalla, sin depender solo de color.
-- **RF-13**: EL SISTEMA DEBERÁ respetar `prefers-reduced-motion` en toda animación.
-- **RF-14**: EL SISTEMA DEBERÁ evitar patrones que penalicen a usuarios neurodivergentes
-  identificados en investigación (límites de tiempo no configurables, densidad visual alta,
-  animación no solicitada) — criterios concretos a definir tras §6.
+- **RF-12**: WHEN a component has interactive state, THE SYSTEM SHALL expose it via ARIA in a way
+  that is operable by keyboard and screen reader, without relying only on color.
+- **RF-13**: THE SYSTEM SHALL respect `prefers-reduced-motion` in every animation.
+- **RF-14**: THE SYSTEM SHALL avoid patterns that penalize neurodivergent users identified in
+  research (non-configurable time limits, high visual density, unsolicited animation) — concrete
+  criteria to be defined after §6.
 
-### 4.3 Distribución y theming (núcleo)
+### 4.3 Distribution and theming (core)
 
-- **RF-15**: EL SISTEMA DEBERÁ distribuirse mediante un mecanismo tipo registry + CLI que copie
-  el código fuente del componente al proyecto consumidor, siguiendo el modelo de shadcn/ui
-  (§0.2), no como dependencia npm versionada como vía primaria.
-- **RF-16**: EL SISTEMA DEBERÁ exponer su theming vía tokens/CSS custom properties, con un tema
-  por defecto neutro y documentado; ningún componente debe hardcodear la paleta de un consumidor
-  concreto (SkillNet incluido).
-- **RF-17**: CADA componente DEBERÁ tener una historia de Storybook (o equivalente) con sus
-  estados (vacío, error, carga, correcto/incorrecto) y pasar comprobación de a11y automatizada.
+- **RF-15**: THE SYSTEM SHALL be distributed via a registry + CLI mechanism that copies the
+  component's source code into the consuming project, following the shadcn/ui model (§0.2), not
+  as a versioned npm dependency as the primary channel.
+- **RF-16**: THE SYSTEM SHALL expose its theming via tokens/CSS custom properties, with a
+  documented neutral default theme; no component should hardcode a specific consumer's palette
+  (including SkillNet's).
+- **RF-17**: EACH component SHALL have a Storybook story (or equivalent) with its states (empty,
+  error, loading, correct/incorrect) and SHALL pass automated a11y checks.
 
-### 4.4 Adaptador SkillNet (fuera del núcleo, opcional)
+### 4.4 SkillNet adapter (outside the core, optional)
 
-- **RF-18**: EL ADAPTADOR SkillNet DEBERÁ mapear el tema neutro del núcleo a los tokens de
-  `design-system.md` sin modificar los componentes del núcleo.
-- **RF-19**: CADA componente candidato al catálogo generativo v2 de SkillNet DEBERÁ declararse
-  sin capacidad de mutación no autorizada, para poder registrarse en
-  `apps/skillnet-web/src/components/courses/kit/` sin reabrir `openui-adoption.md`.
+- **RF-18**: THE SkillNet ADAPTER SHALL map the core's neutral theme to the tokens in
+  `design-system.md` without modifying the core components.
+- **RF-19**: EACH component that is a candidate for SkillNet's v2 generative catalog SHALL declare
+  itself free of unauthorized mutation capability, so it can be registered in
+  `apps/skillnet-web/src/components/courses/kit/` without reopening `openui-adoption.md`.
 
-## 5. Requisitos no funcionales
+## 5. Non-functional requirements
 
-- **RNF-1 (bundle):** los componentes deben ser tree-shakeable / copiables de forma
-  independiente; consumir uno no debe arrastrar el resto.
-- **RNF-2 (i18n):** ningún texto fijo embebido sin punto de extensión para traducción — el
-  núcleo no asume un framework de i18n concreto (SkillNet usa `react-intl`; otro consumidor
-  puede usar otro).
-- **RNF-3 (seguridad):** ningún componente ejecuta HTML/markdown sin sanitizar proveniente de
-  contenido no confiable.
-- **RNF-4 (rendimiento):** los componentes que puedan usarse en contextos de streaming (como el
-  catálogo generativo de SkillNet) no deben asumir que todas sus props llegan completas de una
-  vez — esto es un requisito del núcleo aunque nazca de un caso de adaptador, porque hace al
-  componente más robusto en general.
-- **RNF-5 (mantenimiento y dependencias):** cualquier dependencia externa que no sea copiada
-  (p. ej. la capa de primitivos si se apoya en Radix UI) debe fijarse con versión exacta y un
-  test de deriva — mismo estándar que ya exige `openui-adoption.md` para `@openuidev`. El propio
-  modelo de distribución (§0.2, RF-15) minimiza este riesgo para los componentes en sí, no para
-  sus dependencias internas de comportamiento.
+- **RNF-1 (bundle):** components must be tree-shakeable / independently copyable; consuming one
+  must not drag in the rest.
+- **RNF-2 (i18n):** no fixed embedded text without an extension point for translation — the core
+  does not assume any specific i18n framework (SkillNet uses `react-intl`; another consumer may
+  use another one).
+- **RNF-3 (security):** no component executes unsanitized HTML/markdown coming from untrusted
+  content.
+- **RNF-4 (performance):** components that may be used in streaming contexts (like SkillNet's
+  generative catalog) must not assume all their props arrive complete at once — this is a core
+  requirement even though it originates from an adapter case, because it makes the component more
+  robust in general.
+- **RNF-5 (maintenance and dependencies):** any external dependency that is not copied (e.g. the
+  primitives layer if it relies on Radix UI) must be pinned to an exact version with a drift test
+  — the same standard `openui-adoption.md` already requires for `@openuidev`. The distribution
+  model itself (§0.2, RF-15) minimizes this risk for the components themselves, not for their
+  internal behavioral dependencies.
 
-## 6. Preguntas abiertas para la fase de investigación
+## 6. Open questions for the research phase
 
-1. ¿El mecanismo de "registry" de shadcn/ui (CLI `shadcn add <url>`, `registry.json`) permite
-   construir una **registry propia y privada/independiente**, no oficial de shadcn, con
-   componentes distintos? ¿Qué implica en la práctica (hosting del JSON, esquema exacto,
-   límites conocidos)?
-2. ¿Qué base de primitivos accesibles conviene (Radix UI —la que usa shadcn—, React Aria/
-   Ariakit, Base UI)? ¿Funciona bien en React 19 con evidencia ejecutada, no solo anunciada?
-3. ¿La librería debe exigir Tailwind CSS como peer dependency (como shadcn) o debe poder
-   consumirse sin Tailwind en el proyecto destino? Esto condiciona qué tan "cualquier proyecto"
-   es realista.
-4. ¿Qué algoritmo de repetición espaciada es razonable sin dependencia pesada (SM-2 vs
-   alternativas), y cómo se diseña su API para que sea agnóstica de dónde se persiste el estado?
-5. ¿Qué patrones de accesibilidad para neurodiversidad tienen evidencia real (no intuición):
-   fuentes, densidad, control de tiempo, animación — con qué guías (WCAG 2.2, CAST/UDL, guías de
-   dislexia/TDAH/autismo con respaldo)?
-6. ¿Qué librerías/estándares de e-learning existentes aportan vocabulario o interoperabilidad a
-   considerar (H5P content types, Open edX XBlocks, IMS QTI/LTI, xAPI/SCORM), aunque no se
-   adopten como dependencia?
-7. Específico del adaptador SkillNet: ¿qué componentes del inventario §4.1 son expresables sin
-   reactividad dentro de las 7 reglas de `openui-adoption.md` §5.2, y cuáles quedan aparcados?
-8. Específico del adaptador SkillNet: ¿hay reproductor de vídeo ya elegido en `skillnet-web` que
-   soporte checkpoints (RF-9), o es una capacidad a evaluar desde cero?
+1. Does shadcn/ui's "registry" mechanism (`shadcn add <url>` CLI, `registry.json`) allow building
+   an **independent, private/own registry**, not the official shadcn one, with different
+   components? What does that imply in practice (hosting the JSON, exact schema, known limits)?
+2. Which base of accessible primitives is best (Radix UI — the one shadcn uses —, React Aria/
+   Ariakit, Base UI)? Does it work well on React 19 with executed evidence, not just announced?
+3. Must the library require Tailwind CSS as a peer dependency (like shadcn) or must it be usable
+   without Tailwind in the target project? This determines how realistic "any project" actually
+   is.
+4. Which spaced-repetition algorithm is reasonable without a heavy dependency (SM-2 vs.
+   alternatives), and how should its API be designed to be agnostic of where state is persisted?
+5. Which accessibility patterns for neurodiversity have real evidence (not intuition): fonts,
+   density, time control, animation — with which guides (WCAG 2.2, CAST/UDL, dyslexia/ADHD/autism
+   guides with backing)?
+6. Which existing e-learning libraries/standards contribute vocabulary or interoperability worth
+   considering (H5P content types, Open edX XBlocks, IMS QTI/LTI, xAPI/SCORM), even if not adopted
+   as a dependency?
+7. Specific to the SkillNet adapter: which components in the §4.1 inventory are expressible
+   without reactivity within the 7 rules of `openui-adoption.md` §5.2, and which are parked?
+8. Specific to the SkillNet adapter: is there already a chosen video player in `skillnet-web` that
+   supports checkpoints (RF-9), or is this a capability to evaluate from scratch?
 
-## 7. Criterios de aceptación de este documento
+## 7. Acceptance criteria for this document
 
-- Cada requisito funcional tiene un ID estable referenciable desde tareas.
-- La distinción núcleo / adaptador SkillNet es explícita en cada requisito, no implícita.
-- Las preguntas de investigación (§6) son concretas y bastan para dar un brief a un agente de
-  investigación sin contexto adicional.
-- No contiene decisiones de arquitectura más allá de las ya fijadas en §0 por el dueño del
-  producto (eso vive en `design.md`).
+- Every functional requirement has a stable ID referenceable from tasks.
+- The core / SkillNet-adapter distinction is explicit in every requirement, not implicit.
+- The research questions (§6) are concrete and are enough to brief a research agent without
+  additional context.
+- It contains no architecture decisions beyond those already fixed in §0 by the product owner
+  (that lives in `design.md`).

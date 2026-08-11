@@ -1,65 +1,64 @@
 # @didact/validators/pedagogy
 
-Datos machine-readable sobre la base pedagógica y la interoperabilidad de reporting de los
-componentes del núcleo, derivados de `specs/education-components/research.md` §6 (Pregunta 6) y
-§9.1-9.2.
+Machine-readable data on the pedagogical grounding and reporting interoperability of the core
+components, derived from `specs/education-components/research.md` §6 (Question 6) and §9.1-9.2.
 
-## `evidence.json` — fuerza de evidencia por requisito
+## `evidence.json` — evidence strength per requirement
 
-`research.md` §9.1 introduce una dimensión que el spec original no tenía: **no todos los
-componentes del inventario tienen el mismo respaldo de investigación educativa**. Fuentes:
+`research.md` §9.1 introduces a dimension the original spec didn't have: **not every component in
+the inventory has the same backing from educational research**. Sources:
 
-- **Dunlosky et al. 2013**: de 10 técnicas de estudio evaluadas, solo *practice testing* y
-  *distributed practice* tienen utilidad **alta**; *highlighting*/*rereading*, **baja**. Esto da a
-  **RF-2** (repetición espaciada = distributed practice) y **RF-4** (quiz usado como practice
-  testing) el respaldo más fuerte del inventario. **RF-5** (Glossary como consulta pasiva) no lo
-  tiene por analogía con las técnicas de baja utilidad — de ahí que `research.md` recomiende que
-  fuerce recuperación activa en vez de ser solo consulta.
-- **RF-9/RF-10/RF-11 quedan explícitamente "no evaluadas"** por estas fuentes — no es que carezcan
-  de valor, es que no hay evidencia de esta investigación que se pronuncie sobre ellas.
-- Candidatos **fuera del inventario actual** (Fiorella & Mayer: `SelfExplanation`, `ConceptMap`;
-  Sitzmann: escenario ramificado/simulación) quedan registrados como propuesta v2, no como RF
-  existente — ver el bloque `candidatosFueraDeInventario` del JSON.
+- **Dunlosky et al. 2013**: of 10 study techniques evaluated, only *practice testing* and
+  *distributed practice* have **high** utility; *highlighting*/*rereading*, **low**. This gives
+  **RF-2** (spaced repetition = distributed practice) and **RF-4** (quiz used as practice testing)
+  the strongest backing in the inventory. **RF-5** (Glossary as passive lookup) doesn't have it by
+  analogy with the low-utility techniques — hence why `research.md` recommends it force active
+  recall instead of being just a lookup.
+- **RF-9/RF-10/RF-11 are explicitly "not evaluated"** by these sources — not that they lack value,
+  but that this research provides no evidence one way or the other about them.
+- Candidates **outside the current inventory** (Fiorella & Mayer: `SelfExplanation`, `ConceptMap`;
+  Sitzmann: branching scenario/simulation) are logged as a v2 proposal, not as an existing RF —
+  see the JSON's `outOfInventoryCandidates` block.
 
-## El requisito de "slot de feedback informativo" (Hattie)
+## The "informative feedback slot" requirement (Hattie)
 
-**Wisniewski, Zierer & Hattie 2019** (435 estudios, https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full,
-leído completo): el feedback **informativo** (explica por qué y qué estrategia usar) tiene un
-tamaño de efecto d=0.99, frente a d=0.24 del feedback de refuerzo/elogio/puntos — una diferencia de
-categoría, no de grado.
+**Wisniewski, Zierer & Hattie 2019** (435 studies, https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full,
+read in full): **informative** feedback (explains why and what strategy to use) has an effect
+size of d=0.99, versus d=0.24 for reinforcement/praise/points feedback — a difference of category,
+not of degree.
 
-**Consecuencia para el diseño (aún no reflejada en `requirements.md`/`design.md` — es un hallazgo
-que Fase 2 debe decidir si incorpora):** `RF-4` (variantes de quiz) y `RF-6` (Hint/Reveal) deben
-soportar un **slot de feedback informativo** — un lugar explícito en la API del componente para
-explicar el porqué de una respuesta correcta/incorrecta y qué estrategia habría llevado a
-acertarla — no limitarse a un estado visual de acierto/error. `evidence.json` marca esto con
-`informativeFeedbackRequired: true` en las entradas de RF-4 y RF-6.
+**Design consequence (not yet reflected in `requirements.md`/`design.md` — a finding Phase 2 must
+decide whether to incorporate):** `RF-4` (quiz variants) and `RF-6` (Hint/Reveal) should support
+an **informative feedback slot** — an explicit place in the component's API to explain why an
+answer is correct/incorrect and what strategy would have led to getting it right — not just a
+visual correct/incorrect state. `evidence.json` marks this with
+`informativeFeedbackRequired: true` on the RF-4 and RF-6 entries.
 
-## `qti-mapping.json` — vocabulario de interacciones
+## `qti-mapping.json` — interaction vocabulary
 
-Documenta a qué interacción de **IMS QTI 3.0** corresponde cada variante de RF-3/RF-4, siguiendo
-la recomendación de `research.md` P6 de adoptar el vocabulario de QTI como referencia de naming
-(no de implementación — no se adopta el binding XML de QTI en el núcleo). Incluye
-`gapsPlanificados`: la familia de interacciones **gráficas/sobre imagen** (`hotspot`, `hot-text`,
-`graphic-order`, `graphic-associate`, `graphic-gap-match`, `position-object`, `select-point`,
-`drawing`) y de **respuesta numérica/slider**, que QTI sí define y que `requirements.md` §4.1 no
-cubre hoy — un hallazgo de alcance (§9.2), no de nomenclatura. Cada entrada lleva `"gap": true`
-(sigue siendo cierto: hoy no tienen RF asignado) **y además `"scope": "planned"` con
-`"phase": "oleada-avanzada"`**, reflejando la decisión de producto de Jose de 2026-08-11
-(`research/decisions.md` D2: alcance amplio, estas interacciones están planificadas, no
-descartadas). Por la misma decisión, el bloque `codeExercise` registra **RF-11** (ejercicio de
-código, apoyado en Sandpack para la ejecución) también como `scope: "planned"`.
+Documents which **IMS QTI 3.0** interaction each RF-3/RF-4 variant corresponds to, following
+`research.md` P6's recommendation to adopt QTI's vocabulary as a naming reference (not for
+implementation — QTI's XML binding is not adopted in the core). Includes `plannedGaps`: the
+family of **graphical/image-based** interactions (`hotspot`, `hot-text`, `graphic-order`,
+`graphic-associate`, `graphic-gap-match`, `position-object`, `select-point`, `drawing`) and
+**numeric/slider response**, which QTI does define and which `requirements.md` §4.1 does not
+cover today — a scope finding (§9.2), not a naming one. Each entry carries `"gap": true` (still
+true: they have no assigned RF today) **and also `"scope": "planned"` with
+`"phase": "advanced-wave"`**, reflecting Jose's 2026-08-11 product decision
+(`research/decisions.md` D2: broad scope, these interactions are planned, not dropped). By the
+same decision, the `codeExercise` block registers **RF-11** (code exercise, backed by Sandpack for
+execution) also as `scope: "planned"`.
 
-## `xapi-mapping.json` — vocabulario de eventos de reporting
+## `xapi-mapping.json` — reporting event vocabulary
 
-Documenta a qué `interactionType` de **xAPI** (10 tipos cerrados) correspondería cada RF, útil
-solo como inspiración de naming de callbacks (`onAttempted`, `onMastered`) — el núcleo no
-implementa xAPI/LRS. `performance`, `likert` y `numeric` quedan marcados `"sinMapeo": true`: no
-hay RF equivalente en el inventario actual, coincidiendo con el mismo hueco de interacciones
-numéricas/slider que detecta el mapeo de QTI.
+Documents which **xAPI** `interactionType` (10 closed types) each RF would correspond to, useful
+only as naming inspiration for callbacks (`onAttempted`, `onMastered`) — the core does not
+implement xAPI/LRS. `performance`, `likert`, and `numeric` are marked `"unmapped": true`: there is
+no equivalent RF in the current inventory, matching the same numeric/slider interaction gap QTI's
+mapping detects.
 
-## Estado
+## Status
 
-Datos completos según lo documentado en `research.md`. Sin validador ejecutable todavía — la
-intención es que un lint de Fase 4 compruebe que cada entrada de registry (RF-3/RF-4) declara su
-mapeo QTI/xAPI, no que se limite a documentación de referencia.
+Data complete per what `research.md` documents. No executable validator yet — the intent is for a
+Phase 4 lint to check that every registry entry (RF-3/RF-4) declares its QTI/xAPI mapping, rather
+than this staying reference documentation only.

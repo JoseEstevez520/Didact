@@ -1,61 +1,61 @@
 # @didact/spaced-repetition
 
-Algoritmos de repetición espaciada para el componente `SpacedRepetitionDeck` (RF-2 de
-`requirements.md`), tras una **interfaz agnóstica de persistencia**: el scheduler nunca guarda
-nada, solo recibe y devuelve estado — el proyecto consumidor decide dónde vive (localStorage,
-base de datos propia, etc.).
+Spaced-repetition algorithms for the `SpacedRepetitionDeck` component (RF-2 in
+`requirements.md`), behind a **persistence-agnostic interface**: the scheduler never saves
+anything, it only receives and returns state — the consuming project decides where it lives
+(localStorage, its own database, etc.).
 
-## Contrato (`src/types.ts`)
+## Contract (`src/types.ts`)
 
 ```ts
-type ReviewState = Record<string, unknown>; // opaco: SM2State | FSRSState | LeitnerState
+type ReviewState = Record<string, unknown>; // opaque: SM2State | FSRSState | LeitnerState
 type ReviewGrade = "again" | "hard" | "good" | "easy";
 interface ReviewResult { state: ReviewState; dueAt: Date; }
 interface SpacedRepetitionScheduler {
   createInitialState(): ReviewState;
-  schedule(state: ReviewState, grade: ReviewGrade, now?: Date): ReviewResult; // pura, sin efectos
+  schedule(state: ReviewState, grade: ReviewGrade, now?: Date): ReviewResult; // pure, no side effects
   preview?(state: ReviewState, now?: Date): Record<ReviewGrade, ReviewResult>;
 }
 ```
 
-Interfaz tomada literalmente de `specs/education-components/research.md` Pregunta 4, derivada de
-cómo `ts-fsrs` ya resuelve el mismo problema de diseño.
+Interface taken literally from `specs/education-components/research.md` Question 4, derived from
+how `ts-fsrs` already solves the same design problem.
 
-## Algoritmos
+## Algorithms
 
-### SM-2 (`src/sm2.ts`) — por defecto
+### SM-2 (`src/sm2.ts`) — default
 
-~40-60 líneas de aritmética pura, cero dependencias, 35+ años en producción (SuperMemo, y Anki
-hasta 2023). Evidencia "media" según la tabla de `research.md` P4 — suficiente para ser el
-default por su simplicidad y coste cero, no por ser el algoritmo más preciso disponible.
-Fórmulas verificadas contra la especificación original de SuperMemo y Wikipedia (citadas en el
-fichero). Stub documentado; implementación aritmética completa pendiente de Fase 4.
+~40-60 lines of pure arithmetic, zero dependencies, 35+ years in production (SuperMemo, and Anki
+until 2023). "Medium" evidence per the `research.md` P4 table — enough to be the default for its
+simplicity and zero cost, not for being the most accurate algorithm available. Formulas verified
+against SuperMemo's original specification and Wikipedia (cited in the file). Documented stub;
+full arithmetic implementation pending Phase 4.
 
-### FSRS (`src/fsrs.ts`) — modo avanzado
+### FSRS (`src/fsrs.ts`) — advanced mode
 
-Modela cada tarjeta con Dificultad/Estabilidad/Recuperabilidad y 19 pesos; scheduler por defecto
-de Anki desde 2023, evidencia "alta" (supera a SM-2 en benchmarks del propio proyecto FSRS).
-`research.md` deja dos vías abiertas para cuando se implemente (ninguna decidida en Fase 1):
+Models each card with Difficulty/Stability/Retrievability and 19 weights; Anki's default scheduler
+since 2023, "high" evidence (beats SM-2 in the FSRS project's own benchmarks). `research.md`
+leaves two paths open for when it gets implemented (neither decided in Phase 1):
 
-1. Reimplementar solo el scheduler con pesos por defecto (100-250 líneas, sin el optimizador de
-   ML, que es caro y evitable para un MVP), copiado como código propio.
-2. Adoptar `ts-fsrs` (MIT, TypeScript nativo) como **dependencia externa fijada con versión
-   exacta + test de deriva** (mismo patrón RNF-5 que la capa de primitivos de `@didact/core`),
-   aceptando su coste de mantenimiento a cambio de mejor evidencia. `ts-fsrs` es un paquete
-   multi-módulo publicado en npm, no un fichero trivial de copiar — de ahí que se trate como
-   dependencia fijada y no como copy-paste puro.
+1. Reimplement only the scheduler with default weights (100-250 lines, without the ML optimizer,
+   which is expensive and avoidable for an MVP), copied as our own code.
+2. Adopt `ts-fsrs` (MIT, native TypeScript) as an **external dependency pinned to an exact
+   version + drift test** (the same RNF-5 pattern as `@didact/core`'s primitives layer), accepting
+   its maintenance cost in exchange for better evidence. `ts-fsrs` is a multi-module package
+   published on npm, not a trivial file to copy — hence why it's treated as a pinned dependency
+   rather than pure copy-paste.
 
-### Leitner — no incluido como algoritmo principal
+### Leitner — not included as the main algorithm
 
-`research.md` lo descarta como algoritmo por defecto (demasiado burdo: 1 entero, una caja) y lo
-reserva como posible "modo simple" opcional, no implementado en este scaffold.
+`research.md` rules it out as the default algorithm (too crude: 1 integer, one box) and reserves
+it as a possible optional "simple mode," not implemented in this scaffold.
 
-## Lo no negociable
+## What's non-negotiable
 
-Sea cual sea el algoritmo activo, siempre se expone tras la interfaz agnóstica de arriba — cambiar
-de algoritmo no debe romper a los consumidores que ya integraron `SpacedRepetitionDeck`.
+Whichever algorithm is active, it's always exposed behind the agnostic interface above — switching
+algorithms must not break consumers who already integrated `SpacedRepetitionDeck`.
 
-## Estado
+## Status
 
-Scaffold (Fase 1-3 del `ROADMAP.md`). Ambos schedulers son stubs que documentan el contrato y
-las fórmulas/decisiones de referencia; lanzan si se invocan. Implementación real en Fase 4.
+Scaffold (Phase 1-3 of `ROADMAP.md`). Both schedulers are stubs that document the contract and the
+reference formulas/decisions; they throw if invoked. Real implementation in Phase 4.

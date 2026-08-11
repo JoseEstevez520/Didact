@@ -1,73 +1,72 @@
-# Adaptador SkillNet — frontera de responsabilidad
+# SkillNet Adapter — boundary of responsibility
 
-**Este directorio documenta la frontera entre Didact y SkillNet. No contiene código.** El código
-real del adaptador (mapeo de tema, registro de bloques en el catálogo generativo v2) vive en el
-repositorio de SkillNet (`repo/`), fuera de este monorepo — nunca aquí.
+**This directory documents the boundary between Didact and SkillNet. It contains no code.** The
+adapter's real code (theme mapping, registering blocks in the v2 generative catalog) lives in the
+SkillNet repository (`repo/`), outside this monorepo — never here.
 
-Ver `specs/education-components/design.md` §0 y §4, y `requirements.md` §0.1/§2.4: SkillNet es el
-**primer consumidor real** de Didact, no el criterio de diseño del núcleo. Cualquier decisión
-específica de SkillNet (tokens de `design-system.md`, idioma, el catálogo generativo v2) se trata
-como adaptador opcional, nunca como parte de `packages/*`.
+See `specs/education-components/design.md` §0 and §4, and `requirements.md` §0.1/§2.4: SkillNet is
+Didact's **first real consumer**, not the core's design criterion. Any SkillNet-specific decision
+(tokens from `design-system.md`, language, the v2 generative catalog) is treated as an optional
+adapter, never as part of `packages/*`.
 
-## Qué haría el adaptador (en `repo/`, no aquí)
+## What the adapter would do (in `repo/`, not here)
 
-1. **Uso directo (cursos v1, estáticos):** import normal de componentes de `@didact/core` en
-   `skillnet-web`, con el tema de `design-system.md` aplicado sobre el tema neutro del núcleo
-   (RF-18). Sin restricciones adicionales.
-2. **Bloque del catálogo generativo (cursos v2):** un componente de Didact entra al catálogo
-   (`apps/skillnet-web/src/components/courses/kit/`) solo si cumple las 7 reglas de contrato de
-   `openui-adoption.md` §5.2, se describe con `zod` + `defineComponent`, pasa `assertStaticOnly`,
-   tiene mirror en `src/render/kit.py`, y no hace que el DAG de bloques supere
+1. **Direct use (v1 courses, static):** normal import of `@didact/core` components in
+   `skillnet-web`, with the `design-system.md` theme applied on top of the core's neutral theme
+   (RF-18). No additional restrictions.
+2. **Generative catalog block (v2 courses):** a Didact component enters the catalog
+   (`apps/skillnet-web/src/components/courses/kit/`) only if it complies with the 7 contract rules
+   in `openui-adoption.md` §5.2, is described with `zod` + `defineComponent`, passes
+   `assertStaticOnly`, has a mirror in `src/render/kit.py`, and doesn't push the block DAG past
    `MAX_RENDERED_NODES = 64`.
 
-## Tabla de aptitud (research.md, Pregunta 7)
+## Fitness table (research.md, Question 7)
 
-Clasificación de los 11 componentes de `requirements.md` §4.1 frente a las reglas del catálogo
-generativo v2 de SkillNet (`RENDER_ALLOW_REACTIVE = False`, regla 5: `QuizItem` nunca lleva
-`answer_key` en el `ui_spec`). Fuente primaria: el docstring ejecutable de
-`repo/apps/skillnet-api/src/render/spec.py:1-26`, no el resumen de 7 reglas de
-`docs/design/v2-dynamic-courses.md` §5.2 (que las cita sin enumerarlas).
+Classification of the 11 components in `requirements.md` §4.1 against SkillNet's v2 generative
+catalog rules (`RENDER_ALLOW_REACTIVE = False`, rule 5: `QuizItem` never carries `answer_key` in
+the `ui_spec`). Primary source: the executable docstring in
+`repo/apps/skillnet-api/src/render/spec.py:1-26`, not the 7-rule summary in
+`docs/design/v2-dynamic-courses.md` §5.2 (which cites them without enumerating them).
 
-**Resultado: 8 de 11 APTOS, 1 apto-pero-bloqueado, 2 no aptos.**
+**Result: 8 of 11 FIT, 1 fit-but-blocked, 2 not fit.**
 
-| Componente (RF) | Veredicto | Motivo |
+| Component (RF) | Verdict | Reason |
 |---|---|---|
-| `Flashcard` (RF-1) | **APTO** | Flip/marcar-sabido = estado React efímero; sin `answer_key` que proteger. Precedente: `QuizItemBlock`. |
-| `SpacedRepetitionDeck` (RF-2) | **NO APTO** | Persistir estado entre sesiones exige `Query`/`Mutation`, prohibidas mientras `RENDER_ALLOW_REACTIVE=False`. |
-| Matching/Sort/Categorize (RF-3) | **APTO** | Precedente en producción: `DragOrder` usa props literales + React interno, sin `Mutation`. |
-| Variantes de quiz (RF-4) | **APTO** | `QuizItem` ya cubre 6 `item_type` sin `correct`/`explanation` en props (regla 5); verificación de respuesta abierta corre server-side vía POST autónomo. |
-| `Glossary`/`Term` (RF-5) | **APTO** | Presentación pura; sin respuesta que proteger, sin datos dinámicos. |
-| `Hint`/`Reveal` (RF-6) | **APTO con tensión estructural** | Toggle = estado React, pero la reserialización canónica llega de golpe: seguro para una pista pedagógica, choca con regla 5 si envuelve una respuesta de examen — en ese caso debe delegar en el POST autónomo de `QuizItem`. |
-| Progreso/mastery (RF-7) | **APTO** | Foto fija (`mastery: 0.72`) como prop literal, igual que `Chart`. Una barra en vivo exigiría `Query`. |
-| `Timeline`/`Steps` (RF-8) | **APTO** | Ya existe literalmente como `StepSequence` — 1:1 con RF-8, no analogía. |
-| Checkpoint sobre vídeo (RF-9) | **APTO EN PRINCIPIO / BLOQUEADO POR INFRAESTRUCTURA** | Las reglas no lo impiden (mismo patrón autónomo que `QuizItem`); el bloqueo real es que no hay reproductor de vídeo en `skillnet-web` (research.md Pregunta 8), no la reactividad. |
-| `Rubric` (RF-10) | **APTO** | Autoevaluación sin nota automática → sin `answer_key`; estado de selección efímero. |
-| Ejercicio de código (RF-11) | **NO APTO** | La comprobación exige ejecución/red (≈`Mutation`, prohibida). El display sin comprobación (`CodeBlock`) sí es apto, pero no cubre RF-11 completo. |
+| `Flashcard` (RF-1) | **FIT** | Flip/mark-as-known = ephemeral React state; no `answer_key` to protect. Precedent: `QuizItemBlock`. |
+| `SpacedRepetitionDeck` (RF-2) | **NOT FIT** | Persisting state across sessions requires `Query`/`Mutation`, forbidden while `RENDER_ALLOW_REACTIVE=False`. |
+| Matching/Sort/Categorize (RF-3) | **FIT** | Production precedent: `DragOrder` uses literal props + internal React, no `Mutation`. |
+| Quiz variants (RF-4) | **FIT** | `QuizItem` already covers 6 `item_type`s without `correct`/`explanation` in props (rule 5); open-answer verification runs server-side via a self-contained POST. |
+| `Glossary`/`Term` (RF-5) | **FIT** | Pure presentation; no answer to protect, no dynamic data. |
+| `Hint`/`Reveal` (RF-6) | **FIT with structural tension** | Toggle = React state, but the canonical re-serialization arrives all at once: safe for a pedagogical hint, conflicts with rule 5 if it wraps an exam answer — in that case it must delegate to `QuizItem`'s self-contained POST. |
+| Progress/mastery (RF-7) | **FIT** | A static snapshot (`mastery: 0.72`) as a literal prop, just like `Chart`. A live bar would require `Query`. |
+| `Timeline`/`Steps` (RF-8) | **FIT** | Already exists literally as `StepSequence` — a 1:1 match with RF-8, not an analogy. |
+| Video checkpoint (RF-9) | **FIT IN PRINCIPLE / BLOCKED BY INFRASTRUCTURE** | The rules don't prevent it (same self-contained pattern as `QuizItem`); the real blocker is that there's no video player in `skillnet-web` (research.md Question 8), not reactivity. |
+| `Rubric` (RF-10) | **FIT** | Self-assessment without automatic grading → no `answer_key`; ephemeral selection state. |
+| Code exercise (RF-11) | **NOT FIT** | Checking requires execution/network (≈`Mutation`, forbidden). Display without checking (`CodeBlock`) is fit, but doesn't cover full RF-11. |
 
-**Nota de precedente:** el patrón clave que hace posibles los APTOS es que un bloque puede tener
-**estado de React puro** (`useState`/`useEffect`) sin violar "sin reactividad" — la prohibición es
-sobre la capa del dialecto OpenUI (`Mutation`/`Query`/`$state`/`useTriggerAction()`), no sobre
-React ordinario. El catálogo real de SkillNet tiene hoy **14 bloques**, no 10 como asumía el
-borrador de `design.md` §5.
+**Precedent note:** the key pattern that makes the FITs possible is that a block can have **plain
+React state** (`useState`/`useEffect`) without violating "no reactivity" — the prohibition is on
+the OpenUI dialect layer (`Mutation`/`Query`/`$state`/`useTriggerAction()`), not on ordinary
+React. SkillNet's real catalog today has **14 blocks**, not 10 as `design.md` §5's draft assumed.
 
-## Reproductor de vídeo (research.md, Pregunta 8)
+## Video player (research.md, Question 8)
 
-No existe hoy ninguna integración de reproductor de vídeo en `skillnet-web` (búsqueda exhaustiva
-sin coincidencias de `video`/`player`/`react-player`/`video.js`/`hls`/eventos de timestamp). Es
-capacidad a evaluar desde cero, no una elección ya hecha — punto de partida recomendado: `<video>`
-nativo + `<track kind="chapters">`/`timeupdate` antes de subir a una librería con dependencia npm
-adicional.
+There is no video player integration in `skillnet-web` today (exhaustive search with no matches
+for `video`/`player`/`react-player`/`video.js`/`hls`/timestamp events). It's a capability to
+evaluate from scratch, not an already-made choice — recommended starting point: native `<video>` +
+`<track kind="chapters">`/`timeupdate` before moving up to a library with an additional npm
+dependency.
 
-## Enlaces conceptuales (documentos que viven en `repo/`, no aquí)
+## Conceptual links (documents that live in `repo/`, not here)
 
-- `repo/docs/design/openui-adoption.md` — las reglas del catálogo generativo v2 y su estándar de
-  honestidad sobre evidencia no concluyente.
-- `repo/docs/design/design-system.md` — tokens de tema que el adaptador mapearía sobre el tema
-  neutro del núcleo.
-- `repo/apps/skillnet-api/src/render/spec.py` — fuente primaria y ejecutable de las reglas de
-  contrato (no el resumen narrativo de `v2-dynamic-courses.md` §5.2).
+- `repo/docs/design/openui-adoption.md` — the v2 generative catalog's rules and its honesty
+  standard about inconclusive evidence.
+- `repo/docs/design/design-system.md` — theme tokens the adapter would map onto the core's neutral
+  theme.
+- `repo/apps/skillnet-api/src/render/spec.py` — the primary, executable source for the contract
+  rules (not the narrative summary in `v2-dynamic-courses.md` §5.2).
 
-## Estado
+## Status
 
-Documentación de frontera únicamente (Fase 1-3). La implementación del adaptador es la **Fase 5**
-del `ROADMAP.md`, opcional, y vive enteramente en `repo/` — no bloquea ninguna fase del núcleo.
+Boundary documentation only (Phase 1-3). Implementing the adapter is **Phase 5** of `ROADMAP.md`,
+optional, and lives entirely in `repo/` — it does not block any core phase.

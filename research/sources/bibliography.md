@@ -1,149 +1,145 @@
-# Bibliografía — Didact (Fase 1, investigación)
+# Bibliography — Didact (Phase 1, research)
 
-Fuentes citadas en `specs/education-components/research.md`, agrupadas por tema, más las fuentes
-originales aportadas por el dueño del producto (lote D) cuando `research.md` las referencia a
-través de un espejo accesible. Cada línea indica **por qué importa** la fuente y su **estado de
-verificación** tal como consta en `research.md` (accesible / no verificado / no accesible con
-motivo). Fecha de investigación: 2026-08-11.
+Sources cited in `specs/education-components/research.md`, grouped by topic, plus the original
+sources provided by the product owner (batch D) when `research.md` references them through an
+accessible mirror. Each line indicates **why the source matters** and its **verification status**
+as stated in `research.md` (accessible / not verified / not accessible with a reason). Research
+date: 2026-08-11.
 
 ---
 
-## 1. Taxonomía y esquemas (QTI 3.0, H5P semantics + repos, xAPI)
+## 1. Taxonomy and schemas (QTI 3.0, H5P semantics + repos, xAPI)
 
-- **IMS QTI 3.0 — overview**: https://www.imsglobal.org/spec/qti/v3p0/oview — Estándar de mayor
-  granularidad de vocabulario de interacciones de pregunta/test (research.md P6); base de
-  `qti-mapping.json`. Accesible.
-- **IMS QTI 3.0 — implementation guide (21 interacciones)**: https://www.imsglobal.org/spec/qti/v3p0/impl —
-  Enumeración completa de las 21 interacciones (no ~19 como se asumía inicialmente), incluida la
-  familia gráfica/sobre-imagen fuera del inventario actual (research.md §9.2). Accesible.
+- **IMS QTI 3.0 — overview**: https://www.imsglobal.org/spec/qti/v3p0/oview — Standard with the
+  finest-grained question/test interaction vocabulary (research.md P6); basis for
+  `qti-mapping.json`. Accessible.
+- **IMS QTI 3.0 — implementation guide (21 interactions)**: https://www.imsglobal.org/spec/qti/v3p0/impl —
+  Full enumeration of the 21 interactions (not ~19 as initially assumed), including the graphical/
+  image-based family outside the current inventory (research.md §9.2). Accessible.
 - **H5P — content types and applications**: https://h5p.org/content-types-and-applications —
-  Más de 50 content types embebibles, equivalente 1:1 de casi todo RF-1..RF-9; usado como
-  checklist de validación cruzada del inventario, no como dependencia. Accesible.
-- **H5P — semantics.json**: https://h5p.org/semantics — Esquema declarativo dual
-  (documenta + valida en runtime) adoptado como patrón para `packages/validators/schema/`.
-  Accesible.
-- **xAPI Spec (ADL)**: https://github.com/adlnet/xAPI-Spec — Vocabulario cerrado de 10
-  `interactionType`; usado solo como inspiración de naming de callbacks, base de
-  `xapi-mapping.json`. Accesible.
-- **Open edX XBlock — documentación**: https://docs.openedx.org/projects/xblock/en/latest/index.html —
-  Patrón arquitectónico (estado + vista + acción) acoplado a la plataforma; no aporta vocabulario
-  de ejercicios ni interoperabilidad cross-plataforma. Descartado como fuente de vocabulario.
-  Accesible.
-- **1EdTech — estándar LTI**: https://www.1edtech.org/standards/lti — Lanza herramientas externas
-  dentro de un LMS; ningún vocabulario de ejercicios propio. Relevante solo si un consumidor
-  necesitara embeberse en un LMS de terceros; fuera del núcleo. Accesible.
-- **SCORM — run-time técnico**: https://scorm.com/scorm-explained/technical-scorm/run-time/ —
-  Empaquetado + tracking de finalización, sin vocabulario de ejercicios. Legado, fuera de alcance
-  del núcleo. Accesible.
+  50+ embeddable content types, a 1:1 equivalent of nearly all of RF-1..RF-9; used as a
+  cross-validation checklist for the inventory, not as a dependency. Accessible.
+- **H5P — semantics.json**: https://h5p.org/semantics — Dual declarative schema (documents +
+  validates at runtime) adopted as the pattern for `packages/validators/schema/`. Accessible.
+- **xAPI Spec (ADL)**: https://github.com/adlnet/xAPI-Spec — Closed vocabulary of 10
+  `interactionType`s; used only as naming inspiration for callbacks, basis for
+  `xapi-mapping.json`. Accessible.
+- **Open edX XBlock — documentation**: https://docs.openedx.org/projects/xblock/en/latest/index.html —
+  Architectural pattern (state + view + action) coupled to the platform; contributes no exercise
+  vocabulary nor cross-platform interoperability. Discarded as a vocabulary source. Accessible.
+- **1EdTech — LTI standard**: https://www.1edtech.org/standards/lti — Launches external tools
+  inside an LMS; no exercise vocabulary of its own. Relevant only if a consumer needed to embed
+  itself in a third-party LMS; outside the core. Accessible.
+- **SCORM — technical run-time**: https://scorm.com/scorm-explained/technical-scorm/run-time/ —
+  Packaging + completion tracking, no exercise vocabulary. Legacy, out of the core's scope.
+  Accessible.
 
-## 2. Evidencia pedagógica (Dunlosky, Wisniewski/Hattie, Fiorella & Mayer, Sitzmann)
+## 2. Pedagogical evidence (Dunlosky, Wisniewski/Hattie, Fiorella & Mayer, Sitzmann)
 
-- **Dunlosky et al. 2013** (fuente original, SAGE/*Psychological Science in the Public Interest*):
-  reporta 403/acceso restringido en el momento de la investigación. **No accesible directamente**
-  — reconstruido vía fuente secundaria de la Association for Psychological Science y vía PubMed:
-  https://pubmed.ncbi.nlm.nih.gov/26173288/. De 10 técnicas de estudio, solo *practice testing* y
-  *distributed practice* tienen utilidad **alta** — base de que RF-2/RF-4 tengan el respaldo más
-  fuerte del inventario (`evidence.json`).
+- **Dunlosky et al. 2013** (original source, SAGE/*Psychological Science in the Public Interest*):
+  reported as 403/restricted access at the time of research. **Not directly accessible** —
+  reconstructed via a secondary source from the Association for Psychological Science and via
+  PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/. Of 10 study techniques, only *practice
+  testing* and *distributed practice* have **high** utility — basis for RF-2/RF-4 having the
+  strongest backing in the inventory (`evidence.json`).
 - **Wisniewski, Zierer & Hattie 2019** (Frontiers in Psychology):
-  https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full — Meta-análisis de 435
-  estudios; feedback informativo d=0.99 vs. refuerzo/elogio/puntos d=0.24. Base del requisito de
-  "slot de feedback informativo" propuesto para RF-4/RF-6. **Accesible, leído completo**
+  https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full — Meta-analysis of 435
+  studies; informative feedback d=0.99 vs. reinforcement/praise/points d=0.24. Basis for the
+  "informative feedback slot" requirement proposed for RF-4/RF-6. **Accessible, read in full**
   (open-access).
-- **Fiorella & Mayer 2016** (fuente original, Springer/*Educational Psychology Review*):
-  reporta acceso con login en el momento de la investigación. **No accesible directamente** —
-  vía espejo accesible de ERIC: https://eric.ed.gov/?id=EJ1120458. 8 estrategias generativas de
-  aprendizaje; base de los candidatos fuera de inventario `SelfExplanation` y `ConceptMap`
-  (propuesta v2, no implementar ya).
-- **Sitzmann 2011** (fuente original, Wiley/*Personnel Psychology*): reporta 402/acceso
-  restringido en el momento de la investigación. **No accesible directamente, verificado solo vía
-  resumen del abstract** — https://onlinelibrary.wiley.com/doi/10.1111/j.1744-6570.2011.01190.x.
-  Simulation games con efecto positivo pero moderado (d 0.22-0.52) y sesgo de publicación
-  declarado por la propia fuente; pesa contra sobrepriorizar un componente de escenario/simulación.
+- **Fiorella & Mayer 2016** (original source, Springer/*Educational Psychology Review*): reported
+  as login-required access at the time of research. **Not directly accessible** — via an
+  accessible ERIC mirror: https://eric.ed.gov/?id=EJ1120458. 8 generative learning strategies;
+  basis for the out-of-inventory candidates `SelfExplanation` and `ConceptMap` (v2 proposal, not
+  to implement yet).
+- **Sitzmann 2011** (original source, Wiley/*Personnel Psychology*): reported as 402/restricted
+  access at the time of research. **Not directly accessible, verified only via the abstract's
+  summary** — https://onlinelibrary.wiley.com/doi/10.1111/j.1744-6570.2011.01190.x. Simulation
+  games with a positive but moderate effect (d 0.22-0.52) and a publication bias declared by the
+  source itself; weighs against over-prioritizing a scenario/simulation component.
 
-## 3. Librerías (dnd-kit, ts-fsrs, ink/inkjs, Sandpack, shadcn/ui, primitivos de UI)
+## 3. Libraries (dnd-kit, ts-fsrs, ink/inkjs, Sandpack, shadcn/ui, UI primitives)
 
-- **dnd-kit**: https://github.com/clauderic/dnd-kit — Teclado + ARIA + live regions de serie;
-  mitigación directa del incumplimiento de WCAG 2.5.7 en RF-3. Compatibilidad con React 19 **no
-  confirmada** en documentación oficial (solo fuente secundaria) — candidato a dependencia fijada
-  (RNF-5), no a copia. Accesible.
-- **ts-fsrs**: https://github.com/open-spaced-repetition/ts-fsrs — Implementación TS nativa del
-  scheduler FSRS completo, MIT, sin persistencia propia (mismo contrato que RF-2 exige). Paquete
-  multi-módulo publicado en npm, no un fichero trivial de copiar — tercera opción para RF-2 como
-  dependencia fijada. Accesible.
-- **FSRS4Anki**: https://github.com/open-spaced-repetition/fsrs4anki — Referencia del modelo DSR
-  (Difficulty/Stability/Retrievability) y los 19 pesos por defecto de FSRS. Accesible.
+- **dnd-kit**: https://github.com/clauderic/dnd-kit — Keyboard + ARIA + live regions built in;
+  direct mitigation for the WCAG 2.5.7 non-compliance in RF-3. React 19 compatibility **not
+  confirmed** in official documentation (secondary source only) — a candidate for a pinned
+  dependency (RNF-5), not for copying. Accessible.
+- **ts-fsrs**: https://github.com/open-spaced-repetition/ts-fsrs — Native TS implementation of the
+  full FSRS scheduler, MIT, with no persistence of its own (same contract RF-2 requires).
+  Multi-module package published on npm, not a trivial file to copy — third option for RF-2 as a
+  pinned dependency. Accessible.
+- **FSRS4Anki**: https://github.com/open-spaced-repetition/fsrs4anki — Reference for FSRS's DSR
+  model (Difficulty/Stability/Retrievability) and its 19 default weights. Accessible.
 - **"Implementing FSRS in 100 lines" (Borretti)**: https://borretti.me/article/implementing-fsrs-in-100-lines —
-  Evidencia de que el *scheduler* de FSRS (sin el optimizador de pesos) es tratable en un volumen
-  de código razonable para un MVP. Accesible.
-- **SM-2 — especificación original (SuperMemo)**: https://www.supermemo.com/en/archives1990-2015/english/ol/sm2 —
-  Fórmulas exactas del algoritmo por defecto de repetición espaciada (EF inicial 2.5, suelo 1.3).
-  Accesible.
-- **SM-2 — Wikipedia**: https://en.wikipedia.org/wiki/SM-2_(algorithm) — Verificación cruzada de
-  las fórmulas de la especificación original. Accesible.
-- **Ink**: https://github.com/inkle/ink — Lenguaje de guiones ramificados compilable a JSON;
-  justifica un componente nuevo "escenario ramificado" fuera del inventario actual, prioridad
-  media-baja (ver evidencia de Sitzmann). Accesible.
-- **inkjs**: https://github.com/y-lohse/inkjs — Runtime en JavaScript/TypeScript de Ink, relevante
-  para integrarlo en un proyecto React sin dependencia de un runtime nativo. Accesible.
-- **Sandpack**: https://sandpack.codesandbox.io/ — Resuelve la ejecución (editor + runtime en
-  navegador) de RF-11, no la comprobación. Licencia Apache-2.0 (no MIT) — exige atribución si se
-  redistribuye código copiado, relevante para el modelo copy-paste (RNF-5). Accesible.
-- **shadcn/ui — registry (overview)**: https://ui.shadcn.com/docs/registry — Confirma que el
-  mecanismo de registry de terceros funciona con cualquier framework, no solo React. Accesible.
-- **shadcn/ui — construir una registry propia**: https://ui.shadcn.com/docs/registry/getting-started —
-  Guía dedicada a registries no oficiales; base de la decisión de RF-15. Accesible.
-- **shadcn/ui — esquema `registry.json`**: https://ui.shadcn.com/docs/registry/registry-json —
-  Esquema raíz adoptado literalmente en `packages/registry/registry.json`. Accesible.
-- **shadcn/ui — esquema `registry-item.json`**: https://ui.shadcn.com/docs/registry/registry-item-json —
-  Confirma que el campo `tailwind` está deprecated a favor de `cssVars.theme` — base de la
-  decisión de no exigir Tailwind (research.md P3). Accesible.
-- **shadcn/ui — namespaces de registry**: https://ui.shadcn.com/docs/registry/namespace — Modelo
-  de instalación descentralizado sin autoridad central. Accesible.
-- **shadcn/ui — autenticación de registry**: https://ui.shadcn.com/docs/registry/authentication —
-  Autenticación nativa vía cabeceras HTTP + variables de entorno; sin OAuth/OIDC. Accesible.
-- **shadcn/ui — changelog CLI v4 (2026-03)**: https://ui.shadcn.com/docs/changelog/2026-03-cli-v4 —
-  Documenta `shadcn diff` para la registry oficial; **no confirma explícitamente** que funcione
-  igual con registries namespaced de terceros — marcado "no verificado" en `research.md`.
-  Accesible (el contenido, no la garantía que se buscaba en él).
-- **shadcn/ui — React 19**: https://ui.shadcn.com/docs/react-19 — Confirma la fricción de
-  peer-dependency de Radix UI/React Aria con React 19 estable. Accesible.
-- **shadcn/ui — Tailwind v4**: https://ui.shadcn.com/docs/tailwind-v4 — Muestra que incluso dentro
-  de shadcn/ui, Tailwind no es una versión congelada (migración v3→v4 con `@theme`/OKLCH).
-  Accesible.
-- **Radix UI — releases**: https://www.radix-ui.com/primitives/docs/overview/releases — Confirma
-  "Full React 19 compatibility" (PR #2952) y arreglos específicos de React 19 tan recientes como
-  julio de 2026. Accesible.
-- **MUI — actualización a React 19 (Base UI)**: https://mui.com/blog/react-19-update/ — Evidencia
-  de que el mismo equipo que mantiene Base UI ya migró MUI a React 19; base de "vigilar Base UI"
-  como alternativa a Radix a 3-6 meses. Accesible.
+  Evidence that FSRS's *scheduler* (without the weight optimizer) is tractable within a reasonable
+  amount of code for an MVP. Accessible.
+- **SM-2 — original specification (SuperMemo)**: https://www.supermemo.com/en/archives1990-2015/english/ol/sm2 —
+  Exact formulas for the default spaced-repetition algorithm (initial EF 2.5, floor 1.3).
+  Accessible.
+- **SM-2 — Wikipedia**: https://en.wikipedia.org/wiki/SM-2_(algorithm) — Cross-check of the
+  formulas from the original specification. Accessible.
+- **Ink**: https://github.com/inkle/ink — Branching-script language compilable to JSON; justifies
+  a new "branching scenario" component outside the current inventory, medium-low priority (see
+  Sitzmann's evidence). Accessible.
+- **inkjs**: https://github.com/y-lohse/inkjs — JavaScript/TypeScript runtime for Ink, relevant
+  for integrating it into a React project without depending on a native runtime. Accessible.
+- **Sandpack**: https://sandpack.codesandbox.io/ — Solves RF-11's execution (editor + in-browser
+  runtime), not the checking. Apache-2.0 license (not MIT) — requires attribution if copied code
+  is redistributed, relevant to the copy-paste model (RNF-5). Accessible.
+- **shadcn/ui — registry (overview)**: https://ui.shadcn.com/docs/registry — Confirms the
+  third-party registry mechanism works with any framework, not just React. Accessible.
+- **shadcn/ui — building your own registry**: https://ui.shadcn.com/docs/registry/getting-started —
+  Dedicated guide for non-official registries; basis for the RF-15 decision. Accessible.
+- **shadcn/ui — `registry.json` schema**: https://ui.shadcn.com/docs/registry/registry-json —
+  Root schema adopted literally in `packages/registry/registry.json`. Accessible.
+- **shadcn/ui — `registry-item.json` schema**: https://ui.shadcn.com/docs/registry/registry-item-json —
+  Confirms the `tailwind` field is deprecated in favor of `cssVars.theme` — basis for the decision
+  not to require Tailwind (research.md P3). Accessible.
+- **shadcn/ui — registry namespaces**: https://ui.shadcn.com/docs/registry/namespace —
+  Decentralized installation model with no central authority. Accessible.
+- **shadcn/ui — registry authentication**: https://ui.shadcn.com/docs/registry/authentication —
+  Native authentication via HTTP headers + environment variables; no OAuth/OIDC. Accessible.
+- **shadcn/ui — CLI v4 changelog (2026-03)**: https://ui.shadcn.com/docs/changelog/2026-03-cli-v4 —
+  Documents `shadcn diff` for the official registry; **does not explicitly confirm** it works the
+  same way with third-party namespaced registries — marked "not verified" in `research.md`.
+  Accessible (the content, not the guarantee it was checked for).
+- **shadcn/ui — React 19**: https://ui.shadcn.com/docs/react-19 — Confirms the peer-dependency
+  friction between Radix UI/React Aria and stable React 19. Accessible.
+- **shadcn/ui — Tailwind v4**: https://ui.shadcn.com/docs/tailwind-v4 — Shows that even within
+  shadcn/ui, Tailwind is not a frozen version (v3→v4 migration with `@theme`/OKLCH). Accessible.
+- **Radix UI — releases**: https://www.radix-ui.com/primitives/docs/overview/releases — Confirms
+  "Full React 19 compatibility" (PR #2952) and React-19-specific fixes as recent as July 2026.
+  Accessible.
+- **MUI — React 19 update (Base UI)**: https://mui.com/blog/react-19-update/ — Evidence that the
+  same team maintaining Base UI already migrated MUI to React 19; basis for "watch Base UI" as a
+  Radix alternative in 3-6 months. Accessible.
 
-## 4. Accesibilidad (WCAG 2.2 §2.5.7 Dragging Movements, EN 301 549)
+## 4. Accessibility (WCAG 2.2 §2.5.7 Dragging Movements, EN 301 549)
 
-- **WCAG 2.2 — texto completo**: https://www.w3.org/TR/WCAG22/ — Fuente normativa del contrato
-  mínimo de accesibilidad del núcleo (`wcag-criteria.json`). Accesible.
+- **WCAG 2.2 — full text**: https://www.w3.org/TR/WCAG22/ — Normative source for the core's
+  minimum accessibility contract (`wcag-criteria.json`). Accessible.
 - **WCAG 2.2 — Understanding Dragging Movements (2.5.7)**: https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html —
-  Base del matiz "teclado ≠ single-pointer-sin-arrastre" documentado en `packages/validators/a11y/README.md`.
-  Accesible.
-- **W3C WAI-COGA — Making Content Usable**: https://www.w3.org/TR/coga-usable/ — Guía
-  suplementaria a WCAG con patrones específicos para TDAH/autismo/dislexia/discalculia
-  (temporizadores, densidad visual, consistencia visual). Accesible.
-- **CAST — UDL Guidelines**: https://udlguidelines.cast.org/ — Marco de neurociencia (3 redes:
-  afectiva/reconocimiento/estratégica) usado como framework de investigación, no checklist.
-  Accesible.
-- **EN 301 549** (estándar europeo armonizado, índice ETSI): reportado como no accesible
-  directamente en el momento de la investigación (403) — verificado vía fuentes secundarias
-  (Deque/WCAG.com, no citadas con URL directa en `research.md`). **No verificado**: la versión de
-  EN 301 549 vigente referenciaría WCAG 2.1, anterior a 2.2, por lo que el criterio 2.5.7 podría no
-  estar aún incorporado literalmente — confirmar contra el texto oficial antes de usarlo como
-  argumento legal preciso ante un cliente.
+  Basis for the "keyboard ≠ single-pointer-without-dragging" nuance documented in
+  `packages/validators/a11y/README.md`. Accessible.
+- **W3C WAI-COGA — Making Content Usable**: https://www.w3.org/TR/coga-usable/ — Guidance
+  supplementary to WCAG with specific patterns for ADHD/autism/dyslexia/dyscalculia (timers,
+  visual density, visual consistency). Accessible.
+- **CAST — UDL Guidelines**: https://udlguidelines.cast.org/ — Neuroscience framework (3 networks:
+  affective/recognition/strategic) used as a research framework, not a checklist. Accessible.
+- **EN 301 549** (harmonized European standard, ETSI index): reported as not directly accessible
+  at the time of research (403) — verified via secondary sources (Deque/WCAG.com, not cited with a
+  direct URL in `research.md`). **Not verified**: the currently-in-force version of EN 301 549
+  would reference WCAG 2.1, earlier than 2.2, so criterion 2.5.7 might not yet be literally
+  incorporated — confirm against the official text before using it as a precise legal argument
+  with a client.
 
 ---
 
-## Nota metodológica
+## Methodological note
 
-Este listado prioriza las URLs citadas explícitamente en `research.md`; el detalle completo de
-cada hallazgo (incluida la metodología de verificación, p. ej. consulta en vivo de
-`peerDependencies` contra `registry.npmjs.org`) vive en `research.md` y en los informes crudos de
-`../reports/`. Donde una fuente original no fue accesible directamente, se documenta el motivo
-reportado (403/402/login) y la vía secundaria usada — mismo estándar de honestidad que
-`research.md` hereda de `openui-adoption.md` §1.
+This list prioritizes the URLs explicitly cited in `research.md`; the full detail of each finding
+(including verification methodology, e.g. live `peerDependencies` lookups against
+`registry.npmjs.org`) lives in `research.md` and in the raw reports under `../reports/`. Where an
+original source was not directly accessible, the reported reason (403/402/login) and the
+secondary route used are documented — the same honesty standard `research.md` inherits from
+`openui-adoption.md` §1.

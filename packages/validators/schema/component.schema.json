@@ -2,35 +2,35 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/JoseEstevez520/Didact/packages/validators/schema/component.schema.json",
   "title": "DidactComponentDescriptor",
-  "description": "Esqueleto de esquema declarativo para describir un componente Didact, inspirado en el patron dual de H5P semantics.json (research.md 9.2): el mismo documento sirve para generar documentacion/editor de props Y para validar en runtime. No es el registry-item.json de shadcn (eso vive en @didact/registry) -- este esquema describe las PROPS del componente en si, con el detalle de RNF-4 (props que pueden llegar incompletas en contextos de streaming).",
+  "description": "Declarative schema skeleton for describing a Didact component, inspired by H5P semantics.json's dual pattern (research.md 9.2): the same document is used to generate prop documentation/editor AND to validate at runtime. This is not shadcn's registry-item.json (that lives in @didact/registry) -- this schema describes the component's own PROPS, with the RNF-4 detail (props that may arrive incomplete in streaming contexts).",
   "type": "object",
   "required": ["name", "requirementId", "props"],
   "properties": {
     "name": {
       "type": "string",
-      "description": "Nombre del componente, p. ej. 'Flashcard'."
+      "description": "Component name, e.g. 'Flashcard'."
     },
     "requirementId": {
       "type": "string",
       "pattern": "^RF-[0-9]+$",
-      "description": "ID de requisito funcional de requirements.md que este componente satisface, p. ej. 'RF-1'."
+      "description": "requirements.md functional requirement ID this component satisfies, e.g. 'RF-1'."
     },
     "qtiInteraction": {
       "type": ["string", "null"],
-      "description": "Interaccion QTI 3.0 equivalente, si aplica (ver validators/pedagogy/qti-mapping.json). null si no aplica (p. ej. Flashcard no es una interaccion de evaluacion)."
+      "description": "Equivalent QTI 3.0 interaction, if applicable (see validators/pedagogy/qti-mapping.json). null if not applicable (e.g. Flashcard is not an assessment interaction)."
     },
     "xapiInteractionType": {
       "type": ["string", "null"],
-      "description": "interactionType de xAPI equivalente, si aplica (ver validators/pedagogy/xapi-mapping.json)."
+      "description": "Equivalent xAPI interactionType, if applicable (see validators/pedagogy/xapi-mapping.json)."
     },
     "wcagCriteria": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "IDs de criterios WCAG 2.2 que este componente debe cumplir (ver validators/a11y/wcag-criteria.json), p. ej. ['2.5.7', '2.4.7']."
+      "description": "IDs of the WCAG 2.2 criteria this component must meet (see validators/a11y/wcag-criteria.json), e.g. ['2.5.7', '2.4.7']."
     },
     "props": {
       "type": "array",
-      "description": "Lista de props tipadas del componente.",
+      "description": "List of the component's typed props.",
       "items": { "$ref": "#/$defs/propDescriptor" }
     }
   },
@@ -41,29 +41,29 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Nombre de la prop, p. ej. 'frontText'."
+          "description": "Prop name, e.g. 'frontText'."
         },
         "type": {
           "type": "string",
           "enum": ["string", "number", "boolean", "object", "array", "enum", "node"],
-          "description": "Tipo de la prop. 'node' para contenido React/slot (p. ej. el slot de feedback informativo de RF-4/RF-6, ver validators/pedagogy/README.md)."
+          "description": "Prop type. 'node' for React content/slots (e.g. RF-4/RF-6's informative feedback slot, see validators/pedagogy/README.md)."
         },
         "enumValues": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Solo si type es 'enum': valores permitidos."
+          "description": "Only if type is 'enum': the allowed values."
         },
         "default": {
-          "description": "Valor por defecto de la prop, si lo tiene. Puede ser de cualquier tipo JSON."
+          "description": "Default value for the prop, if it has one. Can be any JSON type."
         },
         "requiredness": {
           "type": "string",
           "enum": ["required", "progressive", "optional"],
-          "description": "'required': debe estar presente siempre. 'progressive': puede llegar ausente en un render incompleto (RNF-4, contexto de streaming) y el componente debe degradar con gracia (p. ej. estado de carga). 'optional': nunca obligatoria, tiene comportamiento por defecto razonable si falta."
+          "description": "'required': must always be present. 'progressive': may arrive absent in an incomplete render (RNF-4, streaming context) and the component must degrade gracefully (e.g. a loading state). 'optional': never mandatory, has reasonable default behavior if missing."
         },
         "description": {
           "type": "string",
-          "description": "Explicacion en lenguaje natural de para que sirve la prop, pensada para quien lee el registry sin abrir el codigo fuente (design.md 8: 'la registry debe ser suficiente para entender que copia el CLI sin leer el codigo fuente primero')."
+          "description": "Natural-language explanation of what the prop is for, meant for someone reading the registry without opening the source code (design.md 8: 'the registry must be enough to understand what the CLI copies without reading the source code first')."
         }
       }
     }

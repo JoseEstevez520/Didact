@@ -2,14 +2,14 @@
   "name": "@didact/spaced-repetition",
   "private": true,
   "version": "0.0.0",
-  "description": "Algoritmos de repeticion espaciada (SM-2 por defecto, FSRS como modo avanzado) tras una interfaz agnostica de persistencia.",
+  "description": "Spaced-repetition algorithms (SM-2 by default, FSRS as an advanced mode) behind a persistence-agnostic interface.",
   "license": "MIT",
   "type": "module",
   "main": "src/types.ts",
   "types": "src/types.ts",
   "scripts": {
-    "build": "echo \"@didact/spaced-repetition: sin build real todavia (Fase 4 del ROADMAP)\"",
-    "lint": "echo \"@didact/spaced-repetition: sin lint real todavia (Fase 4 del ROADMAP)\"",
-    "test": "echo \"@didact/spaced-repetition: sin tests reales todavia (Fase 4 del ROADMAP)\""
+    "build": "echo \"@didact/spaced-repetition: no real build yet (ROADMAP Phase 4)\"",
+    "lint": "echo \"@didact/spaced-repetition: no real lint yet (ROADMAP Phase 4)\"",
+    "test": "echo \"@didact/spaced-repetition: no real tests yet (ROADMAP Phase 4)\""
   }
 }

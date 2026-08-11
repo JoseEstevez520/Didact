@@ -1,43 +1,43 @@
 # @didact/registry
 
-`registry.json` de Didact en el **esquema oficial de shadcn/ui** — el mecanismo de distribución
-elegido para RF-15 de `requirements.md` (registry + CLI que copia código fuente al proyecto
-consumidor, no dependencia npm versionada).
+Didact's `registry.json` in **shadcn/ui's official schema** — the distribution mechanism chosen
+for RF-15 in `requirements.md` (registry + CLI that copies source code into the consuming
+project, not a versioned npm dependency).
 
-## Por qué el esquema oficial de shadcn y no un CLI propio
+## Why shadcn's official schema and not a custom CLI
 
-`specs/education-components/research.md` Pregunta 1 confirma que el mecanismo de registry de
-terceros de shadcn/ui es real, documentado como producto de primera clase (no un hack de
-comunidad) y funciona con cualquier framework, no solo React:
+`specs/education-components/research.md` Question 1 confirms that shadcn/ui's third-party
+registry mechanism is real, documented as a first-class product (not a community hack), and works
+with any framework, not just React:
 
-- Esquema raíz `registry.json` (`$schema`, `name`, `homepage`, `items`/`include`).
-- Esquema de item `registry-item.json` (`name`, `type`, `files`, `dependencies`,
+- Root schema `registry.json` (`$schema`, `name`, `homepage`, `items`/`include`).
+- Item schema `registry-item.json` (`name`, `type`, `files`, `dependencies`,
   `registryDependencies`, `cssVars`, `css`, `envVars`…).
-- Hosting como JSON estático servible desde cualquier servidor HTTP, o un repo GitHub con
-  `registry.json` en la raíz — este repo.
-- Instalación por URL directa (`shadcn add https://.../<item>.json`) o por namespace configurado
-  en el `components.json` del consumidor (modelo descentralizado, sin autoridad central).
+- Hosting as static JSON servable from any HTTP server, or a GitHub repo with `registry.json` at
+  the root — this repo.
+- Installation via direct URL (`shadcn add https://.../<item>.json`) or via a namespace configured
+  in the consumer's `components.json` (decentralized model, no central authority).
 
-**Recomendación de research.md P1:** adoptar el CLI y esquema oficiales como mecanismo primario.
-Construir un CLI propio queda como plan B teórico, no como trabajo a realizar — el riesgo que
-`design.md` §9 anticipaba ("el mecanismo de terceros no soporta lo que necesitamos") no se
-confirmó en la investigación.
+**research.md P1 recommendation:** adopt the official CLI and schema as the primary mechanism.
+Building a custom CLI stays as a theoretical plan B, not as work to be done — the risk
+`design.md` §9 anticipated ("the third-party mechanism doesn't support what we need") was not
+confirmed by the research.
 
-## Caveats verificados (no ignorar al operar esta registry)
+## Verified caveats (do not ignore when operating this registry)
 
-- **No existe un campo `version` nativo en `registry-item.json`.** No hay versionado de un mismo
-  componente a nivel de esquema; el versionado de "misma componente, distintas revisiones" es
-  responsabilidad de cómo esta registry organice sus rutas (p. ej. namespacing por fecha o tag),
-  no algo que el CLI de shadcn resuelva por nosotros.
-- **`shadcn diff` contra registries de terceros: no verificado.** La documentación (changelog CLI
-  v4) lo documenta para la registry oficial; no confirma explícitamente que funcione igual con
-  registries namespaced de terceros como esta. Antes de documentar `shadcn diff` como mecanismo
-  de actualización para consumidores de Didact, probarlo empíricamente.
-- **Autenticación** es nativa vía cabeceras HTTP + variables de entorno (Bearer token, API key).
-  No hay OAuth/OIDC ni discovery automático — relevante solo si esta registry deja de ser pública.
+- **There is no native `version` field in `registry-item.json`.** There is no schema-level
+  versioning for the same component; versioning "same component, different revisions" is the
+  responsibility of how this registry organizes its routes (e.g. namespacing by date or tag), not
+  something shadcn's CLI solves for us.
+- **`shadcn diff` against third-party registries: not verified.** The docs (CLI v4 changelog)
+  document it for the official registry; they do not explicitly confirm it works the same way
+  with third-party namespaced registries like this one. Before documenting `shadcn diff` as
+  Didact consumers' update mechanism, test it empirically.
+- **Authentication** is native via HTTP headers + environment variables (Bearer token, API key).
+  No OAuth/OIDC or automatic discovery — relevant only if this registry stops being public.
 
-## Estado
+## Status
 
-`registry.json` válido con `items: []` — scaffold de Fase 1-3. Las entradas se añaden a medida
-que `packages/core` implemente componentes reales en Fase 4, y esta registry se publica de forma
-consumible (`shadcn build`, hosting del JSON) en Fase 6 del `ROADMAP.md`.
+Valid `registry.json` with `items: []` — Phase 1-3 scaffold. Entries get added as `packages/core`
+implements real components in Phase 4, and this registry gets published in a consumable form
+(`shadcn build`, hosting the JSON) in Phase 6 of `ROADMAP.md`.

@@ -1,64 +1,63 @@
 # @didact/theme
 
-Tema neutro por defecto de Didact (**RF-16**): capa 2 ("styled layer") de la arquitectura de 3
-capas de `specs/education-components/design.md` §2, consumida por `@didact/core` y por
-`apps/docs`. Ningún componente del núcleo debe hardcodear un color/tamaño propio ni el de un
-consumidor concreto (SkillNet incluido) — todo pasa por las variables de este paquete.
+Didact's neutral default theme (**RF-16**): layer 2 ("styled layer") of the 3-layer architecture
+in `specs/education-components/design.md` §2, consumed by `@didact/core` and by `apps/docs`. No
+core component should hardcode its own color/size or a specific consumer's (SkillNet included) —
+everything goes through this package's variables.
 
-## Por qué existe como paquete separado
+## Why it exists as a separate package
 
-`design.md` §2 dibuja la capa 2 como "un solo lugar de theming" entre los primitivos accesibles
-(capa 1) y los componentes educativos (capa 3). Extraerla a un paquete propio (en vez de vivir
-dentro de `@didact/core`) permite que `apps/docs` la consuma para renderizar el catálogo con el
-mismo tema exacto que verá cualquier proyecto que copie un componente, sin depender de que
-`@didact/core` ya tenga implementación real.
+`design.md` §2 draws layer 2 as "a single place for theming" between the accessible primitives
+(layer 1) and the education components (layer 3). Extracting it into its own package (instead of
+living inside `@didact/core`) lets `apps/docs` consume it to render the catalog with the exact
+same theme any project copying a component will see, without depending on `@didact/core` already
+having a real implementation.
 
-## Decisión de producto: Tailwind v4 sí, pese a research.md P3
+## Product decision: Tailwind v4, yes, despite research.md P3
 
-`specs/education-components/research.md` Pregunta 3 concluyó, con evidencia, que el mecanismo de
-distribución de shadcn/ui **no exige** Tailwind (el campo `tailwind` de `registry-item.json` está
-deprecated a favor de `cssVars.theme`) — esa conclusión técnica sigue siendo cierta y no se
-reescribe. Lo que cambia es una **decisión de producto posterior** (Jose, 2026-08-11, ver
-`../../research/decisions.md` D1): Didact adopta **Tailwind v4** (CSS-first: `@theme`, colores
-OKLCH) como su capa de estilo real, por consistencia visual y como referencia de estilo alineada
-con shadcn/ui — no porque el mecanismo de registry lo exigiera.
+`specs/education-components/research.md` Question 3 concluded, with evidence, that shadcn/ui's
+distribution mechanism **does not require** Tailwind (the `tailwind` field in
+`registry-item.json` is deprecated in favor of `cssVars.theme`) — that technical conclusion still
+stands and is not rewritten. What changes is a **later product decision** (Jose, 2026-08-11, see
+`../../research/decisions.md` D1): Didact adopts **Tailwind v4** (CSS-first: `@theme`, OKLCH
+colors) as its real styling layer, for visual consistency and as a style reference aligned with
+shadcn/ui — not because the registry mechanism required it.
 
-`src/tokens.css` expone el tema en **dos niveles** precisamente para no perder la ventaja que P3
-identificó:
+`src/tokens.css` exposes the theme in **two levels** precisely to not lose the advantage P3
+identified:
 
-1. **CSS custom properties planas** (`:root { --didact-* }`) — el nivel que cualquier consumidor
-   sobreescribe para restylear, funcione o no con Tailwind (si alguien copia un componente a un
-   proyecto sin Tailwind, las variables siguen funcionando).
-2. **Un bloque `@theme`** que remapea esas variables a tokens de diseño de Tailwind v4
-   (`bg-didact-accent`, `rounded-didact-md`, etc.), para que los componentes de `@didact/core`
-   puedan escribirse con utilidades de Tailwind sin fijar valores — Tailwind sigue leyendo la
-   variable CSS de (1).
+1. **Plain CSS custom properties** (`:root { --didact-* }`) — the level any consumer overrides to
+   restyle, whether or not they use Tailwind (if someone copies a component into a project without
+   Tailwind, the variables still work).
+2. **A `@theme` block** that remaps those variables into Tailwind v4 design tokens
+   (`bg-didact-accent`, `rounded-didact-md`, etc.), so `@didact/core`'s components can be written
+   with Tailwind utilities without fixing values — Tailwind still reads the CSS variable from (1).
 
-## Contenido de `src/tokens.css`
+## Contents of `src/tokens.css`
 
-- Paleta neutra base (fondo, texto, bordes, acento).
-- **Tokens de estado** (success/warning/danger) explícitamente documentados como "nunca se usan
-  solos" — todo componente que los consuma debe emparejarlos con icono/texto, nunca depender solo
-  del color (British Dyslexia Association Style Guide 2023 + WCAG 1.4.1 Use of Color).
-- Anillo de foco visible (WCAG 2.4.7).
-- Tipografía **sans-serif por defecto**, tamaños relativos (nunca `px` fijo), límite de ~60-70
-  caracteres por línea (BDA Style Guide 2023).
-- Duración de motion centralizada y anulada bajo `prefers-reduced-motion` (WCAG 2.3.3 + RF-13).
+- Base neutral palette (background, text, borders, accent).
+- **Status tokens** (success/warning/danger) explicitly documented as "never used alone" — every
+  component consuming them must pair them with an icon/text, never rely on color alone (British
+  Dyslexia Association Style Guide 2023 + WCAG 1.4.1 Use of Color).
+- Visible focus ring (WCAG 2.4.7).
+- **Sans-serif by default** typography, relative sizes (never fixed `px`), a ~60-70
+  character-per-line limit (BDA Style Guide 2023).
+- Centralized motion duration, overridden under `prefers-reduced-motion` (WCAG 2.3.3 + RF-13).
 
-**Caveat honesto (mismo estándar que `research.md`):** los valores OKLCH concretos son un punto de
-partida razonable trazado a los *criterios* de `research.md` P5 (contraste ≥4.5:1 texto, ≥3:1
-bordes/iconos), pero **no están auditados con una herramienta real** (axe, Pa11y, etc.) todavía.
-No dar el contraste por cumplido solo porque la fórmula lo sugiere — verificarlo en Fase 4 antes
-de congelar la paleta.
+**Honest caveat (same standard as `research.md`):** the concrete OKLCH values are a reasonable
+starting point traced to `research.md` P5's *criteria* (contrast ≥4.5:1 for text, ≥3:1 for
+borders/icons), but **they are not audited with a real tool** (axe, Pa11y, etc.) yet. Don't
+consider contrast satisfied just because the formula suggests it — verify it in Phase 4 before
+freezing the palette.
 
-## Dependencias
+## Dependencies
 
-`tailwindcss` como devDependency, versión fijada (RNF-5) — ver `research/decisions.md` para el
-caveat de que esta versión es una referencia a fecha de esta actualización, no verificada en vivo
-contra `registry.npmjs.org` (a diferencia del resto de `research.md`, que sí lo hizo).
+`tailwindcss` as a devDependency, pinned version (RNF-5) — see `research/decisions.md` for the
+caveat that this version is a reference as of this update's date, not verified live against
+`registry.npmjs.org` (unlike the rest of `research.md`, which did).
 
-## Estado
+## Status
 
-Scaffold (Fase 1-3). Paleta y escalas de referencia, no auditadas ni congeladas — ajustables sin
-romper el contrato de *nombres* de variable, que es lo que consumirán los componentes reales de
-`@didact/core` en Fase 4.
+Scaffold (Phase 1-3). Reference palette and scales, not audited or frozen — adjustable without
+breaking the variable *name* contract, which is what `@didact/core`'s real components will
+consume in Phase 4.

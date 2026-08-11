@@ -1,188 +1,188 @@
-# Design — Librería de Componentes de Educación
+# Design — Education Components Library
 
-> Responde al **cómo**, a partir de `requirements.md`. Varias secciones quedan marcadas
-> **[PENDIENTE — fase de investigación]**: no se cierran aquí porque `requirements.md` §6 exige
-> evidencia antes de decidir. Las decisiones de `requirements.md` §0 (dueño del producto) SÍ
-> están cerradas y este documento no las reabre — solo verifica su viabilidad técnica.
+> Answers the **how**, starting from `requirements.md`. Several sections are marked
+> **[PENDING — research phase]**: they are not closed here because `requirements.md` §6 requires
+> evidence before deciding. The decisions from `requirements.md` §0 (product owner) ARE closed and
+> this document does not reopen them — it only verifies their technical viability.
 
-## 0. Marco: núcleo vs adaptador
+## 0. Framework: core vs. adapter
 
-Todo este documento distingue dos cosas que **no viven en el mismo sitio ni con el mismo
-ciclo de vida**:
+Everything in this document distinguishes two things that **do not live in the same place nor
+share the same lifecycle**:
 
-- **Núcleo**: la librería en sí. Agnóstica de consumidor. Vive en su propio repo (§7).
-- **Adaptador SkillNet**: código que vive en `repo/` (SkillNet) y que consume el núcleo, lo
-  tematiza con `design-system.md` y, opcionalmente, registra componentes en el catálogo
-  generativo v2. Es un consumidor, no una parte de la librería.
+- **Core**: the library itself. Consumer-agnostic. Lives in its own repo (§7).
+- **SkillNet adapter**: code that lives in `repo/` (SkillNet) and consumes the core, themes it
+  with `design-system.md` and, optionally, registers components in the v2 generative catalog. It
+  is a consumer, not a part of the library.
 
-Cualquier sección de abajo etiquetada "(adaptador)" describe algo que se implementa en `repo/`,
-no en este proyecto.
+Any section below labeled "(adapter)" describes something implemented in `repo/`, not in this
+project.
 
-## 1. Restricciones heredadas
+## 1. Inherited constraints
 
-### 1.1 Del núcleo (siempre, cualquier proyecto)
+### 1.1 From the core (always, any project)
 
-| Restricción | Fuente |
+| Constraint | Source |
 |---|---|
-| Modelo de distribución: registry + CLI que copia código fuente (estilo shadcn/ui), no dependencia npm versionada como vía primaria | `requirements.md` §0.2, RF-15 |
-| React como framework objetivo (a confirmar si algo más queda fuera, §6) | `requirements.md` §2 |
-| Tema visual neutro por defecto, restyleable vía tokens/CSS custom properties | `requirements.md` RF-16 |
-| Accesible por defecto (teclado, ARIA, `prefers-reduced-motion`) | `requirements.md` §4.2 |
-| Cualquier dependencia externa no copiada (p. ej. capa de primitivos) fijada con versión exacta + test de deriva | `requirements.md` RNF-5 |
+| Distribution model: registry + CLI that copies source code (shadcn/ui style), not a versioned npm dependency as the primary channel | `requirements.md` §0.2, RF-15 |
+| React as the target framework (to confirm if anything else stays out of scope, §6) | `requirements.md` §2 |
+| Neutral default visual theme, restyleable via tokens/CSS custom properties | `requirements.md` RF-16 |
+| Accessible by default (keyboard, ARIA, `prefers-reduced-motion`) | `requirements.md` §4.2 |
+| Any external, non-copied dependency (e.g. the primitives layer) pinned to an exact version + drift test | `requirements.md` RNF-5 |
 
-### 1.2 Del adaptador SkillNet (solo si se integra ahí)
+### 1.2 From the SkillNet adapter (only if integrated there)
 
-| Restricción | Fuente |
+| Constraint | Source |
 |---|---|
-| Tokens CSS de `design-system.md` (colores, radios, sombras, tipografía, motion) | `repo/docs/design/design-system.md` |
-| Sin `rounded-2xl/3xl`, sin gradientes, sin `shadow-lg/xl`, sin spinners genéricos | `design-system.md` |
-| Catálogo generativo v2 = sin reactividad (`Mutation`/`Query`/`$state`) salvo condiciones de `openui-adoption.md` §6 | `repo/docs/design/openui-adoption.md` |
-| El navegador en v2 nunca recibe texto crudo del modelo, solo re-serialización canónica validada | `openui-adoption.md` §4 |
-| La clave de respuesta (`answer_key`) nunca se sirve al cliente | `openui-adoption.md`, `snml-spec.md` |
-| Código y comentarios en inglés (convención del repo SkillNet) | `repo/CLAUDE.md` |
+| CSS tokens from `design-system.md` (colors, radii, shadows, typography, motion) | `repo/docs/design/design-system.md` |
+| No `rounded-2xl/3xl`, no gradients, no `shadow-lg/xl`, no generic spinners | `design-system.md` |
+| v2 generative catalog = no reactivity (`Mutation`/`Query`/`$state`) except under `openui-adoption.md` §6 conditions | `repo/docs/design/openui-adoption.md` |
+| The browser in v2 never receives raw text from the model, only validated canonical re-serialization | `openui-adoption.md` §4 |
+| The answer key (`answer_key`) is never served to the client | `openui-adoption.md`, `snml-spec.md` |
+| Code and comments in English (SkillNet repo convention) | `repo/CLAUDE.md` |
 
-Nada de 1.2 se aplica al núcleo. Un componente del núcleo no "sabe" que SkillNet existe.
+None of §1.2 applies to the core. A core component does not "know" SkillNet exists.
 
-## 2. Arquitectura propuesta (núcleo, 3 capas)
+## 2. Proposed architecture (core, 3 layers)
 
 ```
 ┌─────────────────────────────────────────────┐
 │ 3. Education molecules                       │  Flashcard, MatchingExercise, QuizItem*,
-│    (componentes con significado pedagógico)  │  SpacedRepetitionDeck, Glossary, Hint,
+│    (components with pedagogical meaning)     │  SpacedRepetitionDeck, Glossary, Hint,
 │                                               │  Timeline, Rubric, MasteryBadge…
 ├─────────────────────────────────────────────┤
-│ 2. Styled layer                              │  Tailwind + variantes (cva o similar) sobre
-│    (tema neutro, restyleable)                │  los primitivos. Un solo lugar de theming.
+│ 2. Styled layer                               │  Tailwind + variants (cva or similar) over
+│    (neutral theme, restyleable)              │  the primitives. A single place for theming.
 ├─────────────────────────────────────────────┤
-│ 1. Accessible primitives                     │  Comportamiento accesible sin estilo propio
-│    (headless)                                │  (foco, teclado, ARIA). Candidata: Radix UI
-│                                               │  (la misma base que usa shadcn/ui) [a verificar]
+│ 1. Accessible primitives                     │  Accessible behavior with no styling of its
+│    (headless)                                │  own (focus, keyboard, ARIA). Candidate: Radix UI
+│                                               │  (the same base shadcn/ui uses) [to verify]
 └─────────────────────────────────────────────┘
 ```
 
-Esto es deliberadamente el mismo patrón de capas que usa shadcn/ui (primitivos headless +
-Tailwind + composición de variantes), aplicado a vocabulario educativo en vez de genérico. La
-capa 3 es donde está el valor real de este proyecto — las capas 1 y 2 existen para no
-reinventar accesibilidad desde cero (ver el coste de hacerlo a mano en
-`openui-adoption.md` §1: 1500+ líneas de test para blindar un parser propio).
+This is deliberately the same layer pattern shadcn/ui uses (headless primitives + Tailwind +
+variant composition), applied to educational vocabulary instead of generic. Layer 3 is where this
+project's real value lives — layers 1 and 2 exist so we don't reinvent accessibility from scratch
+(see the cost of doing it by hand in `openui-adoption.md` §1: 1500+ lines of tests to shield a
+custom parser).
 
-**[PENDIENTE — fase de investigación, requirements.md §6.2]**: confirmar que Radix UI (o la
-alternativa que gane la comparación) funciona bien en React 19 con evidencia ejecutada.
+**[PENDING — research phase, requirements.md §6.2]**: confirm that Radix UI (or whichever
+alternative wins the comparison) works well on React 19 with executed evidence.
 
-## 3. Modelo de distribución: registry estilo shadcn/ui
+## 3. Distribution model: shadcn/ui-style registry
 
-**Decidido en `requirements.md` §0.2**; esta sección detalla la forma, sujeta a verificación
-técnica de §6.1.
+**Decided in `requirements.md` §0.2**; this section details the shape, subject to the technical
+verification in §6.1.
 
-- Cada componente se describe en una entrada de registry (nombre, archivos, dependencias de
-  otros componentes de la propia librería, dependencias externas si las hay).
-- Un CLI (el propio de shadcn si su mecanismo de registry de terceros lo permite — pregunta
-  §6.1 — o uno propio si no) copia el código fuente al proyecto consumidor.
-- El consumidor queda con el componente como código propio: puede modificarlo, no depende de
-  una versión publicada para seguir funcionando.
-- Consecuencia directa: no hay "una sola versión desplegada en producción" de cada componente,
-  hay tantas copias como proyectos lo adoptaron. La librería central es la fuente de verdad para
-  *nuevas* copias y para quien quiera actualizar la suya, no un runtime compartido.
+- Each component is described in a registry entry (name, files, dependencies on other components
+  from the library itself, external dependencies if any).
+- A CLI (shadcn's own, if its third-party registry mechanism allows it — question §6.1 — or a
+  custom one if not) copies the source code into the consuming project.
+- The consumer ends up with the component as their own code: they can modify it, they don't
+  depend on a published version to keep working.
+- Direct consequence: there is no "single version deployed to production" for each component,
+  there are as many copies as projects that adopted it. The central library is the source of truth
+  for *new* copies and for anyone who wants to update theirs, not a shared runtime.
 
-**[PENDIENTE — fase de investigación, requirements.md §6.1, §6.3]**: mecanismo exacto de
-registry de terceros, y si exigir Tailwind como peer dependency es aceptable dado el objetivo de
-"cualquier proyecto".
+**[PENDING — research phase, requirements.md §6.1, §6.3]**: the exact third-party registry
+mechanism, and whether requiring Tailwind as a peer dependency is acceptable given the "any
+project" goal.
 
-## 4. Adaptador SkillNet (fuera del núcleo)
+## 4. SkillNet adapter (outside the core)
 
-### 4.1 Uso directo (cursos v1, estáticos)
+### 4.1 Direct use (v1 courses, static)
 
-Import normal de React en `skillnet-web`, con el tema de `design-system.md` aplicado sobre el
-tema neutro del núcleo (RF-18). Sin restricciones adicionales del núcleo.
+Normal React import in `skillnet-web`, with the `design-system.md` theme applied on top of the
+core's neutral theme (RF-18). No additional core restrictions.
 
-### 4.2 Bloque del catálogo generativo (cursos v2)
+### 4.2 Generative catalog block (v2 courses)
 
-Un componente del núcleo entra al catálogo de SkillNet
-(`apps/skillnet-web/src/components/courses/kit/`) solo si:
+A core component enters SkillNet's catalog
+(`apps/skillnet-web/src/components/courses/kit/`) only if:
 
-1. Se puede describir con un esquema `zod` + `defineComponent`, igual que los 10 bloques
-   actuales (`kit/schemas.ts`, `kit/library.tsx`).
-2. Cumple las 7 reglas de contrato de `openui-adoption.md` §5.2 y no requiere `Mutation`/`Query`.
-3. Pasa `assertStaticOnly` y no dispara `useTriggerAction`.
-4. Tiene un mirror en `src/render/kit.py` (Python) para el test de deriva
+1. It can be described with a `zod` schema + `defineComponent`, just like the current 10 blocks
+   (`kit/schemas.ts`, `kit/library.tsx`).
+2. It complies with the 7 contract rules in `openui-adoption.md` §5.2 and does not require
+   `Mutation`/`Query`.
+3. It passes `assertStaticOnly` and does not trigger `useTriggerAction`.
+4. It has a mirror in `src/render/kit.py` (Python) for the drift test
    (`test_render_prompt_artifact.py`).
-5. No hace que el DAG de bloques supere `MAX_RENDERED_NODES = 64` con anidamiento razonable.
+5. It does not push the block DAG past `MAX_RENDERED_NODES = 64` with reasonable nesting.
 
-Esto es trabajo del adaptador, vive en `repo/`, y no condiciona el diseño de los componentes del
-núcleo salvo en que estos deben poder describirse de forma estática cuando sea razonable (RNF-4).
+This is adapter work, it lives in `repo/`, and it does not condition the core components' design
+except that they must be describable statically when reasonable (RNF-4).
 
-## 5. Inventario de componentes candidatos (núcleo — prioridad final tras investigación)
+## 5. Inventory of candidate components (core — final priority after research)
 
-| Componente | Requisito | ¿Expresable sin reactividad para el adaptador SkillNet? (borrador) | Prioridad (borrador) |
+| Component | Requirement | Expressible without reactivity for the SkillNet adapter? (draft) | Priority (draft) |
 |---|---|---|---|
-| `Flashcard` | RF-1 | Probable sí | Alta |
-| `SpacedRepetitionDeck` | RF-2 | Probable no (estado entre sesiones) | Media |
-| `MatchingExercise` / `SortExercise` / `CategorizeExercise` | RF-3 | A confirmar | Alta |
-| Variantes de quiz (multi-respuesta, V/F, hueco, abierta corta) | RF-4 | Sí, mismo patrón que el `QuizItem` actual de SkillNet | Alta |
-| `Glossary` / `Term` | RF-5 | Sí | Media |
-| `Hint` / `Reveal` | RF-6 | Sí, con cuidado de no filtrar la respuesta en el DOM | Alta |
-| Indicadores de progreso/mastery | RF-7 | Sí | Media |
-| `Timeline` / `Steps` | RF-8 | Sí | Media |
-| Checkpoint sobre vídeo | RF-9 | A confirmar (depende del reproductor) | Baja |
-| `Rubric` / autoevaluación | RF-10 | Sí | Baja |
-| Ejercicio de código | RF-11 | Probable no (necesita ejecución) | Baja |
+| `Flashcard` | RF-1 | Likely yes | High |
+| `SpacedRepetitionDeck` | RF-2 | Likely no (state across sessions) | Medium |
+| `MatchingExercise` / `SortExercise` / `CategorizeExercise` | RF-3 | To confirm | High |
+| Quiz variants (multi-answer, T/F, blank, short open) | RF-4 | Yes, same pattern as SkillNet's current `QuizItem` | High |
+| `Glossary` / `Term` | RF-5 | Yes | Medium |
+| `Hint` / `Reveal` | RF-6 | Yes, careful not to leak the answer in the DOM | High |
+| Progress/mastery indicators | RF-7 | Yes | Medium |
+| `Timeline` / `Steps` | RF-8 | Yes | Medium |
+| Video checkpoint | RF-9 | To confirm (depends on the player) | Low |
+| `Rubric` / self-assessment | RF-10 | Yes | Low |
+| Code exercise | RF-11 | Likely no (needs execution) | Low |
 
-La columna "expresable sin reactividad" es específica del adaptador SkillNet; para el núcleo,
-la prioridad se basa solo en utilidad general (§requirements.md §4.1), no en esa columna.
+The "expressible without reactivity" column is specific to the SkillNet adapter; for the core,
+priority is based solely on general usefulness (`requirements.md` §4.1), not on that column.
 
-## 6. Theming (núcleo)
+## 6. Theming (core)
 
-Sin paleta ni escala de espaciado propia impuesta a los consumidores. El núcleo define **su
-propio tema neutro por defecto** (para poder mostrarse en el registry/Storybook sin depender de
-ningún consumidor) expuesto vía CSS custom properties, y cualquier proyecto —SkillNet incluido—
-lo sobreescribe con las suyas. SkillNet, como adaptador, mapea `design-system.md` sobre esas
-variables (RF-18); esto no es distinto de cómo cualquier proyecto adopta un tema de shadcn/ui.
+No palette or spacing scale of its own imposed on consumers. The core defines **its own neutral
+default theme** (so it can be shown in the registry/Storybook without depending on any consumer)
+exposed via CSS custom properties, and any project — SkillNet included — overrides it with its
+own. SkillNet, as an adapter, maps `design-system.md` onto those variables (RF-18); this is no
+different from how any project adopts a shadcn/ui theme.
 
-## 7. Ubicación del proyecto — **decidido**
+## 7. Project location — **decided**
 
-Repo independiente (donde vive hoy, `Anfaia/library`), publicado como registry propia,
-consumida por CLI desde cualquier proyecto — no como paquete dentro de `repo/packages/`.
+Independent repo (where it lives today, `Anfaia/library`), published as its own registry,
+consumed via CLI from any project — not as a package inside `repo/packages/`.
 
-Esto ya no es una decisión abierta: se deriva directamente de `requirements.md` §0.1 ("debe
-poder usarse en cualquier proyecto") y §0.2 (modelo shadcn, que es intrínsecamente
-multi-proyecto: una registry no tiene sentido si solo la consume un repo). SkillNet consume esta
-librería igual que consumiría cualquier registry de shadcn de terceros: copiando componentes,
-sin publicar ni depender de una versión de npm.
+This is no longer an open decision: it follows directly from `requirements.md` §0.1 ("must be
+usable in any project") and §0.2 (shadcn model, which is intrinsically multi-project: a registry
+makes no sense if only one repo consumes it). SkillNet consumes this library just like it would
+consume any third-party shadcn registry: by copying components, without publishing or depending
+on an npm version.
 
-Lo que sigue pendiente de investigación es solo el **mecanismo exacto** (§6.1 de
-`requirements.md`), no la forma general.
+What remains pending research is only the **exact mechanism** (`requirements.md` §6.1), not the
+general shape.
 
-## 8. Calidad y herramientas (núcleo)
+## 8. Quality and tooling (core)
 
-- **Storybook** (o equivalente): una historia por componente y por estado relevante (vacío,
-  error, correcto/incorrecto, cargando). Addon de a11y en CI.
-- **Tests**: comportamiento (Testing Library o equivalente), no solo snapshots.
-- **Registry como documentación viva**: cada entrada de la registry debe ser suficiente para
-  entender qué copia el CLI sin leer el código fuente primero.
-- **Test de deriva** (solo en el adaptador SkillNet, para componentes que entren al catálogo
-  v2): mismo patrón que `catalog-drift.test.ts` en `repo/`.
+- **Storybook** (or equivalent): one story per component and per relevant state (empty, error,
+  correct/incorrect, loading). A11y addon in CI.
+- **Tests**: behavior (Testing Library or equivalent), not just snapshots.
+- **Registry as living documentation**: each registry entry must be enough to understand what the
+  CLI copies without reading the source code first.
+- **Drift test** (only in the SkillNet adapter, for components entering the v2 catalog): same
+  pattern as `catalog-drift.test.ts` in `repo/`.
 
-## 9. Riesgos
+## 9. Risks
 
-- **El mecanismo de registry de terceros de shadcn no soporta lo que necesitamos** (§6.1) —
-  mitigar teniendo un CLI/registry propio mínimo como plan B, no solo asumir que el de shadcn
-  sirve tal cual.
-- **Elegir una dependencia de base (capa 1) que rompa como `@openuidev` 0.2.x** — mitigar con
-  versión exacta + test de deriva si se adopta algo externo (RNF-5). El modelo copy-paste
-  protege a los *componentes*, no a sus dependencias internas de comportamiento (p. ej. Radix
-  sigue siendo una dependencia real si no se copia también).
-- **Diseñar para SkillNet sin darse cuenta** (acoplar tokens, idioma o supuestos de SkillNet en
-  el núcleo) — mitigar revisando cada PR del núcleo contra la pregunta "¿esto tiene sentido para
-  alguien que nunca ha oído hablar de SkillNet?".
-- **Accesibilidad de intención buena pero sin evidencia** — mitigar no diseñando RF-12–14 sin
-  las fuentes concretas que pide `requirements.md` §6.5.
-- **(Adaptador) Sobrepasar `MAX_RENDERED_NODES`** al anidar ejercicios compuestos dentro del
-  catálogo v2 de SkillNet — verificar por componente antes de registrarlo, no afecta al núcleo.
+- **shadcn's third-party registry mechanism doesn't support what we need** (§6.1) — mitigate by
+  having a minimal own CLI/registry as plan B, not just assuming shadcn's works as-is.
+- **Choosing a base dependency (layer 1) that breaks like `@openuidev` 0.2.x** — mitigate with an
+  exact version + drift test if something external is adopted (RNF-5). The copy-paste model
+  protects the *components*, not their internal behavioral dependencies (e.g. Radix is still a
+  real dependency if it isn't also copied).
+- **Designing for SkillNet without realizing it** (coupling tokens, language, or SkillNet
+  assumptions into the core) — mitigate by reviewing every core PR against the question "does this
+  make sense to someone who has never heard of SkillNet?".
+- **Well-intentioned but evidence-free accessibility** — mitigate by not designing RF-12–14
+  without the concrete sources `requirements.md` §6.5 asks for.
+- **(Adapter) Exceeding `MAX_RENDERED_NODES`** when nesting composite exercises inside SkillNet's
+  v2 catalog — verify per component before registering it, does not affect the core.
 
-## 10. Métricas de éxito (borrador)
+## 10. Success metrics (draft)
 
-- Nº de componentes con historia + test + revisión a11y, sobre el total priorizado en §5.
-- Nº de proyectos consumidores reales (no solo SkillNet) que copian al menos un componente —
-  señal de que "cualquier proyecto" no es solo aspiracional.
-- (Adaptador) Nº de componentes registrados en el catálogo v2 de SkillNet sin romper
+- Number of components with a story + test + a11y review, out of the total prioritized in §5.
+- Number of real consuming projects (not just SkillNet) that copy at least one component — a
+  signal that "any project" isn't just aspirational.
+- (Adapter) Number of components registered in SkillNet's v2 catalog without breaking
   `test_render_prompt_artifact.py`.

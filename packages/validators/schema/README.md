@@ -1,45 +1,45 @@
 # @didact/validators/schema
 
-Patrón declarativo estilo H5P `semantics.json` para describir un componente Didact, y
-`component.schema.json`: un JSON Schema esqueleto que instancia ese patrón.
+An H5P `semantics.json`-style declarative pattern for describing a Didact component, and
+`component.schema.json`: a JSON Schema skeleton that instantiates that pattern.
 
-## El patrón H5P `semantics.json` (research.md §9.2)
+## The H5P `semantics.json` pattern (research.md §9.2)
 
-H5P (https://h5p.org/semantics) resuelve con un solo documento declarativo dos problemas que
-normalmente se resuelven por separado: **generar el editor** de un content type (qué campos
-mostrar, con qué controles) y **validar en runtime** que las props que le llegan al componente
-tienen la forma correcta. Es un esquema que sirve a la vez de documentación estructurada y de
-contrato ejecutable.
+H5P (https://h5p.org/semantics) solves two problems that are normally solved separately with a
+single declarative document: **generating the editor** for a content type (which fields to show,
+with what controls) and **validating at runtime** that the props reaching the component have the
+right shape. It's a schema that serves as both structured documentation and an executable
+contract.
 
-`research.md` §9.2 recomienda explícitamente adoptar este patrón dual para las entradas de
-registry de Didact (relevante para RF-15/RF-17): un esquema por componente que documente y valide
-props a la vez, coherente con **RNF-4** ("los componentes que puedan usarse en contextos de
-streaming... no deben asumir que todas sus props llegan completas de una vez").
+`research.md` §9.2 explicitly recommends adopting this dual pattern for Didact's registry entries
+(relevant to RF-15/RF-17): one schema per component that documents and validates props at once,
+consistent with **RNF-4** ("components that may be used in streaming contexts... must not assume
+all their props arrive complete at once").
 
-*(Nota de dato de `research.md`: el repo de drag-and-drop de H5P es `h5p-drag-question`, no
-`h5p-drag-and-drop` — corregido aquí para no propagar el error.)*
+*(Data note from `research.md`: H5P's drag-and-drop repo is `h5p-drag-question`, not
+`h5p-drag-and-drop` — corrected here to avoid propagating the error.)*
 
 ## `component.schema.json`
 
-Esqueleto de JSON Schema (borrador 2020-12) para describir un componente Didact:
+A JSON Schema skeleton (2020-12 draft) for describing a Didact component:
 
-- `name`, `requirementId` (traza a `requirements.md`, p. ej. `RF-1`), `qtiInteraction` y
-  `xapiInteractionType` (trazan a `validators/pedagogy/`), `wcagCriteria` (traza a
+- `name`, `requirementId` (traces to `requirements.md`, e.g. `RF-1`), `qtiInteraction` and
+  `xapiInteractionType` (trace to `validators/pedagogy/`), `wcagCriteria` (traces to
   `validators/a11y/wcag-criteria.json`).
-- `props`: array de `propDescriptor`, cada una con `name`, `type`, `default` opcional, y sobre
-  todo **`requiredness`** con tres valores, no dos:
-  - `required` — siempre debe estar presente.
-  - `progressive` — puede llegar ausente en un render incompleto (RNF-4, streaming) y el
-    componente debe degradar con gracia (p. ej. mostrando un estado de carga en vez de romper).
-  - `optional` — nunca obligatoria, tiene un comportamiento por defecto razonable si falta.
+- `props`: an array of `propDescriptor`, each with `name`, `type`, an optional `default`, and
+  above all **`requiredness`** with three values, not two:
+  - `required` — must always be present.
+  - `progressive` — may arrive absent in an incomplete render (RNF-4, streaming) and the
+    component must degrade gracefully (e.g. showing a loading state instead of breaking).
+  - `optional` — never mandatory, has reasonable default behavior if missing.
 
-Esta distinción de tres niveles (en vez del binario `required: true/false` habitual en JSON
-Schema) es la traducción directa de RNF-4 al formato de descriptor: una prop puede ser
-"obligatoria a largo plazo" pero "tolerable que falte a corto plazo" en un contexto de streaming,
-que es exactamente el caso que motivó RNF-4 (el catálogo generativo v2 de SkillNet).
+This three-level distinction (instead of JSON Schema's usual binary `required: true/false`) is
+the direct translation of RNF-4 into the descriptor format: a prop can be "mandatory in the long
+run" but "tolerable to miss in the short run" in a streaming context, which is exactly the case
+that motivated RNF-4 (SkillNet's v2 generative catalog).
 
-## Estado
+## Status
 
-Esqueleto sin instanciar todavía para ningún componente real — eso ocurre en Fase 4, cuando
-`packages/core` tenga implementaciones que describir. Sin validador ejecutable (p. ej. Ajv) todavía
-integrado en el pipeline de test.
+Skeleton not yet instantiated for any real component — that happens in Phase 4, once
+`packages/core` has implementations to describe. No executable validator (e.g. Ajv) integrated
+into the test pipeline yet.
