@@ -4,6 +4,11 @@ Didact's defining property is that **every component is fully customizable in st
 forking or fighting the library. This is a hard requirement for every component, not an aesthetic
 preference. It rests on five mechanisms; each component MUST support all that apply to it.
 
+See [`interface-norms.md`](./interface-norms.md) for the complementary set of norms about *how*
+components are composed and used together (action hierarchy, card slots, spacing/sizing, focus and
+state treatment, motion strategy) — this document is about the mechanisms that make a single
+component customizable; that one is about consistency across components built from `@didact/ui`.
+
 ## 1. Token-driven theming
 
 No component hardcodes a color, radius, spacing, or font. Everything reads from design tokens

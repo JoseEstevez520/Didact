@@ -67,7 +67,9 @@ scaffold for phases 2-3 (documented design decision + monorepo structure). It co
 ├── specs/education-components/       Requirements, design, and research (source of truth)
 ├── packages/
 │   ├── core/                         @didact/core — layer 3, education components (Phase 4)
-│   ├── theme/                        @didact/theme — layer 2, neutral theme (Tailwind v4 + tokens)
+│   ├── ui/                           @didact/ui — layers 1-2 materialized: the primitive kit
+│   │                                  (Button, Card, Toggle/ToggleGroup, Separator, Badge)
+│   ├── theme/                        @didact/theme — neutral theme (Tailwind v4 + tokens)
 │   ├── spaced-repetition/            @didact/spaced-repetition — SM-2 / FSRS behind an agnostic interface
 │   ├── registry/                     @didact/registry — Didact's registry.json
 │   └── validators/                   @didact/validators — scientific validators (a11y, pedagogy,
@@ -89,6 +91,9 @@ scaffold for phases 2-3 (documented design decision + monorepo structure). It co
   variants, `className`, `asChild`, copy-paste ownership).
 - [`docs/visual-language.md`](./docs/visual-language.md) — Didact's default look (palette, shape,
   focus, typography, motion).
+- [`docs/interface-norms.md`](./docs/interface-norms.md) — the norms that make components
+  consistent by construction: action hierarchy, card composition, spacing/sizing, focus/state
+  treatment, and the motion strategy, built on `@didact/ui`'s primitive kit.
 
 ## Where to start
 
