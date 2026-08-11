@@ -66,17 +66,14 @@ theoretical values) in `packages/validators/a11y/contrast-audit.{json,md}`, gene
   passes at **4.73:1** — comfortably over 4.5 but the smallest margin of the set; a future
   lightness nudge on that token should re-run the audit rather than assume it still holds. No
   token values needed to change.
-- **Non-text pairs (WCAG 1.4.11, ≥ 3:1) are a mixed, honestly-reported result, not a full pass**:
-  `ring`/`background` passes in dark mode (4.18:1) but fails in light mode (2.59:1); `border`/
-  `background` fails in **both** themes (~1.25:1) — `border` is deliberately a subtle hairline (see
-  "Restraint" above) and was never designed against the 3:1 UI-boundary bar, and the dark theme's
-  border/input tokens additionally carry alpha transparency that erodes contrast further once
-  composited over the near-black background. This mirrors shadcn/ui's own well-known default
-  neutral theme, which these values are drawn from. The light-mode focus **ring** failure is the
-  more actionable one of the two — flagged here as an open follow-up rather than silently patched,
-  since fixing it is a visual-design call (and the documented focus treatment also pairs the ring
-  with a ring-colored border, a combined effect this per-token audit doesn't model) outside this
-  audit's scope of auto-adjusting failing *text* tokens.
+- **Non-text pairs (WCAG 1.4.11, ≥ 3:1):** the focus **`ring`** meets 3:1 in **both** themes —
+  the light-mode `ring` was darkened to `oklch(0.62 0 0)` specifically so the solid focus indicator
+  (a ring-colored border, paired with the translucent 3px ring) clears the bar; dark mode already
+  passed. The **`border`** token is intentionally below 3:1 (a subtle hairline, see "Restraint"
+  above): it is a decorative separator and **never the sole means of identifying a component**
+  (components always carry text, fill, or shape as well), so 1.4.11 does not require it to hit 3:1.
+  Rule for authors: never rely on `border` alone to convey a boundary or state; the focus
+  indicator, which must be perceivable, uses `ring` (which does pass).
 
 Re-run `node packages/validators/a11y/scripts/contrast-audit.mjs` any time a token's OKLCH
 lightness changes.
