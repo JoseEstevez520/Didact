@@ -14,6 +14,10 @@
 
 @import "tailwindcss";
 
+/* Scan the workspace component packages so Tailwind generates every utility they use. */
+@source "../../ui/src";
+@source "../../core/src";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
