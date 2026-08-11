@@ -5,11 +5,22 @@
   "description": "Spaced-repetition algorithms (SM-2 by default, FSRS as an advanced mode) behind a persistence-agnostic interface.",
   "license": "MIT",
   "type": "module",
-  "main": "src/types.ts",
-  "types": "src/types.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10"
+  },
   "scripts": {
-    "build": "echo \"@didact/spaced-repetition: no real build yet (ROADMAP Phase 4)\"",
-    "lint": "echo \"@didact/spaced-repetition: no real lint yet (ROADMAP Phase 4)\"",
-    "test": "echo \"@didact/spaced-repetition: no real tests yet (ROADMAP Phase 4)\""
+    "build": "tsup",
+    "lint": "tsc --noEmit",
+    "test": "vitest run"
   }
 }
