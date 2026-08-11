@@ -150,7 +150,7 @@ function extractBlock(selectorRegex) {
 
 function extractVars(block) {
   const vars = {};
-  const re = /--(didact-[\w-]+)\s*:\s*([^;]+);/g;
+  const re = /--([\w-]+)\s*:\s*([^;]+);/g;
   let m;
   while ((m = re.exec(block))) {
     vars[m[1]] = m[2].trim();
@@ -173,7 +173,7 @@ const darkVars = extractVars(darkBlock);
 // ---------------------------------------------------------------------------
 
 /** background token each theme composites its own alpha colors over. */
-const BG_KEY = "didact-background";
+const BG_KEY = "background";
 
 function luminanceOf(vars, key, bgVars, bgKey) {
   const fg = oklchStringToGammaRgb(vars[key]);
@@ -200,12 +200,12 @@ function evaluatePair(theme, vars, fgKey, bgKey, threshold, kind) {
 }
 
 const PAIRS = [
-  ["didact-foreground", "didact-background", 4.5, "text"],
-  ["didact-primary-foreground", "didact-primary", 4.5, "text"],
-  ["didact-secondary-foreground", "didact-secondary", 4.5, "text"],
-  ["didact-muted-foreground", "didact-background", 4.5, "text"],
-  ["didact-border", "didact-background", 3.0, "non-text"],
-  ["didact-ring", "didact-background", 3.0, "non-text"],
+  ["foreground", "background", 4.5, "text"],
+  ["primary-foreground", "primary", 4.5, "text"],
+  ["secondary-foreground", "secondary", 4.5, "text"],
+  ["muted-foreground", "background", 4.5, "text"],
+  ["border", "background", 3.0, "non-text"],
+  ["ring", "background", 3.0, "non-text"],
 ];
 
 const results = [];
