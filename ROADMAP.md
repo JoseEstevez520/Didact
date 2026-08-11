@@ -30,6 +30,26 @@ verified in Storybook. A required setup detail — `@source` directives in
 it the primitives render unstyled (this was the root cause of an early "why does it look broken"
 episode, now fixed).
 
+## Next up & known issues (2026-08-11)
+
+**Immediate next steps — remaining Phase 4 components** (evidence/utility order), each composing
+from `@didact/ui`, following `docs/interface-norms.md`, and landing with a Storybook story +
+behavior/a11y tests + a registry item:
+- **RF-3 Matching / Sort / Categorize** — drag-and-drop via `dnd-kit`, plus a single-pointer
+  (select-source → select-target) alternative to satisfy WCAG 2.5.7 (not keyboard alone).
+- **RF-5 Glossary / Term** (popover), **RF-6 Hint / Reveal**, **RF-7 progress / mastery**,
+  **RF-8 Timeline / Steps**, **RF-10 Rubric**.
+
+**Known issues to fix:**
+- **`QuizItem` layout is broken/cramped** — the card renders too narrow, so the question wraps
+  awkwardly and the variants look off. Needs a sensible card width/`max-width` + spacing pass, and
+  a re-check of the answered / correct / incorrect states. (The rest of the catalog renders fine.)
+- **Copy-paste publication gaps (Phase 6):** education components import `@didact/ui` as a package
+  specifier (must be rewritten to local paths for pure copy-paste), and the `radius` token doesn't
+  propagate via `cssVars` alone (a consumer needs `@didact/theme`). Detail in
+  `packages/registry/README.md`.
+- **`apps/docs` has no `tsconfig.json`** → its `lint` script fails (lint-only, pre-existing).
+
 ## How to use this roadmap
 
 - Each phase has an **entry point** (what must exist before starting), a **deliverable** (what
