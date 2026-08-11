@@ -87,9 +87,9 @@ special-case its padding.
 
 ## Focus & states
 
-- **Focus:** every interactive primitive uses the same treatment — a 3px ring at the `--didact-
-  ring` color, ~50% opacity, plus a solid `--didact-ring` border (`focus-visible:border-[color:
-  var(--didact-ring)] focus-visible:ring-[3px] focus-visible:ring-[color:var(--didact-ring)]/50`).
+- **Focus:** every interactive primitive uses the same treatment — a 3px ring at the `ring` color,
+  ~50% opacity, plus a ring-colored border (`focus-visible:border-ring focus-visible:ring-ring/50
+  focus-visible:ring-[3px]`).
   Never remove it and never invent a different focus style for a new component — WCAG 2.4.7
   requires focus to be visible, and a consistent treatment is what lets a learner recognize "this
   is focused" instantly across the whole interface. See `visual-language.md`'s "Focus" section for
@@ -100,8 +100,8 @@ special-case its padding.
 - **Loading:** a component in a loading state keeps its layout (no collapsing/reflow) and disables
   interaction the same way `disabled` does, while adding a visible, non-color-only cue (a spinner
   or "Loading…" text) — never a bare color change, per WCAG 1.4.1.
-- **Invalid:** driven by `aria-invalid`, styled via `aria-invalid:border-[color:var(--didact-
-  destructive)] aria-invalid:ring-[color:var(--didact-destructive)]/20` (already built into
+- **Invalid:** driven by `aria-invalid`, styled via `aria-invalid:border-destructive
+  aria-invalid:ring-destructive/20` (already built into
   `Button`, `Badge`, and `Toggle`) — paired with real error text via `aria-describedby`, never the
   red border alone.
 - **Empty:** an empty state is content, not a blank `Card`/`CardContent` — say what's missing and,
@@ -116,14 +116,14 @@ special-case its padding.
 
 ## Motion strategy (decided)
 
-Didact's default animation mechanism is **CSS transitions/keyframes**, driven by the
-`--didact-motion-duration` token and `data-state`/`data-orientation`/etc. attributes that Radix
-primitives already expose — not a JS animation runtime. Concretely:
+Didact's default animation mechanism is **CSS transitions/keyframes**, driven by standard Tailwind
+`transition-*`/`duration-*` utilities and the `data-state`/`data-orientation`/etc. attributes that
+Radix primitives already expose — not a JS animation runtime. Concretely:
 
-- Every transition reads its duration from `--didact-motion-duration` (never a hardcoded `200ms`
-  written inline), and that token collapses to `0ms` under `prefers-reduced-motion: reduce`
-  (`packages/theme/src/tokens.css`) — so respecting reduced motion is automatic for any component
-  that uses the token, not something each component re-implements (RF-13).
+- Every transition pairs its `duration-*` with `motion-reduce:transition-none` (or
+  `motion-reduce:duration-0`), so `prefers-reduced-motion: reduce` turns the animation into an
+  instant state change (RF-13, WCAG 2.3.3). Reduced motion is handled at the component with a
+  standard utility — never left to chance.
 - State-driven visuals (a `Toggle` turning on, a `ToggleGroupItem` becoming selected) animate off
   the primitive's own `data-state` attribute via plain CSS (`data-[state=on]:...`), not a
   JS-driven spring or timeline.
@@ -146,6 +146,7 @@ primitives already expose — not a JS animation runtime. Concretely:
 - Keep the Action hierarchy rule (one `default` per view) even inside a composed education
   component — a `Flashcard`'s own "Known"/"Needs review" controls, for instance, are not
   `default`-variant buttons precisely because they're not the card's one primary action.
-- Never fork a primitive's classes to tweak a color/radius/shadow — override the underlying
-  `--didact-*` token instead (`design-principles.md` §1). If a genuinely new visual value is
-  needed, add a token to `@didact/theme`, don't hardcode it in the component.
+- Never fork a primitive's classes to tweak a color/radius/shadow — override the underlying design
+  token instead (`--background`, `--primary`, `--radius`, …; `design-principles.md` §1). If a
+  genuinely new visual value is needed, add a token to `@didact/theme`, don't hardcode it in the
+  component.

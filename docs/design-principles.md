@@ -12,7 +12,7 @@ component customizable; that one is about consistency across components built fr
 ## 1. Token-driven theming
 
 No component hardcodes a color, radius, spacing, or font. Everything reads from design tokens
-exposed as CSS custom properties (`--didact-*`) on `:root`, with a matching dark scale. A project
+exposed as CSS custom properties (`--background`, `--primary`, `--radius`, etc.) on `:root`, with a matching dark scale. A project
 re-themes the entire library by overriding those variables in one place — no component edits, no
 rebuild of Didact. This is what makes the default theme neutral and every consumer's theme
 first-class. See [`visual-language.md`](./visual-language.md) for the token set.

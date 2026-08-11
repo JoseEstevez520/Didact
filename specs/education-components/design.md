@@ -86,7 +86,7 @@ pedagogical content at all) and stable once a primitive's variant/size set is se
 is where the pedagogical vocabulary — and the actual churn — lives. Each primitive in `@didact/ui`
 is a faithful port of a proven headless-primitives + Tailwind + `cva` reference kit (same
 variant/size sets, same `data-slot`/`data-variant`/`data-size` contract, same `asChild`/Slot escape
-hatch), with only the token source changed to `@didact/theme`'s `--didact-*` custom properties —
+hatch), with only the token source changed to `@didact/theme`'s design tokens (`--background`, `--primary`, etc.) —
 see `packages/ui/src/components/*.tsx` for the per-primitive porting notes and
 `docs/interface-norms.md` for the composition norms this now makes possible by construction
 (action hierarchy, card slot usage, spacing/sizing scale, focus/state treatment, motion strategy).
