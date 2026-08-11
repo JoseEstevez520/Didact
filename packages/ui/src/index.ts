@@ -40,4 +40,14 @@ export { Toggle, toggleVariants } from "./components/toggle.js";
 
 export { ToggleGroup, ToggleGroupItem } from "./components/toggle-group.js";
 
+export { Input } from "./components/input.js";
+
+export { Textarea } from "./components/textarea.js";
+
+export { Label } from "./components/label.js";
+
+export { RadioGroup, RadioGroupItem } from "./components/radio-group.js";
+
+export { Checkbox } from "./components/checkbox.js";
+
 export { cn } from "./lib/cn.js";
