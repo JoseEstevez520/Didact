@@ -1,0 +1,15 @@
+{
+  "name": "@didact/core",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Didact — capa 3 (componentes educativos con significado pedagogico) y capa 2 (theming neutro) de la arquitectura de 3 capas.",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "echo \"@didact/core: sin build real todavia (Fase 4 del ROADMAP)\"",
+    "lint": "echo \"@didact/core: sin lint real todavia (Fase 4 del ROADMAP)\"",
+    "test": "echo \"@didact/core: sin tests reales todavia (Fase 4 del ROADMAP)\""
+  }
+}

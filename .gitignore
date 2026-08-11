@@ -1,0 +1,25 @@
+# Agent / assistant configuration — never distributed with this repo
+CLAUDE.md
+.claude/
+AGENTS.md
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.turbo/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Coverage
+coverage/

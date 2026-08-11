@@ -1,0 +1,105 @@
+{
+  "source": "specs/education-components/research.md, seccion 9.1 (evidencia pedagogica, lote D)",
+  "note": "Fuerza de evidencia por requisito funcional (RF), tal como concluye research.md. 'no-evaluada' significa que las fuentes citadas en research.md 9.1 no se pronuncian sobre ese RF, NO que el RF carezca de valor pedagogico.",
+  "strengthScale": ["alta", "moderada", "baja", "no-evaluada"],
+  "byRequirement": [
+    {
+      "rf": "RF-2",
+      "component": "SpacedRepetitionDeck",
+      "strength": "alta",
+      "source": "Dunlosky et al. 2013 (SAGE 403, reconstruido via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
+      "note": "Distributed practice es una de solo dos de las 10 tecnicas de estudio evaluadas con utilidad alta. Tiene el respaldo mas fuerte del inventario junto a RF-4."
+    },
+    {
+      "rf": "RF-4",
+      "component": "Variantes de quiz",
+      "strength": "alta",
+      "source": "Dunlosky et al. 2013 (SAGE 403, reconstruido via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
+      "note": "Practice testing es la otra tecnica con utilidad alta en Dunlosky et al. Usado como practice testing (no solo evaluacion), RF-4 comparte el respaldo mas fuerte del inventario.",
+      "informativeFeedbackRequired": true,
+      "informativeFeedbackSource": "Wisniewski, Zierer & Hattie 2019 (https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full)"
+    },
+    {
+      "rf": "RF-5",
+      "component": "Glossary/Term",
+      "strength": "baja",
+      "source": "Dunlosky et al. 2013, por analogia con las tecnicas de utilidad baja (rereading/highlighting)",
+      "note": "Consulta pasiva de un termino (tooltip/popover) no exige recuperacion activa. research.md recomienda que RF-5 fuerce recall activo en vez de ser solo consulta, para no quedarse en la categoria de utilidad baja."
+    },
+    {
+      "rf": "RF-6",
+      "component": "Hint/Reveal",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "No evaluado explicitamente por las fuentes de research.md 9.1. Si requiere feedback informativo, igual que RF-4.",
+      "informativeFeedbackRequired": true,
+      "informativeFeedbackSource": "Wisniewski, Zierer & Hattie 2019 (https://www.frontiersin.org/articles/10.3389/fpsyg.2019.03087/full)"
+    },
+    {
+      "rf": "RF-1",
+      "component": "Flashcard",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "No evaluado explicitamente en research.md 9.1 como tecnica independiente; su valor depende de si se usa dentro de RF-2 (distributed practice, evidencia alta)."
+    },
+    {
+      "rf": "RF-3",
+      "component": "Matching/Sort/Categorize",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "No evaluado explicitamente en research.md 9.1."
+    },
+    {
+      "rf": "RF-7",
+      "component": "Progreso/mastery",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "No evaluado explicitamente en research.md 9.1."
+    },
+    {
+      "rf": "RF-8",
+      "component": "Timeline/Steps",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "No evaluado explicitamente en research.md 9.1."
+    },
+    {
+      "rf": "RF-9",
+      "component": "Checkpoint sobre video",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "Explicitamente senalado en research.md 9.1 como no evaluado por estas fuentes."
+    },
+    {
+      "rf": "RF-10",
+      "component": "Rubric/autoevaluacion",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "Explicitamente senalado en research.md 9.1 como no evaluado por estas fuentes."
+    },
+    {
+      "rf": "RF-11",
+      "component": "Ejercicio de codigo",
+      "strength": "no-evaluada",
+      "source": "n/a",
+      "note": "Explicitamente senalado en research.md 9.1 como no evaluado por estas fuentes."
+    }
+  ],
+  "candidatosFueraDeInventario": [
+    {
+      "name": "SelfExplanation",
+      "source": "Fiorella & Mayer 2016 (via ERIC: https://eric.ed.gov/?id=EJ1120458)",
+      "note": "Una de 8 estrategias generativas. No existe en el inventario actual de requirements.md 4.1 -- propuesta v2, no implementar ya."
+    },
+    {
+      "name": "ConceptMap",
+      "source": "Fiorella & Mayer 2016 (via ERIC: https://eric.ed.gov/?id=EJ1120458)",
+      "note": "Estrategia generativa de mapeo. No existe en el inventario actual -- propuesta v2, no implementar ya."
+    },
+    {
+      "name": "Escenario ramificado (branching scenario, ver Ink/inkjs en research.md 9.3)",
+      "source": "Sitzmann 2011 (via resumen del abstract, Wiley 402: https://onlinelibrary.wiley.com/doi/10.1111/j.1744-6570.2011.01190.x)",
+      "note": "Simulation games con efecto positivo pero moderado (d 0.22-0.52) y sesgo de publicacion declarado por la propia fuente. Pesa contra sobrepriorizar este componente: prioridad media-baja si se construye."
+    }
+  ]
+}

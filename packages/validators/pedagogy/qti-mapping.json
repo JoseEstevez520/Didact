@@ -1,0 +1,65 @@
+{
+  "source": "specs/education-components/research.md, Pregunta 6 y seccion 9.2 (IMS QTI 3.0: https://www.imsglobal.org/spec/qti/v3p0/oview , https://www.imsglobal.org/spec/qti/v3p0/impl)",
+  "note": "QTI 3.0 define 21 interacciones. Se adopta su vocabulario de nombres como referencia de naming (research.md P6), no se implementa el binding XML de QTI. RF-3/RF-4 cubren las interacciones textuales/de lista; la familia grafica/sobre-imagen y la numerica/slider NO estan en el inventario actual (hallazgo de alcance, no de nomenclatura) y se marcan con gap:true.",
+  "mappings": [
+    {
+      "rf": "RF-3",
+      "variant": "Matching",
+      "qtiInteraction": "matchInteraction / associateInteraction",
+      "gap": false
+    },
+    {
+      "rf": "RF-3",
+      "variant": "Sort / ordenar secuencia",
+      "qtiInteraction": "orderInteraction",
+      "gap": false
+    },
+    {
+      "rf": "RF-3",
+      "variant": "Categorize",
+      "qtiInteraction": "gapMatchInteraction",
+      "gap": false,
+      "note": "Mapeo aproximado: clasificar en categorias se modela en QTI como asociar elementos a huecos/contenedores."
+    },
+    {
+      "rf": "RF-4",
+      "variant": "Multi-respuesta (multi-select)",
+      "qtiInteraction": "choiceInteraction (cardinality multiple)",
+      "gap": false
+    },
+    {
+      "rf": "RF-4",
+      "variant": "Verdadero/Falso",
+      "qtiInteraction": "choiceInteraction (2 opciones)",
+      "gap": false,
+      "note": "QTI no tiene una interaccion 'true-false' dedicada; se modela como choiceInteraction binaria. xAPI si tiene un interactionType 'true-false' dedicado (ver xapi-mapping.json)."
+    },
+    {
+      "rf": "RF-4",
+      "variant": "Rellenar hueco",
+      "qtiInteraction": "gapMatchInteraction (arrastrar) o textEntryInteraction (tecleado)",
+      "gap": false,
+      "note": "Dos sub-variantes de QTI segun si el hueco se completa arrastrando una opcion o escribiendo texto libre."
+    },
+    {
+      "rf": "RF-4",
+      "variant": "Respuesta abierta corta con verificacion asistida",
+      "qtiInteraction": "extendedTextInteraction / inlineChoiceInteraction",
+      "gap": false
+    }
+  ],
+  "gapsFueraDeV1": {
+    "note": "research.md 9.2: familia entera de interacciones graficas/sobre imagen que QTI si tiene y requirements.md 4.1 no. Recomendacion (b): declarar estas interacciones como fuera de v1, candidatas a v2, en vez de dejarlas descartadas sin decirlo.",
+    "interactions": [
+      { "qtiInteraction": "hotspotInteraction", "gap": true },
+      { "qtiInteraction": "hotTextInteraction", "gap": true },
+      { "qtiInteraction": "graphicOrderInteraction", "gap": true },
+      { "qtiInteraction": "graphicAssociateInteraction", "gap": true },
+      { "qtiInteraction": "graphicGapMatchInteraction", "gap": true },
+      { "qtiInteraction": "positionObjectInteraction", "gap": true },
+      { "qtiInteraction": "selectPointInteraction", "gap": true },
+      { "qtiInteraction": "drawingInteraction", "gap": true },
+      { "qtiInteraction": "sliderInteraction (respuesta numerica/slider)", "gap": true }
+    ]
+  }
+}

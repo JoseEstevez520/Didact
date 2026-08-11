@@ -1,0 +1,21 @@
+{
+  "name": "didact",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Didact — libreria de componentes educativos de proposito general, distribuida en modelo shadcn (registry + copy-paste).",
+  "license": "MIT",
+  "packageManager": "pnpm@9",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "adapters/*"
+  ]
+}

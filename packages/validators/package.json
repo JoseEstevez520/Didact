@@ -1,0 +1,12 @@
+{
+  "name": "@didact/validators",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Validadores cientificos de Didact: datos machine-readable de accesibilidad, evidencia pedagogica, esquema declarativo de componente y control de deriva de dependencias.",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo \"@didact/validators: sin build real todavia (Fase 4 del ROADMAP)\"",
+    "lint": "echo \"@didact/validators: sin lint real todavia (Fase 4 del ROADMAP)\"",
+    "test": "echo \"@didact/validators: sin tests reales todavia (Fase 4 del ROADMAP)\""
+  }
+}

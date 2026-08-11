@@ -1,0 +1,12 @@
+{
+  "name": "@didact/registry",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Registry de Didact en el esquema oficial de shadcn/ui (registry.json), sin CLI propio.",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo \"@didact/registry: sin build real todavia (Fase 4/6 del ROADMAP)\"",
+    "lint": "echo \"@didact/registry: sin lint real todavia (Fase 4/6 del ROADMAP)\"",
+    "test": "echo \"@didact/registry: sin tests reales todavia (Fase 4/6 del ROADMAP)\""
+  }
+}

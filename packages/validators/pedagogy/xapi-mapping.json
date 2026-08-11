@@ -1,0 +1,16 @@
+{
+  "source": "specs/education-components/research.md, seccion 9.2 (xAPI: https://github.com/adlnet/xAPI-Spec)",
+  "note": "xAPI define 10 interactionType cerrados. Se usa solo como inspiracion de naming de callbacks (onAttempted, onMastered), no se implementa xAPI/LRS en el nucleo (research.md P6). performance, likert y numeric quedan sin mapeo -- coincide con el hueco de interacciones numericas/slider que tambien detecta QTI (ver qti-mapping.json gapsFueraDeV1).",
+  "interactionTypes": [
+    { "interactionType": "true-false", "rf": "RF-4", "variant": "Verdadero/Falso", "sinMapeo": false },
+    { "interactionType": "choice", "rf": "RF-4", "variant": "Multi-respuesta (multi-select)", "sinMapeo": false },
+    { "interactionType": "fill-in", "rf": "RF-4", "variant": "Rellenar hueco", "sinMapeo": false },
+    { "interactionType": "long-fill-in", "rf": "RF-4", "variant": "Respuesta abierta corta con verificacion asistida", "sinMapeo": false },
+    { "interactionType": "matching", "rf": "RF-3", "variant": "Matching / Categorize", "sinMapeo": false },
+    { "interactionType": "sequencing", "rf": "RF-3", "variant": "Sort / ordenar secuencia", "sinMapeo": false },
+    { "interactionType": "performance", "rf": null, "variant": null, "sinMapeo": true, "note": "Sin RF equivalente en el inventario actual." },
+    { "interactionType": "likert", "rf": null, "variant": null, "sinMapeo": true, "note": "Sin RF equivalente; relacionado con el hueco de interacciones numericas/slider de QTI (research.md 9.2)." },
+    { "interactionType": "numeric", "rf": null, "variant": null, "sinMapeo": true, "note": "Sin RF equivalente; relacionado con el hueco de interacciones numericas/slider de QTI (research.md 9.2)." },
+    { "interactionType": "other", "rf": null, "variant": null, "sinMapeo": true, "note": "Catch-all de xAPI, no aporta vocabulario especifico." }
+  ]
+}

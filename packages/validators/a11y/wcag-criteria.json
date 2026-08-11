@@ -1,0 +1,73 @@
+{
+  "$schema": "n/a — dato interno de Didact, no un esquema publicado",
+  "source": "specs/education-components/research.md, Pregunta 5.1 (https://www.w3.org/TR/WCAG22/)",
+  "note": "Contrato minimo no negociable del nucleo: WCAG 2.2 AA completo, tratando 2.3.3 (AAA) como obligatorio. Cada criterio mapea a un requisito funcional (RF) o componente concreto, no se documenta como 'accesible' generico.",
+  "criteria": [
+    {
+      "id": "2.3.1",
+      "title": "Three Flashes or Below Threshold",
+      "level": "A",
+      "requirement": "Ninguna animacion de feedback puede destellar mas de 3 veces por segundo.",
+      "appliesTo": ["RF-13"]
+    },
+    {
+      "id": "2.3.3",
+      "title": "Animation from Interactions",
+      "level": "AAA",
+      "levelNote": "Nivel AAA pero tratado como base obligatoria del nucleo, no opcional.",
+      "requirement": "Toda micro-animacion (flip de Flashcard, transicion, confetti) respeta prefers-reduced-motion y ofrece un toggle explicito.",
+      "appliesTo": ["RF-13"]
+    },
+    {
+      "id": "2.2.1",
+      "title": "Timing Adjustable",
+      "level": "A",
+      "requirement": "Todo cronometro de ejercicio debe ser desactivable o ampliable por el usuario.",
+      "appliesTo": ["RF-14"]
+    },
+    {
+      "id": "2.2.2",
+      "title": "Pause, Stop, Hide",
+      "level": "A",
+      "requirement": "Cualquier contenido en movimiento durante mas de 5 segundos necesita un control de pausa.",
+      "appliesTo": ["RF-13", "RF-14"]
+    },
+    {
+      "id": "2.4.7",
+      "title": "Focus Visible",
+      "level": "AA",
+      "requirement": ":focus-visible con contraste suficiente en todo control interactivo; nunca outline:none sin un sustituto visible.",
+      "appliesTo": ["RF-12"]
+    },
+    {
+      "id": "2.4.11",
+      "title": "Focus Not Obscured (Minimum)",
+      "level": "AA",
+      "levelNote": "Criterio nuevo en WCAG 2.2.",
+      "requirement": "Los popovers de Glossary/Term no pueden tapar el elemento que tiene el foco.",
+      "appliesTo": ["RF-5", "RF-12"]
+    },
+    {
+      "id": "1.4.3",
+      "title": "Contrast (Minimum)",
+      "level": "AA",
+      "requirement": "El tema neutro por defecto fija tokens de color con ratio de contraste minimo 4.5:1.",
+      "appliesTo": ["RF-16"]
+    },
+    {
+      "id": "1.4.11",
+      "title": "Non-text Contrast",
+      "level": "AA",
+      "requirement": "Bordes, iconos de estado y barras de progreso mantienen ratio de contraste minimo 3:1.",
+      "appliesTo": ["RF-7", "RF-16"]
+    },
+    {
+      "id": "2.5.7",
+      "title": "Dragging Movements",
+      "level": "AA",
+      "requirement": "Toda funcion de arrastre (matching/sort/categorize) debe tener una alternativa de un solo puntero sin arrastre (patron 'seleccionar origen, seleccionar destino'), ademas de soporte de teclado. Teclado y single-pointer-sin-arrastre NO son lo mismo: dnd-kit da teclado pero no garantiza por si solo el patron de dos clics que 2.5.7 exige en sentido estricto.",
+      "appliesTo": ["RF-3"],
+      "legalNote": "Ver packages/validators/a11y/README.md para el angulo EN 301 549 / European Accessibility Act."
+    }
+  ]
+}
