@@ -59,3 +59,18 @@ export {
   type SpacedRepetitionCard,
   type SpacedRepetitionReview,
 } from "./components/spaced-repetition-deck.js";
+
+export {
+  SingleChoiceQuiz,
+  type SingleChoiceQuizProps,
+  MultiSelectQuiz,
+  type MultiSelectQuizProps,
+  TrueFalseQuiz,
+  type TrueFalseQuizProps,
+  FillInTheBlankQuiz,
+  type FillInTheBlankQuizProps,
+  ShortAnswerQuiz,
+  type ShortAnswerQuizProps,
+  type QuizOption,
+  type QuizCorrectness,
+} from "./components/quiz-item.js";
