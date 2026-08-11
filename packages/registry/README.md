@@ -65,8 +65,11 @@ confirmed by the research.
 
 ## Status
 
-`registry.json` has `mastery-badge` (Phase 3's scaffold proof component) and `flashcard` (RF-1,
-the first real Phase 4 component). The built, servable JSON lives in `public/r/` and IS committed
+`registry.json` has `mastery-badge` (Phase 3's scaffold proof component), `flashcard` (RF-1, the
+first real Phase 4 component), and the Phase 3.5 `@didact/ui` primitive kit -- `button`, `card`,
+`badge`, `separator`, `toggle`, `toggle-group` (the last depends on `toggle` via
+`registryDependencies` rather than duplicating its file). The built, servable JSON lives in
+`public/r/` and IS committed
 (same reasoning as `pnpm-lock.yaml`: it's generated, but it's the actual artifact a static host
 would serve, not throwaway build junk) -- regenerate it after any change to `registry.json` or the
 files it points at with:
