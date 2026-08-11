@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "A multi-line text field (@didact/ui, layers 1-2), styled like the input item with no headless primitive behind it: the same border-input/placeholder/focus-ring/aria-invalid treatment reading @didact/theme's real tokens -- see packages/ui/src/components/textarea.tsx.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "packages/ui/src/components/textarea.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Textarea -- a multi-line text field, ported verbatim from the same reference kit as Button (see\n * button.tsx's header comment). Like Input (input.tsx) it is a styled native element with no\n * headless primitive behind it: standard Tailwind utilities reading `@didact/theme`'s tokens, the\n * same `data-slot=\"textarea\"` attribute, and the shared focus-ring / `aria-invalid` treatment. The\n * only change from the reference source is the `cn` import path.\n */\nfunction Textarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      className={cn(\n        \"flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:ring-destructive/40\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Textarea };\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "packages/ui/src/lib/cn.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "input": "oklch(0.922 0 0)",
+      "muted-foreground": "oklch(0.556 0 0)",
+      "ring": "oklch(0.708 0 0)",
+      "destructive": "oklch(0.577 0.245 27.325)",
+      "radius": "0.625rem"
+    }
+  },
+  "type": "registry:ui"
+}

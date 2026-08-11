@@ -1,0 +1,32 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "title": "Radio Group",
+  "description": "RadioGroup / RadioGroupItem (@didact/ui, layers 1-2): a single-select group of radio controls backed by the unified radix-ui package's RadioGroup, which owns the roving-tabindex keyboard behavior and aria-checked/data-state for each item. The selected-state indicator is an inline SVG circle rather than an icon-library import -- see packages/ui/src/components/radio-group.tsx.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "packages/ui/src/components/radio-group.tsx",
+      "content": "import * as React from \"react\";\nimport { RadioGroup as RadioGroupPrimitive } from \"radix-ui\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * RadioGroup / RadioGroupItem -- a single-select group of radio controls, ported from the same\n * reference kit as Button (see button.tsx's header comment). Backed by `radix-ui`'s `RadioGroup`\n * (the unified `radix-ui` package, same import style as Toggle/ToggleGroup), which owns the\n * roving-tabindex keyboard behavior and `aria-checked`/`data-state` for each item. Standard\n * Tailwind utilities reading `@didact/theme`'s tokens, the same `data-slot` attributes, and the\n * same class structure as the reference.\n *\n * Two deviations from the reference source, both matching conventions already established in this\n * kit rather than the reference's own environment:\n * - the `cn` import path (`../lib/cn.js`), as in every other primitive here;\n * - the selected-state indicator is an inline SVG circle instead of an icon-library import, exactly\n *   as `flashcard.tsx` inlines its own icons -- Didact's kit deliberately ships no icon-library\n *   dependency (docs/interface-norms.md: add a dependency only when a component genuinely needs\n *   one, and a filled dot does not).\n */\nfunction RadioGroup({\n  className,\n  ...props\n}: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {\n  return (\n    <RadioGroupPrimitive.Root\n      data-slot=\"radio-group\"\n      className={cn(\"grid gap-3\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction RadioGroupItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {\n  return (\n    <RadioGroupPrimitive.Item\n      data-slot=\"radio-group-item\"\n      className={cn(\n        \"aspect-square size-4 shrink-0 rounded-full border border-input text-primary shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:ring-destructive/40\",\n        className,\n      )}\n      {...props}\n    >\n      <RadioGroupPrimitive.Indicator\n        data-slot=\"radio-group-indicator\"\n        className=\"relative flex items-center justify-center\"\n      >\n        <svg\n          viewBox=\"0 0 8 8\"\n          fill=\"currentColor\"\n          aria-hidden=\"true\"\n          focusable=\"false\"\n          className=\"absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-primary\"\n        >\n          <circle cx=\"4\" cy=\"4\" r=\"4\" />\n        </svg>\n      </RadioGroupPrimitive.Indicator>\n    </RadioGroupPrimitive.Item>\n  );\n}\n\nexport { RadioGroup, RadioGroupItem };\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "packages/ui/src/lib/cn.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "input": "oklch(0.922 0 0)",
+      "primary": "oklch(0.205 0 0)",
+      "ring": "oklch(0.708 0 0)",
+      "destructive": "oklch(0.577 0.245 27.325)"
+    }
+  },
+  "type": "registry:ui"
+}

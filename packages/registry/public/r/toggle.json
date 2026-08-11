@@ -2,17 +2,17 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toggle",
   "title": "Toggle",
-  "description": "A two-state pressed/unpressed button (@didact/ui, layers 1-2), backed by @radix-ui/react-toggle for aria-pressed/data-state. toggleVariants (variants default/outline, sizes default/sm/lg) is reused directly by the toggle-group item instead of being duplicated.",
+  "description": "A two-state pressed/unpressed button (@didact/ui, layers 1-2), backed by the unified radix-ui package's Toggle for aria-pressed/data-state. toggleVariants (variants default/outline, sizes default/sm/lg) is reused directly by the toggle-group item instead of being duplicated.",
   "dependencies": [
     "class-variance-authority",
     "clsx",
     "tailwind-merge",
-    "@radix-ui/react-toggle"
+    "radix-ui"
   ],
   "files": [
     {
       "path": "packages/ui/src/components/toggle.tsx",
-      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport * as TogglePrimitive from \"@radix-ui/react-toggle\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Toggle -- a two-state pressed/unpressed button, ported from the same reference kit as Button\n * (see button.tsx's header comment). Backed by `@radix-ui/react-toggle`'s `Root`, which manages\n * `aria-pressed`/`data-state` for us. `ToggleGroup`/`ToggleGroupItem` (toggle-group.tsx) reuse\n * `toggleVariants` directly rather than duplicating the class list, matching the reference's own\n * structure.\n */\n\nconst toggleVariants = cva(\n  [\n    \"inline-flex items-center justify-center gap-2 rounded-[var(--didact-radius-md)]\",\n    \"text-sm font-medium whitespace-nowrap outline-none\",\n    \"transition-[color,box-shadow] duration-[var(--didact-motion-duration)]\",\n    \"hover:bg-[color:var(--didact-muted)] hover:text-[color:var(--didact-muted-foreground)]\",\n    \"focus-visible:border-[color:var(--didact-ring)] focus-visible:ring-[3px]\",\n    \"focus-visible:ring-[color:var(--didact-ring)]/50\",\n    \"disabled:pointer-events-none disabled:opacity-50\",\n    \"aria-invalid:border-[color:var(--didact-destructive)] aria-invalid:ring-[color:var(--didact-destructive)]/20\",\n    \"dark:aria-invalid:ring-[color:var(--didact-destructive)]/40\",\n    \"data-[state=on]:bg-[color:var(--didact-accent)] data-[state=on]:text-[color:var(--didact-accent-foreground)]\",\n    \"[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  ].join(\" \"),\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline: [\n          \"border border-[color:var(--didact-input)] bg-transparent shadow-[var(--didact-shadow-xs)]\",\n          \"hover:bg-[color:var(--didact-accent)] hover:text-[color:var(--didact-accent-foreground)]\",\n        ].join(\" \"),\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size }), className)}\n      {...props}\n    />\n  );\n}\n\nexport { Toggle, toggleVariants };\n",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { Toggle as TogglePrimitive } from \"radix-ui\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Toggle -- a two-state pressed/unpressed button, ported verbatim from the same reference kit as\n * Button (see button.tsx's header comment). Backed by `radix-ui`'s `Toggle.Root`, which manages\n * `aria-pressed`/`data-state` for us. `ToggleGroup`/`ToggleGroupItem` (toggle-group.tsx) reuse\n * `toggleVariants` directly rather than duplicating the class list, matching the reference's own\n * structure.\n */\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  },\n);\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  );\n}\n\nexport { Toggle, toggleVariants };\n",
       "type": "registry:ui"
     },
     {
@@ -23,17 +23,15 @@
   ],
   "cssVars": {
     "theme": {
-      "didact-muted": "oklch(0.97 0 0)",
-      "didact-muted-foreground": "oklch(0.556 0 0)",
-      "didact-accent": "oklch(0.97 0 0)",
-      "didact-accent-foreground": "oklch(0.205 0 0)",
-      "didact-destructive": "oklch(0.577 0.245 27.325)",
-      "didact-border": "oklch(0.922 0 0)",
-      "didact-input": "oklch(0.922 0 0)",
-      "didact-ring": "oklch(0.62 0 0)",
-      "didact-radius-md": "calc(0.625rem - 2px)",
-      "didact-shadow-xs": "0 1px 2px 0 oklch(0 0 0 / 0.05)",
-      "didact-motion-duration": "200ms"
+      "muted": "oklch(0.97 0 0)",
+      "muted-foreground": "oklch(0.556 0 0)",
+      "accent": "oklch(0.97 0 0)",
+      "accent-foreground": "oklch(0.205 0 0)",
+      "destructive": "oklch(0.577 0.245 27.325)",
+      "border": "oklch(0.922 0 0)",
+      "input": "oklch(0.922 0 0)",
+      "ring": "oklch(0.708 0 0)",
+      "radius": "0.625rem"
     }
   },
   "type": "registry:ui"

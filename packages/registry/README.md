@@ -35,57 +35,77 @@ confirmed by the research.
   Didact consumers' update mechanism, test it empirically.
 - **Authentication** is native via HTTP headers + environment variables (Bearer token, API key).
   No OAuth/OIDC or automatic discovery — relevant only if this registry stops being public.
-- **`cssVars.theme`'s auto-generated Tailwind alias only triggers for color-shaped values, and
-  its naming isn't collision-safe.** Verified empirically in the Phase 3 registry copy proof
-  (`shadcn add` against `mastery-badge.json` in a throwaway consumer): when the CLI merges
-  `cssVars.theme` into the consumer's `@theme` block, it inserts the literal `--<key>: <value>`
-  declaration, and separately auto-generates a `--color-<key>: var(--<key>)` alias **only** when
-  `<value>` looks like a color (oklch/hsl/rgb/hex). It does this unconditionally, without checking
-  whether `<key>` already contains the word "color" — so a key like `didact-color-bg` (this
-  registry's own naming convention, matching `@didact/theme`) becomes the useless
-  `--color-didact-color-bg`, not a usable `--color-didact-bg`. Non-color-shaped tokens
-  (`didact-radius-md`, `didact-font-sans`, `didact-motion-duration`) get **no** alias at all, so a
-  Tailwind theme-scale utility built on their name (e.g. a `rounded-didact-md` utility) silently
-  fails to resolve for a consumer who only copied the component through the registry (as opposed
-  to importing the `@didact/theme` package directly, which defines its own correct `@theme` block
-  by hand). Also verified: trying to work around this with the item's own `css` field (injecting a
-  hand-written `@theme` block with the correct alias names) does not work either -- the CLI's `css`
-  merger treats every key nested under an at-rule like `"@theme"` as a CSS **selector**, not a flat
-  custom-property declaration (confirmed by reading the relevant merge function in
-  `shadcn@4.16.2`'s bundled source, `chunk-Q6Y23SOV.js`), so `"css": { "@theme": { "--foo": "var(--bar)" } }`
-  throws a `CssSyntaxError` trying to parse `.temp{var(--bar)}` as a declaration body.
-  **Consequence / mitigation applied:** `packages/core/src/components/mastery-badge.tsx` does not
-  rely on any named theme-scale utility (`bg-didact-*`, `rounded-didact-*`) at all -- it reads the
-  raw custom properties directly via Tailwind v4's `[type:var(--x)]` arbitrary-value syntax (e.g.
-  `bg-[color:var(--didact-color-muted)]`), which only needs the plain `--didact-*` declaration
-  `cssVars.theme` reliably delivers, not the fragile alias. Future components should do the same
-  unless/until this gets a cleaner fix (e.g. renaming this registry's `cssVars.theme` keys to
-  avoid embedding "color"/"radius" as a prefix of the key itself, so the CLI's own alias no longer
-  collides).
+- **`cssVars.theme`'s auto-generated Tailwind alias only triggers for color-shaped values.**
+  Verified empirically in the Phase 3 registry copy proof (`shadcn add` against `mastery-badge.json`
+  in a throwaway consumer): when the CLI merges `cssVars.theme` into the consumer's `@theme` block,
+  it inserts the literal `--<key>: <value>` declaration, and separately auto-generates a
+  `--color-<key>: var(--<key>)` alias **only** when `<value>` looks like a color
+  (oklch/hsl/rgb/hex). Now that this registry's `cssVars.theme` keys are the real token names
+  (`primary`, `background`, `muted-foreground`, `ring`, …, matching `packages/theme/src/tokens.css`
+  1:1), that alias lines up exactly with the `--color-primary`/`--color-muted-foreground`/etc.
+  mapping `@didact/theme`'s own `@theme inline` block defines by hand -- so a consumer who copies a
+  component through the registry and relies on `cssVars.theme` alone (no `@didact/theme`
+  installed) still gets working `bg-primary`/`text-muted-foreground`/etc. utilities.
+  **`radius` is the one token that still needs care:** it is not color-shaped, so the CLI adds no
+  alias for it, and Tailwind v4's own default theme defines `--radius-sm`/`--radius-md`/
+  `--radius-lg`/`--radius-xl` as fixed values that do **not** read a `--radius` custom property at
+  all -- that derivation (`--radius-md: calc(var(--radius) - 2px)`, etc.) is `@didact/theme`'s own
+  `@theme inline` override, not a Tailwind default. A consumer who copies a component using
+  `rounded-md`/`rounded-xl` through the registry, injecting only `--radius` via `cssVars.theme`,
+  gets Tailwind's stock fixed radius scale instead of one that follows Didact's `--radius` -- they
+  need to also install `@didact/theme` (or copy its `@theme inline` block by hand) to get the real
+  derived scale. Also verified: trying to work around this with the item's own `css` field
+  (injecting a hand-written `@theme` block with the correct alias names) does not work either --
+  the CLI's `css` merger treats every key nested under an at-rule like `"@theme"` as a CSS
+  **selector**, not a flat custom-property declaration (confirmed by reading the relevant merge
+  function in `shadcn@4.16.2`'s bundled source, `chunk-Q6Y23SOV.js`), so
+  `"css": { "@theme": { "--foo": "var(--bar)" } }` throws a `CssSyntaxError` trying to parse
+  `.temp{var(--bar)}` as a declaration body.
 
 ## Status
 
-`registry.json` has `mastery-badge` (Phase 3's scaffold proof component), `flashcard` (RF-1, the
-first real Phase 4 component), and the Phase 3.5 `@didact/ui` primitive kit -- `button`, `card`,
-`badge`, `separator`, `toggle`, `toggle-group` (the last depends on `toggle` via
-`registryDependencies` rather than duplicating its file). Since both `@didact/core` items were
-rebuilt (2026-08-11) to compose from `@didact/ui` (docs/interface-norms.md), their own
-`registryDependencies` now reach across layers too -- `flashcard` depends on `card`, `button`, and
-`toggle-group`; `mastery-badge` depends on `badge` -- and each item's own `cssVars.theme` only
-lists the `--didact-*` tokens its own file references directly, not the ones its
-`registryDependencies` already bring along (mirroring `toggle-group`/`toggle`'s existing pattern).
-One residual gap worth flagging: `flashcard.tsx`'s and `mastery-badge.tsx`'s source imports
-`@didact/ui` as a real package specifier (needed for the actual pnpm workspace build), whereas
-`registryDependencies` only copies the *source files* of `card`/`button`/`toggle-group`/`badge`
-into a copy-paste consumer's project -- unlike `toggle-group`'s relative `"./toggle.js"` import,
-that package import will not resolve for a consumer who copies `flashcard`/`mastery-badge` without
-also installing `@didact/ui` as a real npm dependency. Not solved here; a future pass should either
-publish `@didact/ui` as an installable package for that path or rewrite these two items' registry
+`registry.json` is synced with the full current component inventory and uses the real token names
+(`background`, `primary`, `ring`, `radius`, …, matching `packages/theme/src/tokens.css` after the
+`--didact-*` -> real-name theme migration) throughout every item's `cssVars.theme` -- no item
+references the old `--didact-*` names anymore.
+
+Items, by layer:
+
+- **`@didact/ui` primitives** (layers 1-2): `button`, `card`, `badge`, `separator`, `toggle`,
+  `toggle-group` (depends on `toggle` via `registryDependencies` rather than duplicating its file),
+  `input`, `textarea`, `label`, `radio-group`, `checkbox`.
+- **`@didact/core` education components** (layer 3): `mastery-badge` (depends on `badge`),
+  `flashcard` (depends on `card`, `button`, `toggle-group`), `spaced-repetition-deck` (depends on
+  `card`, `button`, `flashcard`, and the `spaced-repetition` lib item), `quiz-item` (the
+  `SingleChoiceQuiz`/`MultiSelectQuiz`/`TrueFalseQuiz`/`FillInTheBlankQuiz`/`ShortAnswerQuiz`
+  family, one file, one item -- depends on `card`, `button`, `radio-group`, `checkbox`, `input`,
+  `label`, `textarea`, `toggle-group`).
+- **`@didact/spaced-repetition`**: `spaced-repetition` (`registry:lib`), the SM-2 scheduler --
+  `types.ts` plus `sm2.ts`, zero runtime dependencies. The FSRS module (`fsrs.ts`) is not a
+  registry item: it is a documented implementation stub (ROADMAP Phase 4), not a real component
+  yet.
+
+Each item's own `cssVars.theme` only lists the tokens its own file references directly, not the
+ones its `registryDependencies` already bring along (e.g. `flashcard` composes `Card`/`Button`/
+`ToggleGroup` but references no token directly itself, so it has no `cssVars`; `mastery-badge`
+composes `Badge` but adds one direct reference of its own, `muted-foreground`) -- mirroring
+`toggle-group`/`toggle`'s existing pattern. `dependencies` lists only the npm packages a file
+actually imports, checked against each package's real `package.json` rather than assumed --
+notably every Radix-backed primitive imports from the single unified `radix-ui` package (`"radix-
+ui": "1.6.7"` in `packages/ui/package.json`), not the older scoped `@radix-ui/react-*` subpackages.
+
+One residual gap worth flagging: `flashcard.tsx`, `mastery-badge.tsx`, `spaced-repetition-deck.tsx`
+and `quiz-item.tsx` import `@didact/ui` (and, for the deck, `@didact/spaced-repetition`) as real
+package specifiers (needed for the actual pnpm workspace build), whereas `registryDependencies`
+only copies the *source files* of the items they compose from into a copy-paste consumer's
+project -- unlike `toggle-group`'s relative `"./toggle.js"` import, those package imports will not
+resolve for a consumer who copies one of these items without also installing `@didact/ui` (and
+`@didact/spaced-repetition`, for the deck) as a real npm dependency. Not solved here; a future pass
+should either publish those packages as installable for that path or rewrite these items' registry
 copies to relative imports at build time. The built, servable JSON lives in `public/r/` and IS
-committed
-(same reasoning as `pnpm-lock.yaml`: it's generated, but it's the actual artifact a static host
-would serve, not throwaway build junk) -- regenerate it after any change to `registry.json` or the
-files it points at with:
+committed (same reasoning as `pnpm-lock.yaml`: it's generated, but it's the actual artifact a
+static host would serve, not throwaway build junk) -- regenerate it after any change to
+`registry.json` or the files it points at with:
 
 ```
 pnpm dlx shadcn@latest build packages/registry/registry.json -o packages/registry/public/r --cwd <repo root>
@@ -93,6 +113,5 @@ pnpm dlx shadcn@latest build packages/registry/registry.json -o packages/registr
 
 The registry copy mechanism itself is verified end to end (ROADMAP.md Phase 3 block F): `shadcn
 add` against the built item JSON, from a throwaway consumer project outside this workspace,
-produces a byte-identical copy of the real source file and a working Vite build. Further Phase 4
-components keep arriving alongside `flashcard`; this registry gets published for real hosting in
-Phase 6.
+produces a byte-identical copy of the real source file and a working Vite build. This registry
+gets published for real hosting in Phase 6.

@@ -2,17 +2,17 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "badge",
   "title": "Badge",
-  "description": "A generic label/status primitive (@didact/ui, layers 1-2): variants default/secondary/destructive/outline, asChild via Radix Slot. Distinct from packages/core's domain-specific MasteryBadge -- see packages/ui/src/components/badge.tsx for how they differ.",
+  "description": "A generic label/status primitive (@didact/ui, layers 1-2): variants default/secondary/destructive/outline/ghost/link, asChild via the unified radix-ui package's Slot. Distinct from packages/core's domain-specific MasteryBadge -- see packages/ui/src/components/badge.tsx for how they differ.",
   "dependencies": [
     "class-variance-authority",
     "clsx",
     "tailwind-merge",
-    "@radix-ui/react-slot"
+    "radix-ui"
   ],
   "files": [
     {
       "path": "packages/ui/src/components/badge.tsx",
-      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { Slot } from \"@radix-ui/react-slot\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Badge -- a small status/label primitive, ported from the same reference kit as Button (see\n * button.tsx's header comment). Unlike `MasteryBadge` (packages/core, a domain-specific component\n * with a fixed `level` prop and no layer-1 primitive), this is the generic, reusable primitive\n * `@didact/core` components can compose from for any label/tag/status chip that isn't specifically\n * about mastery. Variants: `default`, `secondary`, `destructive`, `outline`.\n */\n\nconst badgeVariants = cva(\n  [\n    \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden\",\n    \"rounded-full border border-transparent px-2 py-0.5\",\n    \"text-xs font-medium whitespace-nowrap\",\n    \"transition-[color,box-shadow] duration-[var(--didact-motion-duration)]\",\n    \"focus-visible:border-[color:var(--didact-ring)] focus-visible:ring-[3px]\",\n    \"focus-visible:ring-[color:var(--didact-ring)]/50\",\n    \"aria-invalid:border-[color:var(--didact-destructive)] aria-invalid:ring-[color:var(--didact-destructive)]/20\",\n    \"dark:aria-invalid:ring-[color:var(--didact-destructive)]/40\",\n    \"[&>svg]:pointer-events-none [&>svg]:size-3\",\n  ].join(\" \"),\n  {\n    variants: {\n      variant: {\n        default: [\n          \"bg-[color:var(--didact-primary)] text-[color:var(--didact-primary-foreground)]\",\n          \"[a&]:hover:bg-[color:var(--didact-primary)]/90\",\n        ].join(\" \"),\n        secondary: [\n          \"bg-[color:var(--didact-secondary)] text-[color:var(--didact-secondary-foreground)]\",\n          \"[a&]:hover:bg-[color:var(--didact-secondary)]/90\",\n        ].join(\" \"),\n        destructive: [\n          \"bg-[color:var(--didact-destructive)] text-[color:var(--didact-destructive-foreground)]\",\n          \"focus-visible:ring-[color:var(--didact-destructive)]/20\",\n          \"dark:bg-[color:var(--didact-destructive)]/60 dark:focus-visible:ring-[color:var(--didact-destructive)]/40\",\n          \"[a&]:hover:bg-[color:var(--didact-destructive)]/90\",\n        ].join(\" \"),\n        outline: [\n          \"border-[color:var(--didact-border)] text-[color:var(--didact-foreground)]\",\n          \"[a&]:hover:bg-[color:var(--didact-accent)] [a&]:hover:text-[color:var(--didact-accent-foreground)]\",\n        ].join(\" \"),\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nexport interface BadgeProps\n  extends React.ComponentProps<\"span\">,\n    VariantProps<typeof badgeVariants> {\n  /** Render onto the single child element instead of a `<span>` (docs/design-principles.md §4). */\n  asChild?: boolean;\n}\n\nfunction Badge({ className, variant = \"default\", asChild = false, ...props }: BadgeProps) {\n  const Comp = asChild ? Slot : \"span\";\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  );\n}\n\nexport { Badge, badgeVariants };\n",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { Slot } from \"radix-ui\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Badge -- a small status/label primitive, ported verbatim from the same reference kit as Button\n * (see button.tsx's header comment). Unlike `MasteryBadge` (packages/core, a domain-specific\n * component with a fixed `level` prop and no layer-1 primitive), this is the generic, reusable\n * primitive `@didact/core` components can compose from for any label/tag/status chip that isn't\n * specifically about mastery. Variants: `default`, `secondary`, `destructive`, `outline`, `ghost`,\n * `link`.\n */\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nexport interface BadgeProps\n  extends React.ComponentProps<\"span\">,\n    VariantProps<typeof badgeVariants> {\n  /** Render onto the single child element instead of a `<span>` (docs/design-principles.md §4). */\n  asChild?: boolean;\n}\n\nfunction Badge({ className, variant = \"default\", asChild = false, ...props }: BadgeProps) {\n  const Comp = asChild ? Slot.Root : \"span\";\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  );\n}\n\nexport { Badge, badgeVariants };\n",
       "type": "registry:ui"
     },
     {
@@ -23,18 +23,16 @@
   ],
   "cssVars": {
     "theme": {
-      "didact-foreground": "oklch(0.145 0 0)",
-      "didact-primary": "oklch(0.205 0 0)",
-      "didact-primary-foreground": "oklch(0.985 0 0)",
-      "didact-secondary": "oklch(0.97 0 0)",
-      "didact-secondary-foreground": "oklch(0.205 0 0)",
-      "didact-accent": "oklch(0.97 0 0)",
-      "didact-accent-foreground": "oklch(0.205 0 0)",
-      "didact-destructive": "oklch(0.577 0.245 27.325)",
-      "didact-destructive-foreground": "oklch(0.985 0 0)",
-      "didact-border": "oklch(0.922 0 0)",
-      "didact-ring": "oklch(0.62 0 0)",
-      "didact-motion-duration": "200ms"
+      "foreground": "oklch(0.145 0 0)",
+      "primary": "oklch(0.205 0 0)",
+      "primary-foreground": "oklch(0.985 0 0)",
+      "secondary": "oklch(0.97 0 0)",
+      "secondary-foreground": "oklch(0.205 0 0)",
+      "accent": "oklch(0.97 0 0)",
+      "accent-foreground": "oklch(0.205 0 0)",
+      "destructive": "oklch(0.577 0.245 27.325)",
+      "border": "oklch(0.922 0 0)",
+      "ring": "oklch(0.708 0 0)"
     }
   },
   "type": "registry:ui"

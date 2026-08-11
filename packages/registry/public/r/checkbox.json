@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "A two-state (or indeterminate) checkbox (@didact/ui, layers 1-2), backed by the unified radix-ui package's Checkbox, which owns aria-checked/data-state and keyboard toggling. The checked indicator is an inline SVG check rather than an icon-library import -- see packages/ui/src/components/checkbox.tsx.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge",
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "packages/ui/src/components/checkbox.tsx",
+      "content": "import * as React from \"react\";\nimport { Checkbox as CheckboxPrimitive } from \"radix-ui\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Checkbox -- a two-state (or indeterminate) checkbox, ported from the same reference kit as Button\n * (see button.tsx's header comment). Backed by `radix-ui`'s `Checkbox` (the unified `radix-ui`\n * package, same import style as Toggle/ToggleGroup), which owns `aria-checked`/`data-state` and\n * keyboard toggling. Standard Tailwind utilities reading `@didact/theme`'s tokens, the same\n * `data-slot` attributes, and the same class structure as the reference.\n *\n * Two deviations from the reference source, both matching conventions already established in this\n * kit rather than the reference's own environment:\n * - the `cn` import path (`../lib/cn.js`), as in every other primitive here;\n * - the checked indicator is an inline SVG check instead of an icon-library import, exactly as\n *   `flashcard.tsx` inlines its own icons -- Didact's kit deliberately ships no icon-library\n *   dependency.\n */\nfunction Checkbox({\n  className,\n  ...props\n}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {\n  return (\n    <CheckboxPrimitive.Root\n      data-slot=\"checkbox\"\n      className={cn(\n        \"peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:bg-primary\",\n        className,\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator\n        data-slot=\"checkbox-indicator\"\n        className=\"grid place-content-center text-current transition-none\"\n      >\n        <svg\n          viewBox=\"0 0 16 16\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2\"\n          strokeLinecap=\"round\"\n          strokeLinejoin=\"round\"\n          aria-hidden=\"true\"\n          focusable=\"false\"\n          className=\"size-3.5\"\n        >\n          <path d=\"M3 8.5 6.5 12 13 4.5\" />\n        </svg>\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  );\n}\n\nexport { Checkbox };\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "packages/ui/src/lib/cn.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "input": "oklch(0.922 0 0)",
+      "ring": "oklch(0.708 0 0)",
+      "destructive": "oklch(0.577 0.245 27.325)",
+      "primary": "oklch(0.205 0 0)",
+      "primary-foreground": "oklch(0.985 0 0)"
+    }
+  },
+  "type": "registry:ui"
+}
