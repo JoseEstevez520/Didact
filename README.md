@@ -43,21 +43,32 @@ scope, not dropped — see `research/decisions.md` (D2).
 
 ## Project status
 
-This repository corresponds to **Phase 1 completed** in `ROADMAP.md` (deep research) and the
-scaffold for phases 2-3 (documented design decision + monorepo structure). It contains:
+Phases 0–3.5 of `ROADMAP.md` are done and **Phase 4 (first component wave) is in progress** — see
+the "Current status" table in `ROADMAP.md` for the authoritative state. In short, the repo now has:
 
 - The research that grounds every decision (`specs/education-components/research.md` and the raw
   reports in `research/reports/`).
 - The **scientific validators**: machine-readable data derived from that research (WCAG criteria,
   QTI/xAPI mappings, per-requirement pedagogical evidence, declarative component schema,
   dependency drift control) in `packages/validators/`.
-- The monorepo's package structure (`packages/core`, `packages/theme`,
-  `packages/spaced-repetition`, `packages/registry`) with their API contracts documented.
+- A working **design foundation**: the `@didact/ui` primitive kit and the `@didact/theme` neutral
+  tokens, rendering faithfully in Storybook, with the design norms codified in `docs/`.
+- The first real education components (`Flashcard`, `MasteryBadge`), with more being built in
+  Phase 4.
 - Documentation of the boundary with the SkillNet adapter (`adapters/skillnet/`), with no code —
   the adapter code lives in the SkillNet repo, not here.
 
-**What it doesn't contain yet:** real implementation of the education components. That's
-**Phase 4** of the roadmap, and it builds on this repo's scaffold, not before.
+## Development
+
+```bash
+pnpm install
+pnpm --filter @didact/docs storybook   # browsable component catalog at http://localhost:6006
+pnpm -r build                          # build all packages
+pnpm -r test                           # behavior + a11y tests (Vitest + jest-axe)
+```
+
+Storybook resolves the `@didact/*` packages to their source, so editing a component is reflected
+instantly via HMR while iterating on design.
 
 ## Monorepo structure
 

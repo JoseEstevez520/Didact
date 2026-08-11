@@ -1,14 +1,34 @@
 # Roadmap — Education Components Library
 
 > Execution plan. Requires `specs/education-components/requirements.md` and `design.md` as the
-> contract. **This session only produces the spec + plan — none of the phases below are executed
-> yet.** Each phase is designed to be handed to a different agent (or a new session), with enough
-> context to not depend on this conversation.
+> contract. Each phase is designed to be handed to a different agent (or a new session), with
+> enough context to not depend on this conversation. **See "Current status" below for where the
+> project actually is.**
 >
 > Reminder from `requirements.md` §0: this is a general-purpose library, distributed through
 > Didact's own registry-based copy-paste model, usable in any project. SkillNet (`repo/`) is the
 > first real consumer, via an **adapter** — the phases marked "(adapter)" live in `repo/`, not in
 > this project, and are optional with respect to the core.
+
+## Current status (2026-08-11)
+
+| Phase | Status |
+|---|---|
+| 0 — Spec and plan | ✅ done |
+| 1 — Deep research | ✅ done — `specs/education-components/research.md` |
+| 2 — Design decision | ✅ done — `design.md` closed, no `[PENDING]` left |
+| 3 — Project scaffold | ✅ done — pnpm monorepo, Storybook, registry, `MasteryBadge` end-to-end proof |
+| 3.5 — Design foundations | ✅ done — `@didact/ui` primitive kit + real neutral design tokens + interface norms |
+| 4 — First component wave | 🚧 in progress — `Flashcard` done; `SpacedRepetitionDeck` + quiz variants building |
+| 5 (adapter) / 6 / 7 | ⏳ not started |
+
+Post-Phase-1 product decisions (recorded in `research/decisions.md` and `requirements.md` §0.3):
+the library ships **its own primitive kit** (`@didact/ui`); **Tailwind v4** is the styling layer;
+the **visual language mirrors a proven neutral component system** (real design tokens + primitives),
+verified in Storybook. A required setup detail — `@source` directives in
+`packages/theme/src/tokens.css` — makes Tailwind generate every utility the primitives use; without
+it the primitives render unstyled (this was the root cause of an early "why does it look broken"
+episode, now fixed).
 
 ## How to use this roadmap
 
@@ -32,6 +52,8 @@
 ---
 
 ## Phase 1 — Deep research
+
+**Status: done.**
 
 **Entry point:** `specs/education-components/requirements.md` §6 (open questions, 8 total).
 **Deliverable:** a research report (`specs/education-components/research.md`, created in this
@@ -95,6 +117,8 @@ explicitly").
 
 ## Phase 2 — Design decision
 
+**Status: done.**
+
 **Entry point:** `research.md` from phase 1.
 **Deliverable:** updated `design.md`: `[PENDING]` sections resolved (registry mechanism §3,
 primitives base §2, Tailwind requirement), and the §5 inventory table with final core priority,
@@ -105,6 +129,8 @@ defensible with `research.md`'s evidence, not with intuition.
 
 ## Phase 3 — Project scaffold (core)
 
+**Status: done.**
+
 **Entry point:** `design.md` closed (phase 2).
 **Deliverable:** the independent repo's structure (`Anfaia/library`): build/tsconfig
 configuration, registry mechanism (own CLI or integration with shadcn's, per what phase 2 says),
@@ -113,13 +139,36 @@ Storybook with the neutral default theme, test pipeline.
 tested, viewed in Storybook, and copied into a test project via the registry mechanism end to
 end — proving the scaffolding works before building the real components.
 
+## Phase 3.5 — Design foundations (core)
+
+**Status: done.**
+
+Added after Phase 3 once it became clear that building each component ad-hoc produced an
+inconsistent look. Establishes the shared base every education component composes from, so
+components are consistent by construction rather than reinvented each time.
+
+**Entry point:** phase 3 scaffold + the product decision to ship an own primitive kit
+(`requirements.md` §0.3).
+**Deliverable:** `@didact/ui` — a kit of base primitives (Button, Card family, Badge, Separator,
+Toggle/ToggleGroup, plus form primitives added as components need them) that all education
+components compose from, styled through the real neutral design tokens in `@didact/theme`;
+`docs/interface-norms.md` + `docs/visual-language.md` codifying the design norms (action hierarchy,
+composition, spacing, focus, motion); and the Tailwind wiring (`@source`) that makes every
+primitive utility actually generate.
+**Exit criterion:** the primitives render faithfully in Storybook, and an education component
+(`Flashcard`) composed from them looks right — no invented palette, no ad-hoc per-component
+buttons.
+
 ## Phase 4 — First wave of components (core, high priority)
 
-**Entry point:** phase 3 scaffold + phase 2 priority.
-**Deliverable:** the components marked high priority in `design.md` §5 (expected to be
-`Flashcard`, quiz variants, `Hint`/`Reveal`, matching exercises — to confirm after phase 2), each
-with: implementation, registry entry, Storybook story with its states, behavior test, a11y check
-passing.
+**Status: in progress.** `Flashcard` (RF-1) done, composed on `@didact/ui` with a reveal→rate
+flow. `SpacedRepetitionDeck` (RF-2, SM-2) and quiz variants (RF-4) are being built next.
+
+**Entry point:** phase 3.5 foundations + phase 2 priority.
+**Deliverable:** the high-priority components from `design.md` §5, ordered by pedagogical evidence
+(`Flashcard`, `SpacedRepetitionDeck`, quiz variants first; then matching/`Hint`/progress/etc.),
+each with: implementation composing from `@didact/ui`, registry entry, Storybook story with its
+states, behavior test, a11y check passing.
 **Exit criterion:** every component in this wave meets RF-12–17 of `requirements.md` (core, not
 adapter).
 
