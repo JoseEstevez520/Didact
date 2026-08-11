@@ -8,6 +8,7 @@
   "dependencies": {
     "@didact/core": "workspace:*",
     "@didact/theme": "workspace:*",
+    "@didact/ui": "workspace:*",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
@@ -29,6 +30,6 @@
     "build": "echo \"@didact/docs: no npm-consumable dist -- see build-storybook\"",
     "build-storybook": "storybook build",
     "lint": "tsc --noEmit",
-    "test": "echo \"@didact/docs: no behavior of its own to test -- it hosts packages/core's stories\""
+    "test": "echo \"@didact/docs: no behavior of its own to test -- it hosts packages/core's and packages/ui's stories\""
   }
 }
