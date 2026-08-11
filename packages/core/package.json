@@ -14,6 +14,7 @@
     }
   },
   "dependencies": {
+    "@didact/spaced-repetition": "workspace:*",
     "@didact/theme": "workspace:*",
     "@didact/ui": "workspace:*",
     "class-variance-authority": "0.7.1",

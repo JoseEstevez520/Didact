@@ -78,6 +78,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@didact/spaced-repetition':
+        specifier: workspace:*
+        version: link:../spaced-repetition
       '@didact/theme':
         specifier: workspace:*
         version: link:../theme

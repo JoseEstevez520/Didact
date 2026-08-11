@@ -16,5 +16,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ["react", "react-dom", "@didact/theme", "@didact/ui"],
+  external: ["react", "react-dom", "@didact/theme", "@didact/ui", "@didact/spaced-repetition"],
 });

@@ -52,3 +52,10 @@ export {
   type FlashcardProps,
   type FlashcardStatus,
 } from "./components/flashcard.js";
+
+export {
+  SpacedRepetitionDeck,
+  type SpacedRepetitionDeckProps,
+  type SpacedRepetitionCard,
+  type SpacedRepetitionReview,
+} from "./components/spaced-repetition-deck.js";
