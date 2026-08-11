@@ -1,0 +1,112 @@
+/**
+ * @didact/theme — tema neutro por defecto de Didact (RF-16 de requirements.md).
+ *
+ * Capa 2 ("styled layer") de la arquitectura de 3 capas (design.md §2): un solo lugar de
+ * theming, consumido por `@didact/core` (capa 3) y por `apps/docs`. Ningún componente del
+ * núcleo debe hardcodear un color/tamaño propio ni el de un consumidor concreto (SkillNet
+ * incluido) — todo pasa por estas variables.
+ *
+ * Decisión de producto (2026-08-11, ver ../../../research/decisions.md D1): Tailwind v4
+ * (CSS-first, `@theme`, OKLCH) es la capa de estilo elegida por Jose, pese a que
+ * `specs/education-components/research.md` P3 concluyó que el mecanismo de distribución de
+ * shadcn/ui no la exige técnicamente. Por eso este fichero expone el tema en DOS niveles:
+ *
+ *   1. CSS custom properties planas (`:root { --didact-* }`) — el nivel que un consumidor
+ *      sobreescribe para restylear sin tocar Tailwind en absoluto (sigue funcionando si algún
+ *      consumidor copia un componente a un proyecto sin Tailwind).
+ *   2. Un bloque `@theme` que remapea esas variables a tokens de diseño de Tailwind v4, para que
+ *      los componentes puedan usar utilidades (`bg-didact-accent`, `rounded-didact-md`, etc.)
+ *      sin fijar valores — la utilidad de Tailwind sigue leyendo la variable CSS de (1).
+ *
+ * Fuentes de las decisiones de valores (no inventadas, trazadas a research.md P5):
+ * - Tipografía sans-serif por defecto, tamaños relativos (nunca px fijo) — British Dyslexia
+ *   Association Style Guide 2023.
+ * - Límite de ~60-70 caracteres por línea — BDA Style Guide 2023.
+ * - Tokens de estado (success/warning/danger) que NUNCA se usan solos: todo componente que los
+ *   consuma debe emparejarlos con icono/texto, no solo color (BDA + WCAG 1.4.1 Use of Color).
+ * - Ratios de contraste objetivo: texto normal >=4.5:1 (WCAG 1.4.3), bordes/iconos/barras de
+ *   progreso >=3:1 (WCAG 1.4.11). Los valores OKLCH de abajo son un punto de partida razonable,
+ *   NO una auditoria de contraste verificada — pendiente de medir con una herramienta real
+ *   (p. ej. axe/Pa11y) antes de Fase 4, no dar por cumplido solo por la formula.
+ * - `prefers-reduced-motion` (WCAG 2.3.3 + RF-13): las duraciones de motion se anulan aqui a
+ *   nivel de token; cada componente sigue siendo responsable de respetarlas.
+ *
+ * ESTADO: scaffold (Fase 1-3). Paleta y escalas de referencia, no auditadas ni congeladas —
+ * ajustables sin romper el contrato de NOMBRES de variable, que es lo que consumen los
+ * componentes de `@didact/core`.
+ */
+
+@import "tailwindcss";
+
+:root {
+  /* Paleta neutra base. El consumidor sobreescribe estas variables para re-marcar (igual que
+     cualquier proyecto que adopta un tema de shadcn/ui). */
+  --didact-color-bg: oklch(100% 0 0);
+  --didact-color-fg: oklch(20% 0 0);
+  --didact-color-muted: oklch(96% 0 0);
+  --didact-color-muted-fg: oklch(40% 0 0);
+  --didact-color-border: oklch(88% 0 0);
+  --didact-color-accent: oklch(45% 0.08 260);
+  --didact-color-accent-fg: oklch(98% 0 0);
+
+  /* Tokens de estado: nunca se usan solos (BDA + WCAG 1.4.1) -- siempre acompañados de
+     icono/texto en el componente que los consuma, nunca solo color. */
+  --didact-color-success: oklch(45% 0.13 150);
+  --didact-color-success-bg: oklch(95% 0.05 150);
+  --didact-color-warning: oklch(55% 0.15 80);
+  --didact-color-warning-bg: oklch(95% 0.08 80);
+  --didact-color-danger: oklch(45% 0.16 25);
+  --didact-color-danger-bg: oklch(95% 0.05 25);
+
+  /* Foco visible, WCAG 2.4.7. Nunca outline:none sin este sustituto. */
+  --didact-focus-ring: oklch(55% 0.18 260);
+  --didact-focus-ring-width: 2px;
+
+  /* Radios */
+  --didact-radius-sm: 0.25rem;
+  --didact-radius-md: 0.5rem;
+  --didact-radius-lg: 0.75rem;
+
+  /* Tipografia: sans-serif por defecto (BDA), tamanos relativos, nunca px fijo. */
+  --didact-font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --didact-font-size-base: 1rem;
+  --didact-line-height-base: 1.5;
+  --didact-max-line-length: 70ch; /* BDA: maximo ~60-70 caracteres por linea, sin justificar */
+
+  /* Motion: la logica de prefers-reduced-motion vive en el componente (RF-13); estas variables
+     solo centralizan la duracion por defecto para que un componente no la invente por su cuenta. */
+  --didact-motion-duration: 200ms;
+  --didact-motion-duration-reduced: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --didact-motion-duration: var(--didact-motion-duration-reduced);
+  }
+}
+
+/* Bloque @theme de Tailwind v4: expone los tokens de arriba como design tokens de Tailwind
+   (utilidades como bg-didact-accent, text-didact-fg, rounded-didact-md) sin fijar el valor --
+   Tailwind sigue leyendo la variable CSS, que el consumidor puede sobreescribir. */
+@theme {
+  --color-didact-bg: var(--didact-color-bg);
+  --color-didact-fg: var(--didact-color-fg);
+  --color-didact-muted: var(--didact-color-muted);
+  --color-didact-muted-fg: var(--didact-color-muted-fg);
+  --color-didact-border: var(--didact-color-border);
+  --color-didact-accent: var(--didact-color-accent);
+  --color-didact-accent-fg: var(--didact-color-accent-fg);
+  --color-didact-success: var(--didact-color-success);
+  --color-didact-success-bg: var(--didact-color-success-bg);
+  --color-didact-warning: var(--didact-color-warning);
+  --color-didact-warning-bg: var(--didact-color-warning-bg);
+  --color-didact-danger: var(--didact-color-danger);
+  --color-didact-danger-bg: var(--didact-color-danger-bg);
+  --color-didact-focus-ring: var(--didact-focus-ring);
+
+  --radius-didact-sm: var(--didact-radius-sm);
+  --radius-didact-md: var(--didact-radius-md);
+  --radius-didact-lg: var(--didact-radius-lg);
+
+  --font-didact-sans: var(--didact-font-sans);
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@didact/theme",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Didact — tema neutro por defecto (RF-16): CSS custom properties + bloque @theme de Tailwind v4. Capa 2 (styled layer) de la arquitectura de 3 capas.",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/tokens.css",
+  "exports": {
+    "./tokens.css": "./src/tokens.css"
+  },
+  "devDependencies": {
+    "tailwindcss": "4.1.11"
+  },
+  "scripts": {
+    "build": "echo \"@didact/theme: sin build real todavia (Fase 4 del ROADMAP)\"",
+    "lint": "echo \"@didact/theme: sin lint real todavia (Fase 4 del ROADMAP)\"",
+    "test": "echo \"@didact/theme: sin tests reales todavia (Fase 4 del ROADMAP)\""
+  }
+}

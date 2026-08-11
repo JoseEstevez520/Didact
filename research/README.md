@@ -21,6 +21,11 @@ Este directorio contiene los artefactos crudos de la **Fase 1 (deep research)** 
 4. **`sources/bibliography.md`** — bibliografía completa de las URLs citadas en `research.md`,
    agrupada por tema, con una línea por fuente explicando por qué importa y su estado de
    verificación.
+5. **`decisions.md`** — registro fechado de **decisiones de producto posteriores** a la Fase 1
+   que anulan una recomendación puntual de `research.md` con conocimiento de causa (no la
+   contradicen por descuido). Hoy documenta dos: adoptar Tailwind v4 pese a que P3 concluyó que no
+   es técnicamente obligatorio (D1), y un alcance amplio por oleadas de complejidad en vez del
+   framing de "fuera de v1" para las interacciones gráficas/numéricas de §9.2 (D2).
 
 ## Estándar de honestidad
 

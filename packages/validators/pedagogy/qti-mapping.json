@@ -1,6 +1,6 @@
 {
   "source": "specs/education-components/research.md, Pregunta 6 y seccion 9.2 (IMS QTI 3.0: https://www.imsglobal.org/spec/qti/v3p0/oview , https://www.imsglobal.org/spec/qti/v3p0/impl)",
-  "note": "QTI 3.0 define 21 interacciones. Se adopta su vocabulario de nombres como referencia de naming (research.md P6), no se implementa el binding XML de QTI. RF-3/RF-4 cubren las interacciones textuales/de lista; la familia grafica/sobre-imagen y la numerica/slider NO estan en el inventario actual (hallazgo de alcance, no de nomenclatura) y se marcan con gap:true.",
+  "note": "QTI 3.0 define 21 interacciones. Se adopta su vocabulario de nombres como referencia de naming (research.md P6), no se implementa el binding XML de QTI. RF-3/RF-4 cubren las interacciones textuales/de lista; la familia grafica/sobre-imagen y la numerica/slider NO tienen RF asignado todavia en requirements.md (hallazgo de alcance, no de nomenclatura) y se marcan con gap:true. Decision de producto de Jose (2026-08-11, research/decisions.md D2): alcance amplio -- estas interacciones estan PLANIFICADAS como oleada avanzada (scope:'planned'), no descartadas.",
   "mappings": [
     {
       "rf": "RF-3",
@@ -48,18 +48,24 @@
       "gap": false
     }
   ],
-  "gapsFueraDeV1": {
-    "note": "research.md 9.2: familia entera de interacciones graficas/sobre imagen que QTI si tiene y requirements.md 4.1 no. Recomendacion (b): declarar estas interacciones como fuera de v1, candidatas a v2, en vez de dejarlas descartadas sin decirlo.",
+  "gapsPlanificados": {
+    "note": "research.md 9.2: familia entera de interacciones graficas/sobre imagen que QTI si tiene y requirements.md 4.1 no. gap:true sigue siendo cierto (hoy no tienen RF asignado en requirements.md), pero decision de producto de Jose (2026-08-11, ver research/decisions.md D2) las declara PLANIFICADAS como oleada avanzada, no descartadas -- revierte la nota anterior de 'fuera de v1'.",
     "interactions": [
-      { "qtiInteraction": "hotspotInteraction", "gap": true },
-      { "qtiInteraction": "hotTextInteraction", "gap": true },
-      { "qtiInteraction": "graphicOrderInteraction", "gap": true },
-      { "qtiInteraction": "graphicAssociateInteraction", "gap": true },
-      { "qtiInteraction": "graphicGapMatchInteraction", "gap": true },
-      { "qtiInteraction": "positionObjectInteraction", "gap": true },
-      { "qtiInteraction": "selectPointInteraction", "gap": true },
-      { "qtiInteraction": "drawingInteraction", "gap": true },
-      { "qtiInteraction": "sliderInteraction (respuesta numerica/slider)", "gap": true }
+      { "qtiInteraction": "hotspotInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "hotTextInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "graphicOrderInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "graphicAssociateInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "graphicGapMatchInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "positionObjectInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "selectPointInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "drawingInteraction", "gap": true, "scope": "planned", "phase": "oleada-avanzada" },
+      { "qtiInteraction": "sliderInteraction (respuesta numerica/slider)", "gap": true, "scope": "planned", "phase": "oleada-avanzada" }
     ]
+  },
+  "codeExercise": {
+    "note": "RF-11 (ejercicio de codigo) no es una interaccion QTI -- se registra aqui por la misma decision de producto D2 (alcance amplio, no v1 minimo). Apoyado en Sandpack para la ejecucion (research.md 9.3); la comprobacion sigue siendo trabajo propio.",
+    "rf": "RF-11",
+    "scope": "planned",
+    "phase": "oleada-avanzada"
   }
 }

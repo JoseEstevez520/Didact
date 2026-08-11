@@ -18,8 +18,10 @@ educativos (eso es la Fase 4).
 
 ## Estructura del monorepo
 
-- `packages/core` — capa 3 (componentes educativos), capa 2 (theming) y su relación con la capa 1
-  (primitivos accesibles).
+- `packages/core` — capa 3 (componentes educativos) y su relación con la capa 2 (theming) y la
+  capa 1 (primitivos accesibles).
+- `packages/theme` — capa 2 (theming): tema neutro por defecto en CSS custom properties + bloque
+  `@theme` de Tailwind v4 (RF-16).
 - `packages/spaced-repetition` — algoritmos de repetición espaciada tras una interfaz agnóstica.
 - `packages/registry` — el `registry.json` que describe el catálogo de componentes distribuible
   vía el mecanismo estilo shadcn/ui.
@@ -28,7 +30,8 @@ educativos (eso es la Fase 4).
 - `adapters/skillnet` — documentación de la frontera con SkillNet (sin código; el código del
   adaptador vive en el repo de SkillNet).
 - `apps/docs` — plan de documentación viva (Storybook), pendiente de Fase 3.
-- `research/` — artefactos de investigación (informes crudos + bibliografía).
+- `research/` — artefactos de investigación (informes crudos + bibliografía + registro de
+  decisiones de producto posteriores a la Fase 1, ver `research/decisions.md`).
 
 ## Convenciones
 
@@ -36,8 +39,14 @@ educativos (eso es la Fase 4).
   real (ver `packages/registry/README.md`).
 - No se añaden dependencias externas sin fijar versión exacta y documentar el motivo (RNF-5,
   ver `packages/validators/drift/`).
-- No se exige Tailwind en el núcleo (ver `research.md` P3): la base de theming son CSS custom
-  properties.
+- **Tailwind v4 es la capa de estilo de Didact** (decisión de producto de Jose, 2026-08-11 — ver
+  `research/decisions.md` D1), con el tema neutro centralizado en `@didact/theme`, restyleable vía
+  CSS custom properties. `research.md` P3 documentó que el mecanismo de registry de shadcn/ui no
+  exige Tailwind técnicamente — eso sigue siendo cierto, pero es una elección deliberada de estilo
+  y no un límite técnico: se adopta igualmente por consistencia visual.
+- Alcance amplio y ambicioso, no "v1 recortado" (decisión de producto de Jose, 2026-08-11 — ver
+  `research/decisions.md` D2): las interacciones gráficas/numéricas de QTI (research.md §9.2) y el
+  ejercicio de código (RF-11) están en alcance como oleadas de mayor complejidad, no descartadas.
 - Commits y PRs en español o inglés, indistintamente, pero consistentes dentro de un mismo PR.
 - No se incluyen archivos de configuración de asistentes de IA en el repo (`.gitignore` los
   excluye explícitamente).

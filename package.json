@@ -13,9 +13,9 @@
     "lint": "turbo run lint",
     "test": "turbo run test"
   },
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "adapters/*"
-  ]
+  "devDependencies": {
+    "tailwindcss": "4.1.11",
+    "@tailwindcss/postcss": "4.1.11",
+    "postcss": "8.4.49"
+  }
 }

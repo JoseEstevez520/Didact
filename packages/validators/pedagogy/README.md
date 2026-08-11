@@ -40,11 +40,15 @@ acertarla — no limitarse a un estado visual de acierto/error. `evidence.json` 
 Documenta a qué interacción de **IMS QTI 3.0** corresponde cada variante de RF-3/RF-4, siguiendo
 la recomendación de `research.md` P6 de adoptar el vocabulario de QTI como referencia de naming
 (no de implementación — no se adopta el binding XML de QTI en el núcleo). Incluye
-`gapsFueraDeV1`: la familia de interacciones **gráficas/sobre imagen** (`hotspot`, `hot-text`,
+`gapsPlanificados`: la familia de interacciones **gráficas/sobre imagen** (`hotspot`, `hot-text`,
 `graphic-order`, `graphic-associate`, `graphic-gap-match`, `position-object`, `select-point`,
 `drawing`) y de **respuesta numérica/slider**, que QTI sí define y que `requirements.md` §4.1 no
-cubre hoy — un hallazgo de alcance (§9.2), no de nomenclatura. Cada entrada de este bloque lleva
-`"gap": true`.
+cubre hoy — un hallazgo de alcance (§9.2), no de nomenclatura. Cada entrada lleva `"gap": true`
+(sigue siendo cierto: hoy no tienen RF asignado) **y además `"scope": "planned"` con
+`"phase": "oleada-avanzada"`**, reflejando la decisión de producto de Jose de 2026-08-11
+(`research/decisions.md` D2: alcance amplio, estas interacciones están planificadas, no
+descartadas). Por la misma decisión, el bloque `codeExercise` registra **RF-11** (ejercicio de
+código, apoyado en Sandpack para la ejecución) también como `scope: "planned"`.
 
 ## `xapi-mapping.json` — vocabulario de eventos de reporting
 
