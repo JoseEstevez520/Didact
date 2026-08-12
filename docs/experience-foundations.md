@@ -1,7 +1,7 @@
 # Fundamentos de experiencia y criterio de prioridad
 
-**Estado:** decisión de producto vigente  
-**Ámbito:** expansión posterior a las interacciones educativas básicas  
+**Estado:** decisión de producto vigente
+**Ámbito:** expansión posterior a las interacciones educativas básicas
 **Relacionado:** `docs/catalog-architecture.md`, `ROADMAP.md`, `research/sources/bibliography.md`
 
 ## Corrección de rumbo
@@ -94,9 +94,9 @@ También se mantiene diversidad: una oleada no entrega tres experiencias basadas
 
 ### A. Timeline de medios y checkpoints
 
-**Base:** reloj de medios, cues, transcript, selección temporal y composición de interacciones hijas.  
+**Base:** reloj de medios, cues, transcript, selección temporal y composición de interacciones hijas.
 **Experiencias:** `InteractiveMedia`, después `InteractiveVideo` y `InteractiveAudio` como variantes
-del medio, no como contratos educativos duplicados.  
+del medio, no como contratos educativos duplicados.
 **Pruebas contrastantes:** vídeo de procedimiento corporativo y audio de comprensión lingüística.
 
 No será un reproductor propio. La reproducción pertenece al elemento o proveedor; Didact coordina
@@ -105,9 +105,9 @@ tiempo educativo, actividades, transcript, respuesta, feedback y accesibilidad.
 ### B. Coordenadas, funciones y series
 
 **Base:** escalas, ejes, viewport, series, puntos manipulables, tabla equivalente y navegación por
-teclado.  
+teclado.
 **Experiencias:** `DataExplorer` y `FunctionExplorer` solo se separan si sus modelos de autoría y
-respuesta lo justifican.  
+respuesta lo justifican.
 **Pruebas contrastantes:** función matemática y serie empresarial o científica.
 
 La tabla accesible no es un fallback decorativo: debe permitir inspeccionar o editar la misma
@@ -122,8 +122,8 @@ El gate completo y la frontera engine/experiencia/recipe/consumidor están en
 
 ### C. Grafo de estados y decisiones
 
-**Base:** nodos, transiciones, variables, condiciones, historial y consecuencias.  
-**Experiencias:** `BranchingScenario` y `ProcedureTrainer`.  
+**Base:** nodos, transiciones, variables, condiciones, historial y consecuencias.
+**Experiencias:** `BranchingScenario` y `ProcedureTrainer`.
 **Pruebas contrastantes:** conversación comercial y procedimiento de seguridad.
 
 El grafo es serializable. `inkjs` puede ser un adaptador opcional, nunca el contrato público ni una
@@ -131,9 +131,9 @@ dependencia obligatoria.
 
 ### D. Runtime de sistemas y simulación
 
-**Base:** estado, parámetros, acciones, reloj opcional, observables, reset, snapshots y reglas.  
+**Base:** estado, parámetros, acciones, reloj opcional, observables, reset, snapshots y reglas.
 **Experiencia:** `SimulationLab`. `AnimationLab`, un laboratorio de física o un modelo financiero
-son recipes o especializaciones hasta que una diferencia contractual demuestre lo contrario.  
+son recipes o especializaciones hasta que una diferencia contractual demuestre lo contrario.
 **Pruebas contrastantes obligatorias:** un sistema temporal visual y un sistema no basado en
 keyframes, por ejemplo crecimiento financiero o dinámica de inventario.
 
@@ -142,9 +142,9 @@ intentos y feedback. No se estabilizará después de probarlo únicamente con an
 
 ### E. Workspace de artefactos y ejecución
 
-**Base:** editor o lienzo, archivos/artefactos, preview, ejecución aislada y protocolo de evaluación.  
+**Base:** editor o lienzo, archivos/artefactos, preview, ejecución aislada y protocolo de evaluación.
 **Experiencias:** `CodeExercise` primero; dibujo, circuitos u otros builders requieren motores de
-dominio propios aunque compartan el shell.  
+dominio propios aunque compartan el shell.
 **Pruebas contrastantes:** ejecución de código y artefacto no ejecutable antes de generalizar el
 workspace.
 

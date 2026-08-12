@@ -93,4 +93,3 @@ export const Streaming: Story = { args: { streaming: true } };
 export const Empty: Story = { args: {} };
 
 export const Disabled: Story = { args: { definition: operationalTrend, disabled: true } };
-

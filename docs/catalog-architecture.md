@@ -1,7 +1,7 @@
 # Arquitectura del catálogo y de Storybook
 
-**Estado:** fuente de verdad del producto  
-**Ámbito:** Didact como biblioteca pública y SkillNet como consumidor, nunca como límite del catálogo  
+**Estado:** fuente de verdad del producto
+**Ámbito:** Didact como biblioteca pública y SkillNet como consumidor, nunca como límite del catálogo
 **Relacionado:** `ROADMAP.md`, `specs/education-components/catalog-taxonomy.md`, `apps/docs/README.md`
 
 La estrategia de descubrimiento y descargas agrupadas se define en

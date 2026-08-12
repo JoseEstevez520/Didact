@@ -1,6 +1,6 @@
 # Domain tools foundation
 
-**Status:** first wave implemented  
+**Status:** first wave implemented
 **Scope:** reusable learning tools that model a domain action without coupling Didact to one subject or consumer
 
 ## Why this layer exists

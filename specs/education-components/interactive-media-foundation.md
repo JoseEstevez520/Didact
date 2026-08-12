@@ -1,7 +1,7 @@
 # Interactive Media foundation
 
-**Estado:** implementación experimental disponible  
-**Schema:** `@didact/schema` / `InteractiveMediaDefinition` 1.0.0  
+**Estado:** implementación experimental disponible
+**Schema:** `@didact/schema` / `InteractiveMediaDefinition` 1.0.0
 **Manifest:** `didact.interactive-media` 1.0.0, available/experimental
 
 ## Problema educativo

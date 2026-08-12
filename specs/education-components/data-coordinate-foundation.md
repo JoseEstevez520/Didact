@@ -1,7 +1,7 @@
 # Data & Coordinate foundation
 
-**Estado:** disponible como contrato experimental  
-**Experiencia pública inicial:** `DataExplorer`  
+**Estado:** disponible como contrato experimental
+**Experiencia pública inicial:** `DataExplorer`
 **Verticales de validación:** función matemática y serie temporal empresarial/científica
 
 ## Decisión
@@ -100,4 +100,3 @@ contrato experimental.
 - stories y tests prueban mouse, teclado, tabla y estado controlado;
 - el registry instala la experiencia y su schema sin imports internos rotos;
 - telemetría o integraciones reales determinan si se estabiliza o se divide.
-

@@ -1,7 +1,7 @@
 # System Simulation foundation
 
-**Estado:** disponible como contrato experimental  
-**Experiencia pública:** `SimulationLab`  
+**Estado:** disponible como contrato experimental
+**Experiencia pública:** `SimulationLab`
 **Verticales:** movimiento temporal visual e inventario operacional
 
 ## Decisión

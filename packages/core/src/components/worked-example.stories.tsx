@@ -50,4 +50,3 @@ export const Streaming: Story = {
     steps: [{ id: "partial" }, { id: "ready", title: "Next step", content: "This part is ready." }],
   },
 };
-

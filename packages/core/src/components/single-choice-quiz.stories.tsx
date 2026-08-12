@@ -26,4 +26,3 @@ export const WithFeedback: Story = {
   args: { feedback: "Mercury is the innermost planet, orbiting closer to the Sun than Venus." },
 };
 export const Disabled: Story = { args: { disabled: true } };
-

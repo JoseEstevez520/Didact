@@ -24,4 +24,3 @@ export const ActiveRecall: Story = {
     example: <span>Example: a pond and all the organisms, water, soil, and light within it.</span>,
   },
 };
-

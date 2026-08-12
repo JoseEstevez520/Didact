@@ -1,7 +1,7 @@
 # Decision & Procedure foundation
 
-**Estado:** disponible como contrato experimental  
-**Experiencia pública:** `BranchingScenario`  
+**Estado:** disponible como contrato experimental
+**Experiencia pública:** `BranchingScenario`
 **Verticales:** conversación comercial y procedimiento de seguridad
 
 ## Decisión

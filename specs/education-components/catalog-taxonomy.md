@@ -1,7 +1,7 @@
 # Taxonomía y criterio de admisión del catálogo
 
-**Estado:** contrato inicial de la Fase 5  
-**Fuente ejecutable:** `packages/schema`  
+**Estado:** contrato inicial de la Fase 5
+**Fuente ejecutable:** `packages/schema`
 **Alcance:** componentes educativos reutilizables de Didact, independientemente de SkillNet
 
 ## Por qué existe esta taxonomía

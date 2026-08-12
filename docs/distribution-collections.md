@@ -1,7 +1,7 @@
 # Facetas, colecciones y kits descargables
 
-**Estado:** implementado y verificado  
-**Ámbito:** descubrimiento e instalación del catálogo público de Didact  
+**Estado:** implementado y verificado
+**Ámbito:** descubrimiento e instalación del catálogo público de Didact
 **Relacionado:** `docs/catalog-architecture.md`, `packages/catalog`, `packages/registry`, `ROADMAP.md`
 
 ## Decisión
