@@ -22,8 +22,8 @@ public distribution is not complete until consumers have an immutable, unauthent
 5. Smoke-test one basic component, one drag component, one schema-backed component,
    `InteractiveMedia`, `MeasurementLab`, and one complete kit.
 6. Publish release notes with stability labels and known runtime requirements.
-7. Install the release in a real consumer such as SkillNet and convert general failures into Didact
-   regression tests.
+7. Install the release in [SkillNet](https://github.com/ANFAIA/SkillNet), Didact's first real
+   consumer, and convert general integration failures into Didact regression tests.
 
 ## External installation matrix
 

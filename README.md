@@ -38,7 +38,10 @@ Didact is built around four commitments:
 - **Storybook documentation**, controlled/uncontrolled states, streaming support, localization,
   behavior tests, and automated accessibility checks.
 
-SkillNet is the first real consumer, but Didact contains no SkillNet-specific adapter or data model.
+[SkillNet](https://github.com/ANFAIA/SkillNet) is Didact's first real consumer and the product where
+the library is validated in dynamically generated corporate courses. Didact remains independent:
+it contains no SkillNet-specific adapter or data model, and every public contract must remain useful
+to other learning products.
 
 ## Quick start
 
