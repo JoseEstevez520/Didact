@@ -3,7 +3,7 @@
  *
  * Public entry point. The package exposes:
  * - the agnostic interface (`SpacedRepetitionScheduler`) plus its `ReviewState`/`ReviewGrade`/
- *   `ReviewResult` vocabulary (see `types.ts`) — the contract `@didact/core`'s `SpacedRepetitionDeck`
+ *   `ReviewResult` vocabulary (see `types.ts`) — the contract retrieval-practice flows
  *   and any consumer program against, without knowing which algorithm is behind it;
  * - `sm2Scheduler` (the default, fully implemented SM-2 arithmetic — see `sm2.ts`);
  * - `fsrsScheduler` (an advanced mode whose numerical implementation is still a documented stub —

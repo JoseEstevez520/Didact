@@ -5,7 +5,7 @@
   "byRequirement": [
     {
       "rf": "RF-2",
-      "component": "SpacedRepetitionDeck",
+      "component": "RetrievalPracticeSession",
       "strength": "high",
       "source": "Dunlosky et al. 2013 (SAGE 403, reconstructed via APS/PubMed: https://pubmed.ncbi.nlm.nih.gov/26173288/)",
       "note": "Distributed practice is one of only two of the 10 study techniques evaluated with high utility. It has the strongest backing in the inventory alongside RF-4."

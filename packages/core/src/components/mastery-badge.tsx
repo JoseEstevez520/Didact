@@ -25,7 +25,7 @@ import { cn } from "../lib/cn.js";
  * (Beginner/Intermediate/Advanced), never only a color swatch -- WCAG 1.4.1 Use of Color. The
  * optional `interactive` mode renders a native `<button>` (keyboard-operable, focusable, with
  * `aria-pressed`) instead of a `<div onClick>`, via `Badge`'s `asChild`, and its focus-visible
- * style is the same underlying `Badge` classes (`focus-visible:ring-ring/50`, WCAG 2.4.7) either
+ * style is the same underlying `Badge` classes (`focus-visible:outline-ring`, WCAG 2.4.7) either
  * way.
  *
  * Customization (see `docs/design-principles.md` §2-3): this component accepts `variant` (mapped

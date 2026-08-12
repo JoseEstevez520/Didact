@@ -96,7 +96,7 @@ function nextEasinessFactor(previous: number, quality: number): number {
 
 /**
  * SM-2 scheduler. Pure arithmetic, no persistence — the default `SpacedRepetitionScheduler` for
- * Didact's `SpacedRepetitionDeck` (`@didact/core`, RF-2).
+ * Didact retrieval-practice flows (`@didact/core`, RF-2).
  */
 export const sm2Scheduler: SpacedRepetitionScheduler = {
   createInitialState(): SM2State {

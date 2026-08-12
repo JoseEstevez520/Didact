@@ -4,7 +4,7 @@
  * Entry point for layer 3 (education molecules) of the 3-layer architecture described in
  * `specs/education-components/design.md` §2:
  *
- *   3. Education molecules  — Flashcard, MatchingExercise, QuizItem, SpacedRepetitionDeck,
+ *   3. Education molecules  — Flashcard, MatchingExercise, QuizItem,
  *                              Glossary, Hint, Timeline, Rubric, MasteryBadge, code exercise
  *                              (RF-11, Sandpack), QTI graphical/numeric interactions
  *                              (research.md §9.2) — broad scope organized in complexity waves,
@@ -54,13 +54,6 @@ export {
 } from "./components/flashcard.js";
 
 export {
-  SpacedRepetitionDeck,
-  type SpacedRepetitionDeckProps,
-  type SpacedRepetitionCard,
-  type SpacedRepetitionReview,
-} from "./components/spaced-repetition-deck.js";
-
-export {
   SingleChoiceQuiz,
   type SingleChoiceQuizProps,
   MultiSelectQuiz,
@@ -74,3 +67,256 @@ export {
   type QuizOption,
   type QuizCorrectness,
 } from "./components/quiz-item.js";
+
+export {
+  Timeline,
+  type TimelineProps,
+  type TimelineStep,
+  type TimelineStepStatus,
+  type TimelineLabels,
+} from "./components/timeline.js";
+
+export {
+  MatchingExercise,
+  type MatchingExerciseProps,
+  SortExercise,
+  type SortExerciseProps,
+  CategorizeExercise,
+  type CategorizeExerciseProps,
+  type ExerciseChoice,
+  type ExerciseAssignments,
+  type ExerciseSubmission,
+} from "./components/matching-exercises.js";
+
+export {
+  Glossary,
+  type GlossaryProps,
+  type GlossaryEntry,
+  Term,
+  type TermProps,
+  type TermLabels,
+} from "./components/glossary.js";
+
+export {
+  ProgressIndicator,
+  type ProgressIndicatorProps,
+  ProgressOverview,
+  type ProgressOverviewProps,
+  type ProgressEntry,
+  type ProgressKind,
+  type ProgressLabels,
+} from "./components/progress-indicator.js";
+
+export {
+  Reveal,
+  type RevealProps,
+  Hint,
+  HintReveal,
+  type HintProps,
+  type HintRevealLabels,
+} from "./components/hint-reveal.js";
+
+export {
+  Rubric,
+  type RubricProps,
+  type RubricCriterion,
+  type RubricLevel,
+  type RubricValue,
+  type RubricLabels,
+} from "./components/rubric.js";
+
+export {
+  PracticeSet,
+  type PracticeSetProps,
+  type PracticeSetItem,
+  type PracticeSetAttempt,
+  type PracticeSetPhase,
+  type PracticeSetLabels,
+} from "./components/practice-set.js";
+
+export {
+  RetrievalPracticeSession,
+  type RetrievalPracticeSessionProps,
+  type RetrievalPracticeItem,
+  type RetrievalPracticeReview,
+  type RetrievalPracticePersistence,
+  type RetrievalPracticeLabels,
+} from "./components/retrieval-practice-session.js";
+
+export {
+  SelfExplanationPrompt,
+  type SelfExplanationPromptProps,
+  type SelfExplanationPromptLabels,
+  WorkedExample,
+  type WorkedExampleProps,
+  type WorkedExampleStep,
+  type WorkedExampleLabels,
+  CompletionProblem,
+  type CompletionProblemProps,
+  type CompletionProblemStep,
+  type CompletionWorkedStep,
+  type CompletionMissingStep,
+  type CompletionProblemValue,
+  type CompletionProblemResult,
+  type CompletionStepStatus,
+  type CompletionProblemLabels,
+} from "./components/generative-learning.js";
+
+export {
+  NumericQuestion,
+  type NumericQuestionProps,
+  type NumericQuestionRule,
+  type NumericTolerance,
+  type NumericQuestionUnit,
+  type NumericQuestionNumberFormat,
+  type NumericQuestionStatus,
+  type NumericQuestionReason,
+  type NumericQuestionResult,
+  type NumericQuestionLabels,
+  type NumericQuestionInputContext,
+} from "./components/numeric-question.js";
+
+export {
+  WordBank,
+  type WordBankProps,
+  type WordBankOption,
+  type WordBankGap,
+  type WordBankValue,
+  type WordBankGapStatus,
+  type WordBankResultStatus,
+  type WordBankResult,
+  type WordBankLabels,
+} from "./components/word-bank.js";
+
+export {
+  Hotspot,
+  type HotspotProps,
+  type HotspotPoint,
+  type HotspotRegion,
+  type HotspotValue,
+  type HotspotResult,
+  type HotspotGrading,
+  type HotspotSubmitPayload,
+  type HotspotLabels,
+} from "./components/hotspot.js";
+
+export {
+  MediaPlayer,
+  type MediaPlayerProps,
+  type MediaPlayerTrack,
+  type MediaPlayerLabels,
+  type MediaPlayerController,
+} from "./components/media-player.js";
+
+export {
+  InteractiveMedia,
+  type InteractiveMediaProps,
+  type InteractiveMediaLabels,
+  type InteractiveMediaPlayerController,
+  type InteractiveMediaPlayerContext,
+  type InteractiveMediaActivityContext,
+} from "./components/interactive-media.js";
+
+export {
+  DataExplorer,
+  type DataExplorerProps,
+  type DataExplorerLabels,
+} from "./components/data-explorer.js";
+
+export {
+  BranchingScenario,
+  type BranchingScenarioProps,
+  type BranchingScenarioLabels,
+} from "./components/branching-scenario.js";
+
+export {
+  SimulationLab,
+  type SimulationLabProps,
+  type SimulationLabLabels,
+  type SimulationRuntimeContext,
+  type SimulationActionResult,
+} from "./components/simulation-lab.js";
+
+export {
+  CodeExercise,
+  type CodeExerciseProps,
+  type CodeExerciseLabels,
+} from "./components/code-exercise.js";
+
+export {
+  LabelDiagram,
+  type LabelDiagramProps,
+  type LabelDiagramTarget,
+  type LabelDiagramItem,
+  type LabelDiagramValue,
+  type LabelDiagramResult,
+  type LabelDiagramResultStatus,
+  type LabelDiagramTargetStatus,
+  type LabelDiagramLabels,
+} from "./components/label-diagram.js";
+
+export {
+  ConceptMap,
+  type ConceptMapProps,
+  type ConceptMapDefinition,
+  type ConceptMapNode,
+  type ConceptMapRelation,
+  type ConceptMapState,
+  type ConceptMapEvent,
+  type ConceptMapEvaluationResult,
+  type ConceptMapEvaluationStatus,
+  type ConceptMapLabels,
+  type ConceptMapText,
+} from "./components/concept-map.js";
+
+export {
+  DrawingResponse,
+  type DrawingResponseProps,
+  type DrawingResponseDefinition,
+  type DrawingResponseState,
+  type DrawingStroke,
+  type DrawingPoint,
+  type DrawingTool,
+  type DrawingEvaluation,
+  type DrawingResponseResult,
+  type DrawingResponseLabels,
+} from "./components/drawing-response.js";
+
+export {
+  EquationWorkbench,
+  type EquationWorkbenchProps,
+  type EquationWorkbenchDefinition,
+  type EquationWorkbenchState,
+  type EquationStep,
+  type EquationWorkbenchEvaluation,
+  type EquationWorkbenchResult,
+  type EquationRendererContext,
+  type EquationWorkbenchLabels,
+} from "./components/equation-workbench.js";
+
+export {
+  EvidenceAnnotation,
+  type EvidenceAnnotationProps,
+  type EvidenceAnnotationDefinition,
+  type EvidenceAnnotationState,
+  type EvidenceAnnotationItem,
+  type EvidenceAnnotationText,
+  type EvidenceSegment,
+  type EvidenceCategory,
+  type EvidenceClaim,
+  type EvidenceAnnotationEvaluation,
+  type EvidenceAnnotationResult,
+  type EvidenceAnnotationLabels,
+} from "./components/evidence-annotation.js";
+
+export {
+  MeasurementLab,
+  type MeasurementLabProps,
+  type MeasurementLabDefinition,
+  type MeasurementLabState,
+  type MeasurementInstrumentKind,
+  type MeasurementLabEvaluation,
+  type MeasurementLabResult,
+  type MeasurementLabStatus,
+  type MeasurementLabLabels,
+} from "./components/measurement-lab.js";

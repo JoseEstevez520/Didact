@@ -9,7 +9,7 @@ import { MasteryBadge } from "./mastery-badge.js";
  * a bare "it's accessible" claim.
  */
 const meta = {
-  title: "Core/MasteryBadge",
+  title: "02 Learning patterns/Progress & mastery/Mastery Badge",
   component: MasteryBadge,
   parameters: {
     layout: "centered",

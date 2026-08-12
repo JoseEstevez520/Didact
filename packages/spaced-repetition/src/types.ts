@@ -28,7 +28,7 @@ export type ReviewGrade = "again" | "hard" | "good" | "easy";
 
 /**
  * Result of scheduling a review: the new opaque state to persist and the date the card becomes
- * due again. `SpacedRepetitionDeck` (a layer above, in `@didact/core`, RF-2) uses `dueAt` to
+ * due again. Retrieval-practice orchestrators (a layer above, in `@didact/core`, RF-2) use `dueAt` to
  * decide which card to show next.
  */
 export interface ReviewResult {

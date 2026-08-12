@@ -10,7 +10,7 @@ import { Flashcard } from "./flashcard.js";
  * each with the WCAG criterion it exercises instead of a bare "it's accessible" claim.
  */
 const meta = {
-  title: "Core/Flashcard",
+  title: "02 Learning patterns/Practice & memory/Flashcard",
   component: Flashcard,
   parameters: {
     layout: "centered",
@@ -141,8 +141,8 @@ export const AllVariants: Story = {
       description: {
         story:
           "The `variant` prop overrides the neutral Card look (docs/design-principles.md §2) on " +
-          "top of `@didact/ui`'s Card -- `default` keeps Card's own fill/shadow, `outline` turns " +
-          "it transparent and shadow-less while keeping the hairline border.",
+          "top of `@didact/ui`'s Card -- `default` keeps Card's own fill and fixed border, while " +
+          "`outline` turns the fill transparent and keeps the same hairline boundary.",
       },
     },
   },

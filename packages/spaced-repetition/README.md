@@ -1,6 +1,6 @@
 # @didact/spaced-repetition
 
-Spaced-repetition algorithms for the `SpacedRepetitionDeck` component (RF-2 in
+Spaced-repetition algorithms for `RetrievalPracticeSession` and consumer-defined practice flows (RF-2 in
 `requirements.md`), behind a **persistence-agnostic interface**: the scheduler never saves
 anything, it only receives and returns state — the consuming project decides where it lives
 (localStorage, its own database, etc.).
@@ -53,7 +53,7 @@ it as a possible optional "simple mode," not implemented in this scaffold.
 ## What's non-negotiable
 
 Whichever algorithm is active, it's always exposed behind the agnostic interface above — switching
-algorithms must not break consumers who already integrated `SpacedRepetitionDeck`.
+algorithms must not break consumers who already integrated the scheduler contract.
 
 ## Status
 

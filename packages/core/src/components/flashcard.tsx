@@ -23,9 +23,9 @@ import { cn } from "../lib/cn.js";
  *    advancing to the next card -- see the `flipped`/`onFlip` docs below).
  *
  * Composition (docs/interface-norms.md "Card composition"): the Flashcard IS a `Card`. `Card`
- * itself supplies the surface (fill, border, radius, shadow) and its fixed `px-6`/`py-6`/`gap-6`
+ * itself supplies the surface (fill, fixed border, radius) and its fixed `px-6`/`py-6`/`gap-6`
  * padding is left alone, per that doc, rather than special-cased per instance -- `variant`/`size`
- * below only ever add classes on top (transparent/shadow-less for `outline`, max-width + face
+ * below only ever add classes on top (transparent for `outline`, max-width + face
  * text scale for `size`), never touch Card's own spacing. `CardContent` holds the flipping front/
  * back faces; `CardFooter` holds the rating `ToggleGroup`, rendered only once `flipped` is true.
  *
@@ -68,7 +68,7 @@ import { cn } from "../lib/cn.js";
  *   (`aria-hidden`) icon, and the selected item is only ever reinforced, never carried solely, by
  *   `Toggle`'s background-color change for `data-state=on`.
  * - Every interactive element's focus style comes from `@didact/ui`'s `Button`/`Toggle`, which
- *   already read the theme's ring token with the same 3px/50%-opacity ring plus ring-colored
+ *   already read the theme's ring token with the same 2px offset outline plus ring-colored
  *   border used across Didact (docs/visual-language.md, "Focus") -- WCAG 2.4.7. Nothing in this
  *   file reimplements or overrides that.
  *
@@ -93,7 +93,7 @@ const flashcardVariants = cva("w-full", {
   variants: {
     variant: {
       default: "",
-      outline: "bg-transparent shadow-none",
+      outline: "bg-transparent",
     },
     size: {
       sm: "max-w-xs",

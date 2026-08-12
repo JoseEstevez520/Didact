@@ -7,6 +7,16 @@
   },
   "pinned": [
     {
+      "dependency": "@dnd-kit/core",
+      "exactVersion": "6.3.1",
+      "reason": "RF-3 drag/drop orchestration and pointer/keyboard sensors. The select-source then select-target controls remain a separate non-dragging alternative for WCAG 2.5.7; dnd-kit is pinned because it remains a runtime dependency rather than copied source. Its published peer range (React/React DOM >=16.8.0) includes this workspace's React 19.2.8."
+    },
+    {
+      "dependency": "@dnd-kit/sortable",
+      "exactVersion": "10.0.0",
+      "reason": "RF-3 sortable-list preset, keyboard coordinates and arrayMove helper. Pinned with @dnd-kit/core because the registry copies Didact's component source but not dnd-kit's runtime; its peer requirement @dnd-kit/core ^6.3.0 is satisfied by the exact 6.3.1 pin."
+    },
+    {
       "dependency": "@radix-ui/react-dialog",
       "exactVersion": "EXAMPLE-NOT-INSTALLED-1.1.23",
       "reason": "Commented EXAMPLE, not a real dependency installed yet. Layer 1 (accessible primitives) from design.md 2. research.md P2: Radix declares its React 19 peer pinned to 19.0.0-rc.1 (not ^19.0.0) in its latest version today -- documented installation friction, not a functional blocker. It would be pinned to an exact version (not a range) precisely because Radix isn't copied as our own code, it remains a real dependency (design.md 9: 'the copy-paste model protects the components, not their internal behavioral dependencies')."

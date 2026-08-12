@@ -2,13 +2,13 @@
 
 Layer 3 of Didact's 3-layer architecture (`specs/education-components/design.md` §2): the
 **education components** with pedagogical meaning (Flashcard, MatchingExercise, QuizItem,
-SpacedRepetitionDeck, Glossary, Hint/Reveal, Timeline, Rubric, MasteryBadge…), built on top of a
+Glossary, Hint/Reveal, Timeline, Rubric, MasteryBadge…), built on top of a
 layer 2 of neutral theming and a layer 1 of accessible primitives.
 
 ```
 ┌─────────────────────────────────────────────┐
 │ 3. Education molecules                       │  Flashcard, MatchingExercise, QuizItem,
-│    (components with pedagogical meaning)     │  SpacedRepetitionDeck, Glossary, Hint,
+│    (components with pedagogical meaning)     │  RetrievalPracticeSession, Glossary, Hint,
 │                                               │  Timeline, Rubric, MasteryBadge…
 ├─────────────────────────────────────────────┤
 │ 2. Styled layer                               │  Tailwind v4 + cva over @didact/theme's
@@ -21,8 +21,34 @@ layer 2 of neutral theming and a layer 1 of accessible primitives.
 
 ## Status
 
-**Scaffold (Phase 1-3 of `ROADMAP.md`). Real component implementation is Phase 4.**
-`src/index.ts` doesn't export any components yet — it only documents the entry-point contract.
+`MediaPlayer` is the neutral audio/video foundation: it can be used alone without a transcript,
+checkpoints, title, objective or completion policy. `InteractiveMedia` composes that player with the
+educational layer when a course needs timed activities, transcript navigation and completion state.
+The foundation does not count as an additional educational type in the catalog.
+
+`DataExplorer` is the experimental data-and-coordinate experience. Mathematical functions and
+scientific or business series share its axes, series, selection and point-override state. The graph
+and table are synchronized projections of that state. `FunctionExplorer` is deliberately not a
+second export while it would only duplicate this contract; hosts inject and secure any expression
+evaluator they choose to use.
+
+`BranchingScenario` is the experimental decision-and-procedure experience. Conversations and
+procedures share a serializable graph of variables, conditions, effects and history. A separate
+`ProcedureTrainer` is intentionally not exported while it would only rename the same contract.
+
+`SimulationLab` is the experimental systems foundation. It owns accessible controls and serializable
+state, while consumers inject deterministic transitions and domain renderers. Motion, physics,
+finance and inventory remain recipes until one proves that it needs a different public contract.
+
+**Diversification across Phases 8–10 is in progress.** The package exports `Flashcard`, `RetrievalPracticeSession`, the `QuizItem`
+family, `Timeline`, `Glossary`/`Term`, `Hint`/`Reveal`, `ProgressIndicator`/`ProgressOverview`,
+`Rubric`, the RF-3 `MatchingExercise`/`SortExercise`/`CategorizeExercise` family, and
+`MasteryBadge`, plus the first active-learning bundle: `PracticeSet`,
+`RetrievalPracticeSession`, `SelfExplanationPrompt`, `WorkedExample`, and `CompletionProblem`.
+The next cross-domain bundle adds `NumericQuestion`, `WordBank`, and `Hotspot` for quantitative,
+language, and spatial learning activities.
+Each component ships with Storybook states, behavior and automated accessibility tests, and a
+registry item.
 
 ## Decisions already closed (not reopened during implementation)
 
