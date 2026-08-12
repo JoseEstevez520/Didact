@@ -1,0 +1,190 @@
+import type { ComponentManifest } from "@didact/schema";
+
+import {
+  accessibility,
+  evidence,
+  listField,
+  objectField,
+  qti,
+  schemaVersion,
+} from "../manifest-helpers";
+
+const experimentalLifecycle = { availability: "available", maturity: "experimental" } as const;
+
+export const interactiveMediaManifest = {
+  id: "didact.interactive-media",
+  name: "Interactive Media",
+  description: "Coordinates timed learning checkpoints, transcripts and completion over audio or video without owning media playback.",
+  role: "composite",
+  families: ["media", "sequence-procedure"],
+  facets: {
+    subjects: ["general", "language", "business", "technical"],
+    representations: ["temporal", "audio", "video", "procedural"],
+    learnerActions: ["inspect", "interpret", "respond"],
+    purposes: ["present", "practice", "orchestrate"],
+    contexts: ["self-paced", "classroom", "corporate", "compliance", "onboarding", "technical-training"],
+  },
+  lifecycle: experimentalLifecycle,
+  version: { schema: schemaVersion, component: "1.0.0" },
+  variants: [
+    { id: "audio", name: "Interactive audio" },
+    { id: "video", name: "Interactive video" },
+  ],
+  authoring: {
+    version: schemaVersion,
+    fields: [
+      objectField("media", "Media", "Audio/video asset, duration, tracks and accessibility equivalents."),
+      listField("transcript", "Transcript", "Timed, ordered and speaker-labelled transcript cues."),
+      listField("checkpoints", "Checkpoints", "Timed references to embedded Didact activities."),
+      objectField("completion", "Completion", "Media progress and required-checkpoint completion policy."),
+    ],
+    supportsLocalization: true,
+  },
+  capabilities: [
+    "media:audio",
+    "media:video",
+    "media:transcript",
+    "media:captions",
+    "orchestration:timed-checkpoints",
+    "response:composite",
+    "result:child-owned",
+    "completion:policy",
+  ],
+  evidence: [evidence(
+    "h5p-2023-interactive-media-usage",
+    "not-evaluated",
+    "H5P (2023), Status update: What content types are most popular?",
+    "Interactive Video was widely used in the measured H5P.com corpus and supports prioritizing the authoring need.",
+    "Usage is not learning-effect evidence, the data describe H5P.com in 2022, and an interactive wrapper has no automatic pedagogical benefit.",
+  )],
+  accessibility: accessibility(
+    "Native or adapter playback must expose keyboard controls. Audio requires a transcript; spoken video requires captions; meaningful visual video requires a description equivalent. Checkpoints are reachable outside the timeline and never depend on timing alone.",
+    ["1.2.1", "1.2.2", "1.2.3", "1.2.5", "2.1.1", "2.2.1", "2.2.2", "2.4.3", "4.1.3"],
+    { captions: "required" },
+  ),
+  mappings: {
+    qti: qti("none", "none", "The composite owns timing and completion; each child checkpoint retains its own QTI mapping."),
+    xapi: { verbs: ["experienced", "attempted", "completed"], notes: "Report media/session events separately and preserve each child activity's interaction type." },
+  },
+  optionalDependencies: [],
+  tags: ["interactive-video", "interactive-audio", "checkpoints", "transcript", "foundation:media", "implemented:@didact/core/InteractiveMedia"],
+} as const satisfies ComponentManifest;
+
+export const branchingScenarioManifest = {
+  id: "didact.branching-scenario",
+  name: "Branching Scenario",
+  description: "Lets learners make contextual decisions whose conditions, variable effects and consequences form a serializable state graph.",
+  role: "interaction",
+  families: ["scenario-simulation", "sequence-procedure"],
+  facets: { subjects: ["general", "business", "technical"], representations: ["text", "procedural", "network"], learnerActions: ["decide", "interpret", "experiment"], purposes: ["practice", "assess", "simulate"], contexts: ["self-paced", "corporate", "compliance", "onboarding", "technical-training"] },
+  lifecycle: experimentalLifecycle,
+  version: { schema: schemaVersion, component: "1.0.0" },
+  variants: [{ id: "conversation", name: "Branching conversation" }, { id: "procedure", name: "Procedure practice" }],
+  authoring: { version: schemaVersion, fields: [objectField("initialVariables", "Initial variables", "Serializable state available to conditions and effects."), listField("nodes", "Nodes", "Decision and outcome nodes with stable identifiers."), objectField("navigation", "Navigation", "Backtracking and restart policy.")], supportsLocalization: true },
+  capabilities: ["scenario:branching", "state:variables", "state:conditions", "state:effects", "navigation:history", "feedback:consequences", "result:outcome"],
+  evidence: [evidence("sitzmann-2011-simulation-games", "low", "Sitzmann (2011), A meta-analytic examination of the instructional effectiveness of computer-based simulation games", "Simulation practice can support learning when it actively engages learners and is integrated with instructional support.", "The evidence concerns simulation games broadly, includes publication-bias limitations, and does not validate every branching scenario or UI pattern.")],
+  accessibility: accessibility("Choices are keyboard-operable controls in document order. Consequences are announced, unavailable routes remain disabled, and no timed or pointer-only action is required.", ["1.3.1", "2.1.1", "2.4.3", "2.4.6", "3.3.2", "4.1.2", "4.1.3"]),
+  mappings: { qti: qti("customInteraction", "approximate", "QTI has no native state-graph scenario; a PCI adapter may preserve it."), xapi: { interactionType: "performance", verbs: ["attempted", "interacted", "completed"], notes: "Report meaningful decisions and final outcomes." } },
+  optionalDependencies: [{ package: "inkjs", purpose: "Optional Ink adapter; never the public contract.", fallback: "Use the native DecisionGraphDefinition authoring format." }],
+  tags: ["branching", "scenario", "procedure", "decision-graph", "foundation:decision-procedure", "implemented:@didact/core/BranchingScenario"],
+} as const satisfies ComponentManifest;
+
+export const simulationLabManifest = {
+  id: "didact.simulation-lab",
+  name: "Simulation Lab",
+  description: "Coordinates parameters, deterministic state transitions, time, domain actions, observables and snapshots without owning a domain-specific solver.",
+  role: "interaction",
+  families: ["scenario-simulation", "technical-practice", "knowledge-representation"],
+  facets: { subjects: ["mathematics", "science", "data", "business", "technical"], representations: ["numeric", "temporal", "system"], learnerActions: ["manipulate", "experiment", "interpret"], purposes: ["explore", "practice", "simulate"], contexts: ["self-paced", "classroom", "corporate", "technical-training"] },
+  lifecycle: experimentalLifecycle,
+  version: { schema: schemaVersion, component: "1.0.0" },
+  variants: [{ id: "temporal-visual", name: "Temporal visual system" }, { id: "state-model", name: "State-based system" }],
+  authoring: { version: schemaVersion, fields: [listField("parameters", "Parameters", "Learner-adjustable inputs."), listField("variables", "Observables", "Typed state exposed by the runtime."), listField("actions", "Actions", "Domain operations supplied by the runtime."), objectField("clock", "Clock", "Manual or continuous deterministic time policy."), objectField("snapshots", "Snapshots", "Optional save and restore policy.")], supportsLocalization: true },
+  capabilities: ["simulation:runtime-port", "simulation:parameters", "simulation:actions", "simulation:clock", "simulation:observables", "simulation:snapshots", "result:ungraded"],
+  evidence: [evidence("sitzmann-2011-simulation-games", "low", "Sitzmann (2011), A meta-analytic examination of the instructional effectiveness of computer-based simulation games", "Simulation practice can support learning when learners actively control relevant variables and receive instructional support.", "This component is infrastructure for simulation practice; the evidence does not validate a bare model without prediction, task and feedback.")],
+  accessibility: accessibility("Every parameter and action has a standard control. Observable values provide a textual equivalent to custom visual renderers; play, pause, step, reset and snapshot controls have accessible names and never require dragging.", ["1.1.1", "1.3.1", "1.4.1", "2.1.1", "2.2.2", "2.4.6", "2.5.7", "4.1.2", "4.1.3"]),
+  mappings: { qti: qti("customInteraction", "approximate", "A PCI adapter may carry a simulation but QTI does not define its system runtime."), xapi: { interactionType: "performance", verbs: ["experienced", "interacted", "completed"], notes: "Report parameter changes, meaningful actions and task completion outside the high-frequency clock." } },
+  optionalDependencies: [],
+  tags: ["simulation", "system", "parameters", "observables", "snapshots", "foundation:system-simulation", "implemented:@didact/core/SimulationLab"],
+} as const satisfies ComponentManifest;
+
+export const codeExerciseManifest = {
+  id: "didact.code-exercise",
+  name: "Code Exercise",
+  description: "Lets learners edit multi-file technical artifacts and request execution and evaluation through explicit host-provided sandbox ports.",
+  role: "interaction",
+  families: ["technical-practice", "assessment"],
+  facets: { subjects: ["technical", "data", "business"], representations: ["artifact", "symbolic", "text"], learnerActions: ["create", "execute", "interpret"], purposes: ["practice", "create", "assess"], contexts: ["self-paced", "classroom", "corporate", "technical-training"] },
+  lifecycle: experimentalLifecycle,
+  version: { schema: schemaVersion, component: "1.0.0" },
+  variants: [{ id: "programming", name: "Programming exercise" }, { id: "query", name: "Data query exercise" }],
+  authoring: { version: schemaVersion, fields: [listField("files", "Files", "Editable and read-only files with stable ids and paths."), objectField("execution", "Execution", "Runtime id, timeout and sandbox policy."), objectField("evaluation", "Evaluation", "Optional host-provided grading policy.")], supportsLocalization: true },
+  capabilities: ["artifact:multi-file", "artifact:read-only-reference", "execution:host-port", "execution:sandbox-required", "evaluation:host-port", "feedback:informative"],
+  evidence: [evidence("didact-artifact-execution-boundary", "not-evaluated", "Didact Artifact & Execution foundation design gate", "Producing and testing an artifact supports authentic technical practice when aligned with a concrete task and informative feedback.", "The workspace itself has no automatic learning benefit; sandbox security, task quality and grading validity remain host responsibilities.")],
+  accessibility: accessibility("Files are keyboard-operable tabs, editing uses a labelled text control, read-only references remain selectable, and output and feedback are textual live regions. Rich editors must preserve this baseline.", ["1.3.1", "2.1.1", "2.4.3", "2.4.6", "3.3.2", "4.1.2", "4.1.3"]),
+  mappings: { qti: qti("customInteraction", "approximate", "A PCI adapter may carry the response, but QTI does not define execution or sandboxing."), xapi: { interactionType: "performance", verbs: ["attempted", "interacted", "completed"], notes: "Report meaningful runs and submissions, never keystrokes or raw source unless policy explicitly permits it." } },
+  optionalDependencies: [{ package: "@codesandbox/sandpack-react", purpose: "Optional rich JavaScript/TypeScript preview adapter.", fallback: "Use the built-in textarea workspace and a host execution port." }],
+  tags: ["code", "sql", "workspace", "sandbox", "foundation:artifact-execution", "implemented:@didact/core/CodeExercise"],
+} as const satisfies ComponentManifest;
+
+export const dataExplorerManifest = {
+  id: "didact.data-explorer",
+  name: "Data Explorer",
+  description: "Lets learners inspect, select and manipulate functions or data series through synchronized graphical and tabular views.",
+  role: "interaction",
+  families: ["knowledge-representation", "technical-practice"],
+  facets: {
+    subjects: ["mathematics", "science", "data", "business"],
+    representations: ["numeric", "symbolic", "data-series", "spatial", "temporal"],
+    learnerActions: ["inspect", "select", "manipulate", "experiment", "interpret"],
+    purposes: ["explore", "practice"],
+    contexts: ["self-paced", "classroom", "corporate", "technical-training"],
+  },
+  lifecycle: experimentalLifecycle,
+  version: { schema: schemaVersion, component: "1.0.0" },
+  variants: [
+    { id: "function", name: "Function exploration", description: "A sampled or parametrized mathematical function." },
+    { id: "series", name: "Data-series exploration", description: "Discrete scientific, statistical or business observations." },
+  ],
+  authoring: {
+    version: schemaVersion,
+    fields: [
+      objectField("task", "Learning task", "Objective, learner action, submission and feedback policy."),
+      objectField("axes", "Axes", "Horizontal and vertical scales, domains, labels and units."),
+      listField("series", "Series", "Stable-id series and their ordered points."),
+      listField("annotations", "Annotations", "Optional reference regions, lines or labels.", false),
+      objectField("interaction", "Interaction", "Allowed inspection, selection and manipulation operations."),
+    ],
+    supportsLocalization: true,
+  },
+  capabilities: [
+    "data:cartesian",
+    "data:series",
+    "data:function-samples",
+    "data:annotations",
+    "response:point-selection",
+    "response:range-selection",
+    "response:value-manipulation",
+    "result:task-owned",
+    "feedback:informative",
+    "accessibility:synchronized-table",
+  ],
+  evidence: [evidence(
+    "didact-data-coordinate-boundary",
+    "not-evaluated",
+    "Didact Data & Coordinate foundation design gate",
+    "Interactive graphical representation creates a reusable learner action across mathematics, science and business data.",
+    "A graph is not independently evidence of learning; the task and informative feedback determine its educational value.",
+  )],
+  accessibility: accessibility(
+    "Graph and table are synchronized projections of one state. Every pointer operation has keyboard and tabular controls; series, values and units have textual names; meaning never depends on color alone.",
+    ["1.3.1", "1.4.1", "1.4.11", "2.1.1", "2.4.3", "2.5.1", "2.5.7", "4.1.2", "4.1.3"],
+    { draggingAlternative: true },
+  ),
+  mappings: {
+    qti: qti("none", "none", "QTI has no native data-exploration interaction; a future PCI adapter may carry the experience without becoming its public contract."),
+    xapi: { interactionType: "other", verbs: ["experienced", "interacted", "answered"], notes: "Adapters report meaningful selections, manipulations and submissions rather than pointer movement." },
+  },
+  optionalDependencies: [],
+  tags: ["graph", "chart", "function", "data-series", "coordinates", "foundation:data-coordinate", "implemented:@didact/core/DataExplorer"],
+} as const satisfies ComponentManifest;

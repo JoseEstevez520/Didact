@@ -26,10 +26,9 @@ d=0.24 for reinforcement) that `research.md` proposes for RF-4/RF-6.
 
 ### `schema/` — declarative component contract
 
-`component.schema.json`: a JSON Schema skeleton following H5P `semantics.json`'s dual pattern (one
-document that documents and validates at once), with three-level `requiredness`
-(`required`/`progressive`/`optional`) to model RNF-4 (props that may arrive incomplete in
-streaming contexts).
+The original JSON Schema skeleton has been superseded by the executable TypeScript contracts in
+`@didact/schema`. `@didact/catalog` provides the concrete manifests. This directory now documents
+that ownership boundary so there is only one hand-maintained source of truth.
 
 ### `drift/` — non-copied dependency drift control
 
@@ -47,5 +46,6 @@ validation, drift test) a component must pass before being published in `@didact
 
 ## Status
 
-Data complete per what `research.md` documents as of 2026-08-11. No executable validation runtime
-yet — that's Phase 4 work in `ROADMAP.md`, built on this scaffold.
+The evidence, accessibility and mapping datasets remain reference data. Executable manifest,
+authoring, response and result validation is implemented in `@didact/schema`; catalog-level drift
+checks live with `@didact/catalog`.
