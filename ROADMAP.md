@@ -1,237 +1,545 @@
-# Roadmap — Education Components Library
+# Roadmap — Didact Education Components
 
-> Execution plan. Requires `specs/education-components/requirements.md` and `design.md` as the
-> contract. Each phase is designed to be handed to a different agent (or a new session), with
-> enough context to not depend on this conversation. **See "Current status" below for where the
-> project actually is.**
->
-> Reminder from `requirements.md` §0: this is a general-purpose library, distributed through
-> Didact's own registry-based copy-paste model, usable in any project. SkillNet (`repo/`) is the
-> first real consumer, via an **adapter** — the phases marked "(adapter)" live in `repo/`, not in
-> this project, and are optional with respect to the core.
+> Plan de ejecución de una biblioteca educativa independiente, distribuida mediante el registry
+> copy-paste de Didact y utilizable por cualquier producto React. SkillNet es un consumidor
+> opcional: no define la arquitectura ni bloquea el avance del núcleo.
 
-## Current status (2026-08-11)
+## Norte del producto
 
-| Phase | Status |
+Didact no aspira a ser una colección de quizzes sueltos. El objetivo es cubrir el ciclo completo
+de un curso online: presentar, practicar, explicar, evaluar, dar feedback, representar progreso y
+componer experiencias más complejas.
+
+El primer hito amplio de este roadmap es de **42 tipos educativos diferenciados**: 34 capacidades
+ya implementadas y 8 pendientes. Es un hito de cobertura, no el techo de la biblioteca. La cifra no
+se infla contando primitives UI, aliases, recipes de asignatura o cambios cosméticos como componentes
+distintos.
+
+La calidad del catálogo se medirá como:
+
+> cobertura útil × coherencia del contrato × accesibilidad × evidencia × capacidad de composición
+
+Por tanto, tener más componentes sí aumenta el valor cuando cubren necesidades diferentes; tener
+muchos componentes con APIs incompatibles, inaccesibles o sin propósito educativo no crea una
+buena biblioteca.
+
+## Estado actual (2026-08-11)
+
+| Fase | Estado |
 |---|---|
-| 0 — Spec and plan | ✅ done |
-| 1 — Deep research | ✅ done — `specs/education-components/research.md` |
-| 2 — Design decision | ✅ done — `design.md` closed, no `[PENDING]` left |
-| 3 — Project scaffold | ✅ done — pnpm monorepo, Storybook, registry, `MasteryBadge` end-to-end proof |
-| 3.5 — Design foundations | ✅ done — `@didact/ui` primitive kit + real neutral design tokens + interface norms |
-| 4 — First component wave | 🚧 in progress — `Flashcard` done; `SpacedRepetitionDeck` + quiz variants building |
-| 5 (adapter) / 6 / 7 | ⏳ not started |
+| 0 — Especificación y plan | ✅ terminada |
+| 1 — Investigación | ✅ terminada — `specs/education-components/research.md` |
+| 2 — Decisiones de diseño | ✅ terminada — `design.md` y `research/decisions.md` |
+| 3 — Scaffold del proyecto | ✅ terminada — monorepo, Storybook, pruebas y registry |
+| 3.5 — Fundamentos visuales | ✅ terminada — `@didact/ui`, tokens y normas de interfaz |
+| 4 — Primera oleada | ✅ terminada — 16 tipos educativos públicos |
+| 5 — Contrato del catálogo | ✅ terminada — `@didact/schema`, `@didact/events`, `@didact/catalog` |
+| 6 — Registry publicable | ✅ terminada — build, theme, imports locales y catálogo navegable |
+| 6.5 — Arquitectura de catálogo y Storybook | ✅ terminada — navegación canónica y reglas contra duplicados |
+| 6.6 — Facetas, colecciones y kits | ✅ terminada — seis colecciones y seis kits generados |
+| 7 — Práctica activa y aprendizaje generativo | ⏸ pausada — 5 de 10; se evita concentrar más variantes similares |
+| 8 — Evaluación textual y numérica | ⏸ pausada — 2 de 7; backlog útil, no siguiente prioridad |
+| 9 — Interacciones gráficas accesibles | ⏸ pausada — 1 de 5; continuará sobre motores compartidos |
+| **10 — Fundamentos de experiencia** | **✅ terminada — cinco fundamentos disponibles; `CodeExercise` cierra artefactos y ejecución** |
+| **10.5 — Herramientas de dominio** | **✅ primera oleada — ecuaciones, evidencia y medición disponibles** |
+| 11–13 | ⏳ pendientes |
 
-Post-Phase-1 product decisions (recorded in `research/decisions.md` and `requirements.md` §0.3):
-the library ships **its own primitive kit** (`@didact/ui`); **Tailwind v4** is the styling layer;
-the **visual language mirrors a proven neutral component system** (real design tokens + primitives),
-verified in Storybook. A required setup detail — `@source` directives in
-`packages/theme/src/tokens.css` — makes Tailwind generate every utility the primitives use; without
-it the primitives render unstyled (this was the root cause of an early "why does it look broken"
-episode, now fixed).
+## Principios de alcance
 
-## Next up & known issues (2026-08-11)
+La expansión y la navegación del catálogo siguen
+[`docs/catalog-architecture.md`](docs/catalog-architecture.md): una sola ubicación canónica por
+componente, casos de asignatura como recipes y nuevas oleadas que amplían modelos de representación
+y acciones del alumno en lugar de repetir interacciones existentes.
 
-**Immediate next steps — remaining Phase 4 components** (evidence/utility order), each composing
-from `@didact/ui`, following `docs/interface-norms.md`, and landing with a Storybook story +
-behavior/a11y tests + a registry item:
-- **RF-3 Matching / Sort / Categorize** — drag-and-drop via `dnd-kit`, plus a single-pointer
-  (select-source → select-target) alternative to satisfy WCAG 2.5.7 (not keyboard alone).
-- **RF-5 Glossary / Term** (popover), **RF-6 Hint / Reveal**, **RF-7 progress / mastery**,
-  **RF-8 Timeline / Steps**, **RF-10 Rubric**.
+- QTI aporta vocabulario y modelos de interacción; no obliga a que el núcleo use XML.
+- H5P `semantics.json` inspira el esquema declarativo de autoría; no se adopta su runtime.
+- xAPI aporta un contrato de reporting; los statements pertenecen a un adaptador opcional.
+- La evidencia pedagógica orienta el orden y el diseño, no se usa para hacer promesas universales.
+- El feedback debe explicar qué ocurrió, por qué y qué hacer después. Elogios, puntos o badges no
+  se presentan como aprendizaje.
+- Ninguna actividad dependerá exclusivamente de arrastrar. Las operaciones de drag tendrán una
+  alternativa equivalente mediante teclado y controles explícitos.
+- El contenido, la persistencia, el LMS y la analítica del consumidor no se mezclan con la UI.
+- Las dependencias se incorporan por capacidad y de forma localizada, no por número de componentes.
 
-**Known issues to fix:**
-- ~~**`QuizItem` layout is broken/cramped**~~ — ✅ fixed (2026-08-11). Root cause was not the
-  component: Storybook's `layout: "centered"` shrink-wraps its child, so the card's `w-full max-w-md`
-  collapsed to min-content (the question wrapping one word per line). Fixed with a story decorator
-  giving the card a definite-width (`28rem`) parent, so it renders at its intended `max-w-md`;
-  verified live in Storybook across all variants incl. the answered / correct / incorrect states.
-- **Copy-paste publication gaps (Phase 6):** education components import `@didact/ui` as a package
-  specifier (must be rewritten to local paths for pure copy-paste), and the `radius` token doesn't
-  propagate via `cssVars` alone (a consumer needs `@didact/theme`). Detail in
-  `packages/registry/README.md`.
-- **`apps/docs` has no `tsconfig.json`** → its `lint` script fails (lint-only, pre-existing).
+## Taxonomía y catálogo objetivo
 
-## How to use this roadmap
+### Base implementada — 15 tipos
 
-- Each phase has an **entry point** (what must exist before starting), a **deliverable** (what
-  must exist when it's done), and an **exit criterion** (how to know it finished well).
-- No phase starts without the previous one having produced its deliverable — in particular, phase
-  2 (design decision) cannot fix architecture without phase 1's report.
-- Phases 4+ are iterative per component, not a monolithic block: they run in waves following the
-  priority phase 2 sets.
+| Área | Tipos disponibles |
+|---|---|
+| Tarjetas de estudio | `Flashcard` |
+| Asociación y secuencia | `MatchingExercise`, `SortExercise`, `CategorizeExercise` |
+| Preguntas | `SingleChoiceQuiz`, `MultiSelectQuiz`, `TrueFalseQuiz`, `FillInTheBlankQuiz`, `ShortAnswerQuiz` |
+| Consulta y andamiaje | `Glossary`/`Term`, `Hint`/`Reveal` |
+| Seguimiento y valoración | `ProgressIndicator`/`ProgressOverview`, `MasteryBadge`, `Rubric` |
+| Presentación estructurada | `Timeline`/Steps |
 
----
+Los tipos de soporte —progreso, badges, timeline, glosario— no se describen por sí solos como
+técnicas que mejoran el aprendizaje.
 
-## Phase 0 — Spec and plan (this session)
+### Primera ampliación implementada — 5 tipos
 
-**Status: done.**
+`PracticeSet`, `RetrievalPracticeSession`, `SelfExplanationPrompt`, `WorkedExample` y
+`CompletionProblem` elevan el catálogo público a 20 tipos. No son aliases: cubren orquestación de
+práctica, recuperación espaciada, autoexplicación, ejemplos resueltos y retirada progresiva de
+andamiaje.
 
-- `specs/education-components/requirements.md` (core vs. SkillNet adapter made explicit in §0)
-- `specs/education-components/design.md` (with explicit `[PENDING]` sections)
-- This `ROADMAP.md`
+### Diversificación implementada — 3 tipos
 
----
+`NumericQuestion`, `WordBank` y `Hotspot` amplían el catálogo a 23 tipos y a dominios cuantitativos,
+lingüísticos y espaciales. El criterio para las siguientes oleadas es que cada lote cubra modos de
+respuesta materialmente distintos, evitando acumular formularios textuales con pequeñas variantes.
 
-## Phase 1 — Deep research
+`InteractiveMedia` eleva el catálogo a 24 tipos con una plataforma temporal común para audio y
+vídeo. `SpacedRepetitionDeck` se retiró del catálogo: duplicaba la superficie de `Flashcard` y
+mezclaba presentación con planificación. La recuperación activa vive en `RetrievalPracticeSession`;
+la planificación entre sesiones permanece como motor headless en `@didact/spaced-repetition`.
 
-**Status: done.**
+`DataExplorer` y `BranchingScenario` amplían el catálogo a 26 tipos con dos fundamentos distintos:
+datos/coordenadas y decisiones/procedimientos. `FunctionExplorer` y `ProcedureTrainer` permanecen
+como recipes para no duplicar contratos.
 
-**Entry point:** `specs/education-components/requirements.md` §6 (open questions, 8 total).
-**Deliverable:** a research report (`specs/education-components/research.md`, created in this
-phase) that answers, with sources and verified evidence, the 8 questions in
-`requirements.md` §6, and fills in the `[PENDING]` sections of `design.md` with data.
-**Exit criterion:** every question in §6 has an answer with cited evidence (not "it seems that"
-without a source) and an explicit recommendation. Where evidence is not conclusive, say so — an
-"it's unclear, and here is what would need to be measured" is a valid research outcome; a made-up
-answer is not (same standard `openui-adoption.md` §1 applied: "not verified, and I say so
-explicitly").
+`SimulationLab` eleva el catálogo a 27 tipos. Movimiento, física, finanzas e inventario son recipes
+del mismo runtime mientras compartan parámetros, acciones, reloj, observables y snapshots.
 
-### Brief for the research agent (use as the assignment prompt)
+`CodeExercise` eleva el catálogo a 28 tipos y cierra la quinta base de experiencia. JavaScript y SQL
+comparten archivos, ejecución y evaluación, pero el sandbox y el grader son puertos del consumidor.
+Los artefactos no ejecutables ya caben en el schema; no se publica un workspace genérico hasta
+demostrar una segunda interfaz de creación materialmente distinta.
 
-> Research in depth to ground the design of a general-purpose education components library (not
-> specific to one project), distributed with Didact's own registry model (registry + CLI that
-> copies source code, not a versioned npm dependency). First read
-> `Anfaia/library/specs/education-components/requirements.md` in full — especially §0 (decisions
-> already made by the product owner: general purpose, registry-based copy-paste distribution) and
-> §6 (the exact 8 questions) — and `design.md` (sections marked `[PENDING]`). Do not propose new
-> architecture or write code:
-> the deliverable is a report, `Anfaia/library/specs/education-components/research.md`, with one
-> section per question in `requirements.md` §6, cited evidence (URLs, verified behavior where
-> feasible), and an explicit recommendation per question.
->
-> For **question 1** (shadcn/ui's third-party registry mechanism): confirm with shadcn/ui's
-> current official documentation whether its CLI supports unofficial/own registries
-> (`registry.json`, item schema, hosting), and whether there are known limits (authentication,
-> size, versioning of the same component). Do not assume that "shadcn is open source" implies
-> the third-party registry mechanism is mature — verify it.
->
-> For **question 2** (primitives base: Radix UI vs. React Aria/Ariakit vs. Base UI): confirm real
-> React 19 compatibility with executed evidence or explicit changelog, not just a README read —
-> the SkillNet repo already had a case (`@openuidev/react-lang`, see
-> `repo/docs/design/openui-adoption.md`) where the only way to know the truth was to run it
-> against our own data.
->
-> For **question 3** (Tailwind as a mandatory peer dependency?): look at how shadcn/ui itself
-> handles this and whether there are alternatives (plain CSS, CSS-in-JS) that don't compromise the
-> "any project" goal too much.
->
-> For **question 4** (spaced repetition): compare at least SM-2 with a modern alternative and
-> state the cost of implementing it without a heavy dependency, with an API agnostic of where
-> state is persisted.
->
-> For **question 5** (accessibility and neurodiversity): use well-backed sources (WCAG 2.2,
-> CAST/UDL, guides from recognized organizations — British Dyslexia Association, etc.), not design
-> intuition.
->
-> For **question 6** (e-learning standards: H5P, Open edX XBlocks, IMS QTI/LTI, xAPI/SCORM):
-> identify what vocabulary or interoperability they contribute as a reference, without
-> recommending adopting them as a dependency unless the evidence clearly justifies it.
->
-> For **question 7** (SkillNet adapter: which components are expressible without reactivity):
-> read `repo/docs/design/openui-adoption.md` §5.2 and §6 in full and classify each component from
-> `requirements.md` §4.1 as fit or not fit for SkillNet's v2 generative catalog, with a reason.
->
-> For **question 8** (SkillNet adapter: video player): check whether `skillnet-web` already
-> integrates one before assuming a new one has to be chosen from scratch.
+`LabelDiagram`, `ConceptMap` y `DrawingResponse` elevan el catálogo a 31 tipos con tres acciones
+distintas: asignar nombres a posiciones, construir relaciones conceptuales y producir trazos libres.
+Comparten coordenadas normalizadas y alternativas accesibles, pero no se fusionan porque sus
+respuestas, operaciones y criterios de evaluación son materialmente diferentes.
+
+`EquationWorkbench`, `EvidenceAnnotation` y `MeasurementLab` elevan el catálogo a 34 tipos con tres
+acciones nuevas: transformar símbolos, justificar afirmaciones con evidencia y leer instrumentos
+con escala, unidad y precisión. Su criterio de admisión y sus fronteras viven en
+[`specs/education-components/domain-tools-foundation.md`](specs/education-components/domain-tools-foundation.md).
+
+### Expansión restante — 8 tipos
+
+| Oleada | Nuevos tipos | Total acumulado |
+|---|---:|---:|
+| Práctica activa y aprendizaje generativo (resto) | 3 | 37 |
+| Evaluación textual y numérica (resto) | 3 | 40 |
+| Interacciones gráficas (resto) | 2 | 42 |
+
+## Definición de terminado por tipo educativo
+
+Un tipo no entra en el catálogo público hasta tener:
+
+1. propósito y límites documentados, sin exagerar la evidencia;
+2. contrato declarativo de autoría, respuesta, resultado y feedback;
+3. API React controlada y no controlada cuando corresponda;
+4. estados vacío, parcial/streaming, deshabilitado, error y completado;
+5. navegación por teclado, semántica accesible y prueba automatizada de a11y;
+6. feedback informativo y sin revelar corrección antes de la acción del estudiante;
+7. internacionalización de todos los textos de interfaz;
+8. pruebas de comportamiento, stories representativas y estilos basados solo en tokens;
+9. `ComponentManifest`, mapping semántico y registry item;
+10. documentación de composición y ejemplo real en un curso.
 
 ---
 
-## Phase 2 — Design decision
+## Fases 0–4 — Fundamentos y primera oleada
 
-**Status: done.**
+**Estado: terminadas.** Se conservan como historial de ejecución.
 
-**Entry point:** `research.md` from phase 1.
-**Deliverable:** updated `design.md`: `[PENDING]` sections resolved (registry mechanism §3,
-primitives base §2, Tailwind requirement), and the §5 inventory table with final core priority,
-no longer "draft." The location (§7, independent repo) is already decided and is not reopened
-here unless research finds a real impediment.
-**Exit criterion:** no `[PENDING]` mark remains in `design.md`; the component priority order is
-defensible with `research.md`'s evidence, not with intuition.
-
-## Phase 3 — Project scaffold (core)
-
-**Status: done.**
-
-**Entry point:** `design.md` closed (phase 2).
-**Deliverable:** the independent repo's structure (`Anfaia/library`): build/tsconfig
-configuration, registry mechanism (own CLI or integration with shadcn's, per what phase 2 says),
-Storybook with the neutral default theme, test pipeline.
-**Exit criterion:** a trivial example component (e.g. a simple educational `Badge`) can be built,
-tested, viewed in Storybook, and copied into a test project via the registry mechanism end to
-end — proving the scaffolding works before building the real components.
-
-## Phase 3.5 — Design foundations (core)
-
-**Status: done.**
-
-Added after Phase 3 once it became clear that building each component ad-hoc produced an
-inconsistent look. Establishes the shared base every education component composes from, so
-components are consistent by construction rather than reinvented each time.
-
-**Entry point:** phase 3 scaffold + the product decision to ship an own primitive kit
-(`requirements.md` §0.3).
-**Deliverable:** `@didact/ui` — a kit of base primitives (Button, Card family, Badge, Separator,
-Toggle/ToggleGroup, plus form primitives added as components need them) that all education
-components compose from, styled through the real neutral design tokens in `@didact/theme`;
-`docs/interface-norms.md` + `docs/visual-language.md` codifying the design norms (action hierarchy,
-composition, spacing, focus, motion); and the Tailwind wiring (`@source`) that makes every
-primitive utility actually generate.
-**Exit criterion:** the primitives render faithfully in Storybook, and an education component
-(`Flashcard`) composed from them looks right — no invented palette, no ad-hoc per-component
-buttons.
-
-## Phase 4 — First wave of components (core, high priority)
-
-**Status: in progress.** `Flashcard` (RF-1) done, composed on `@didact/ui` with a reveal→rate
-flow. `SpacedRepetitionDeck` (RF-2, SM-2) and quiz variants (RF-4) are being built next.
-
-**Entry point:** phase 3.5 foundations + phase 2 priority.
-**Deliverable:** the high-priority components from `design.md` §5, ordered by pedagogical evidence
-(`Flashcard`, `SpacedRepetitionDeck`, quiz variants first; then matching/`Hint`/progress/etc.),
-each with: implementation composing from `@didact/ui`, registry entry, Storybook story with its
-states, behavior test, a11y check passing.
-**Exit criterion:** every component in this wave meets RF-12–17 of `requirements.md` (core, not
-adapter).
-
-## Phase 5 (SkillNet adapter, optional) — Integration with the v2 generative catalog
-
-**Lives in `repo/`, not in this project.** Does not block any core phase.
-
-**Entry point:** phase 4 components classified as "fit for v2" in phase 2 (question 7).
-**Deliverable:** `zod` schema + `defineComponent` in
-`repo/apps/skillnet-web/src/components/courses/kit/`, mirror in
-`repo/apps/skillnet-api/src/render/kit.py`, and verification that
-`test_render_prompt_artifact.py` / `catalog-drift.test.ts` still pass with the expanded catalog.
-**Exit criterion:** the expanded catalog does not introduce reactivity, does not reopen
-`openui-adoption.md` §6, and the drift tests pass.
-
-## Phase 6 — Second wave + registry publication
-
-**Entry point:** phase 4 complete for the first wave (phase 5 is optional and does not block
-this).
-**Deliverable:** remaining medium/low priority components, a browsable documentation site for the
-registry, first published version (hosting of `registry.json` / mechanism chosen in phase 2) so
-that any project — not just SkillNet — can consume it.
-**Exit criterion:** the `requirements.md` §4.1 inventory covered or explicitly dropped with a
-reason (not simply forgotten); at least one consumer other than SkillNet (real or test) validates
-that the copy mechanism works outside the original context.
-
-## Phase 7 — Measurement and iteration
-
-**Entry point:** components in real use in at least one consuming project (SkillNet or another).
-**Deliverable:** reading usage signals — in SkillNet, via `node_render_views` or equivalent
-telemetry if the component entered the v2 adapter; in general, feedback on which components get
-copied/adopted more — to decide what to iterate on first.
-**Exit criterion:** at least one iteration decision (prioritize, redesign, or retire a component)
-made with usage data, not just intuition.
+- Fase 0 produjo `requirements.md`, `design.md` y el roadmap inicial.
+- Fase 1 investigó registry, primitives, styling, repetición espaciada, accesibilidad, estándares y
+  encaje con SkillNet.
+- Fase 2 cerró las decisiones de arquitectura y declaró el alcance amplio por oleadas.
+- Fase 3 demostró build, Storybook, tests y copia mediante registry.
+- Fase 3.5 creó `@didact/ui`, `@didact/theme` y las normas visuales compartidas.
+- Fase 4 implementó y verificó los 16 tipos de la tabla anterior.
 
 ---
 
-## Out of this roadmap
+## Fase 5 — Contrato del catálogo y esquema declarativo
 
-- Activating reactivity in SkillNet's generative catalog (`RENDER_ALLOW_REACTIVE`). Conditions
-  already written in `openui-adoption.md` §6; this roadmap does not reopen them.
-- Authoring real pedagogical content (question banks, curricula).
-- Any SkillNet-specific visual design decision inside the core — that is exactly what the adapter
-  exists to prevent (see `design.md` §0).
+**Estado: terminada.**
+
+**Entrada:** las 16 capacidades actuales y los mapas pedagógicos existentes.
+
+**Entregables:**
+
+- taxonomía formal que distinga `primitive`, `interaction`, `display`, `composite`, `headless` y
+  `adapter`;
+- `@didact/schema` con un `ComponentManifest` versionado y esquemas de autoría inspirados en H5P;
+- contratos comunes de `response`, `result`, intentos, scoring y feedback;
+- `@didact/events`, sin dependencia de React, con los eventos `started`, `attempted`, `answered`,
+  `feedbackViewed`, `completed` y `mastered`;
+- campos de manifest para propósito pedagógico, evidencia, accesibilidad, persistencia,
+  dependencias opcionales y mappings QTI/xAPI;
+- migraciones de esquema y validación de contenido parcial;
+- manifests de los 16 tipos existentes;
+- corrección de mappings ambiguos: `FillInTheBlank` escrito → `textEntryInteraction`,
+  `WordBank` → `gapMatchInteraction`, `ShortAnswer` → `extendedTextInteraction`, e
+  `InlineChoice` como interacción propia.
+
+**Criterio de salida:** todo el catálogo actual puede describirse, validarse y descubrirse con el
+mismo contrato sin importar sus detalles React. Los contratos se prueban además contra los diseños
+de `PracticeSet`, `RetrievalPracticeSession`, `SelfExplanationPrompt`, `WorkedExample` y
+`CompletionProblem` antes de congelarlos.
+
+### Resultado
+
+- `@didact/schema` implementa taxonomía, manifest, autoría recursiva, contenido
+  completo/streaming, respuesta, resultado, feedback, versionado y validación estructurada.
+- `@didact/events` implementa los seis eventos neutrales, inmutables y JSON-safe.
+- `@didact/catalog` nació con 10 manifests disponibles para los 16 tipos iniciales y cinco
+  contratos de diseño que ya se han promovido como implementaciones disponibles en la Fase 7.
+- `specs/education-components/catalog-taxonomy.md` fija el criterio de admisión y separa UI,
+  lógica headless, componentes educativos, composiciones y adaptadores.
+
+---
+
+## Fase 6 — Registry publicable y consumo externo
+
+**Estado: terminada.**
+
+**Entrada:** contrato estable de la Fase 5. Puede empezar en paralelo en los problemas ya aislados,
+pero debe terminar antes de multiplicar el catálogo.
+
+**Entregables:**
+
+- reescritura correcta de imports `@didact/*` a rutas locales al copiar;
+- instalación completa del theme y propagación del token `radius`;
+- `tsconfig.json` funcional para `apps/docs`;
+- catálogo navegable con filtros por propósito, formato, accesibilidad y mapping;
+- política de versiones y actualización para componentes copiados;
+- fixture de un consumidor React limpio, fuera del contexto del monorepo.
+
+**Criterio de salida:** un proyecto vacío puede instalar, compilar, personalizar y ejecutar una
+actividad desde el registry sin resolver manualmente imports ni depender del monorepo.
+
+### Resultado
+
+- El build genera 28 artefactos públicos y reescribe los imports internos a rutas locales del
+  consumidor, validando recursivamente sus dependencias.
+- `didact-theme` instala los tokens light/dark y la escala de radios derivada de `--radius`.
+- El catálogo Storybook dispone de búsqueda y filtros por propósito, formato técnico,
+  accesibilidad de teclado y fidelidad QTI.
+- La política de actualizaciones copy-paste y versiones mayores está documentada y el formato se
+  valida con el CLI oficial de shadcn.
+
+---
+
+## Fase 6.6 — Facetas, colecciones y kits descargables
+
+**Estado: terminada.** Las nuevas plataformas nacen ya con clasificación, descubrimiento y
+distribución agrupada coherentes.
+
+**Fuente de verdad:** [`docs/distribution-collections.md`](docs/distribution-collections.md).
+
+**Entregables:**
+
+1. `ComponentFacets` tipado en `@didact/schema`: materias, representaciones, acciones del alumno,
+   propósitos y contextos;
+2. migración de los manifests disponibles desde tags implícitos hacia facetas explícitas;
+3. contrato `CatalogCollection` y validación de referencias en `@didact/catalog`;
+4. colecciones iniciales `Learning Essentials`, `Mathematics & Data`, `Language Learning`,
+   `Visual & Spatial` y `Corporate Training`;
+5. filtros por facetas y páginas de colección en el explorador de Storybook;
+6. generación de kits del registry mediante `registryDependencies`, sin duplicar archivos;
+7. materialización de un componente individual y un kit en el consumer fixture, y aceptación del
+   kit sin archivos por la CLI oficial.
+
+**Criterio de salida:** todos los manifests disponibles tienen facetas válidas, las colecciones no
+referencian tipos draft, cada kit expone su cierre de dependencias y el consumer fixture materializa
+componente y kit sin imports `@didact/*` residuales. La instalación desde URL pertenece al gate de
+publicación porque requiere un host estable.
+
+### Resultado
+
+- `@didact/schema` define y valida las cinco dimensiones de facetas y el contrato de colección.
+- Los 18 manifests disponibles están clasificados sin sustituir los tags libres.
+- `@didact/catalog` publica cinco colecciones editoriales con roles y razones por componente.
+- Storybook combina colección, materia, representación, acción, propósito, contexto, familia,
+  rol técnico, teclado y fidelidad QTI sin duplicar entradas canónicas.
+- El registry genera `learning-essentials`, `math-foundations`, `language-learning`,
+  `visual-spatial` y `corporate-training` como bloques sin archivos propios.
+- Tests, build, cierre recursivo de dependencias, consumer fixture y validación del kit con
+  `shadcn view` están en verde.
+
+---
+
+## Fase 7 — Práctica activa y aprendizaje generativo
+
+**Estado: pausada — primer lote terminado (5 de 10).** Se conserva lo implementado, pero los cinco
+tipos restantes no se priorizan hasta ampliar otros campos del catálogo.
+
+**Objetivo:** convertir las interacciones aisladas en experiencias reales de estudio y práctica.
+
+**Orden previsto:**
+
+1. ✅ `PracticeSet` / `QuestionSet` — navegación, intentos, entrega, revisión y resumen;
+2. ✅ `RetrievalPracticeSession` — recuperación activa con scheduler y almacenamiento inyectables;
+3. ✅ `SelfExplanationPrompt`;
+4. ✅ `WorkedExample`;
+5. ✅ `CompletionProblem` — retirada progresiva de pasos;
+6. `ElaborativeQuestion`;
+7. `InterleavedPracticeSet`;
+8. `TeachBackPrompt`;
+9. ✅ `ConceptMap`;
+10. `SummarizationPrompt` guiado.
+
+**Criterio de salida:** los diez tipos cumplen la definición de terminado y pueden componerse con
+los quizzes existentes. La sumarización se documenta con cautela: su utilidad depende mucho del
+diseño y de la guía, no de añadir un textarea.
+
+---
+
+## Fase 8 — Cobertura de evaluación textual y numérica
+
+**Estado: pausada — 2 de 7 tipos.** El backlog se conserva para compatibilidad y cursos básicos,
+pero no se implementa seguido como una cadena de controles parecidos. Sus tipos se intercalarán con
+oleadas que abran nuevas representaciones.
+
+**Tipos:**
+
+1. ✅ `NumericQuestion`, con tolerancias, rangos y unidades;
+2. `SliderQuestion`;
+3. `LikertScale`;
+4. `SurveyMatrix`;
+5. `InlineChoice`;
+6. ✅ `WordBank` / `GapMatch`;
+7. `HotText` / Mark the words.
+
+**Reglas clave:** una encuesta no tiene una respuesta “correcta”; el scoring numérico se mantiene
+headless; y las variantes de teclado/lector de pantalla son parte del contrato, no mejoras tardías.
+
+**Criterio de salida:** quedan cubiertas las principales interacciones textuales y numéricas que
+hoy faltan frente a los vocabularios QTI/xAPI, sin afirmar todavía compatibilidad de importación o
+exportación.
+
+---
+
+## Fase 9 — Interacciones gráficas accesibles
+
+**Estado: en curso — 3 de 5 tipos.** Los tipos restantes se construirán sobre motores espaciales
+compartidos para evitar cinco implementaciones incompatibles de coordenadas y arrastre.
+
+**Tipos:**
+
+1. ✅ `Hotspot` / `SelectPoint`;
+2. ✅ `LabelDiagram`;
+3. `GraphicOrder`;
+4. `GraphicAssociation`;
+5. ✅ `DrawingResponse`.
+
+**Infraestructura compartida:** coordenadas resistentes al responsive, descripción larga,
+movimiento mediante teclado, deshacer, alternativa sin arrastre y feedback que no dependa solo del
+color o de la posición.
+
+`dnd-kit` puede incorporarse aquí como motor localizado. No garantiza accesibilidad por sí solo:
+cada acción de arrastre debe poder resolverse también mediante controles simples.
+
+**Criterio de salida:** ninguna actividad depende exclusivamente de dragging y todas conservan una
+representación de respuesta estable al cambiar el tamaño de la imagen.
+
+### Resultado parcial de la fase gráfica
+
+- `LabelDiagram`, `ConceptMap` y `DrawingResponse` cubren asignación espacial, construcción de redes
+  y respuesta vectorial sin duplicar un único patrón.
+- Anatomía/maquinaria, ciclo científico/proceso corporativo y geometría/anotación prueban amplitud.
+- La frontera compartida vive en
+  [`specs/education-components/spatial-construction-foundation.md`](specs/education-components/spatial-construction-foundation.md).
+- `GraphicOrder` y `GraphicAssociation` permanecen pendientes y deben demostrar que no son simples
+  recipes de `SortExercise`, `MatchingExercise` o `LabelDiagram`.
+
+---
+
+## Fase 10 — Fundamentos de experiencia
+
+**Estado: terminada — cinco fundamentos validados y publicados.**
+
+**Fuente de verdad:** [`docs/experience-foundations.md`](docs/experience-foundations.md).
+
+Esta fase lleva Didact más allá de formularios sin escoger un sector por intuición. La unidad de
+planificación es un motor especializado demostrado por dos casos contrastantes, no un componente
+para cada asignatura ni un mega-runtime universal.
+
+### Orden de las líneas
+
+1. ✅ **Medios interactivos:** reloj/cues, transcript e interacciones hijas. Validado con vídeo
+   de procedimiento y audio de comprensión.
+2. ✅ **Datos y coordenadas:** ejes, escalas, series, puntos manipulables y tabla equivalente.
+   Validado como un único `DataExplorer` experimental con función matemática y serie científica o
+   empresarial; `FunctionExplorer` queda aplazado salvo evidencia contractual para separarlo.
+3. ✅ **Decisiones y procedimientos:** grafo de estados, variables, condiciones, historial y
+   consecuencias. Validado como un único `BranchingScenario` con conversación comercial y seguridad;
+   `ProcedureTrainer` permanece como recipe mientras no exista una divergencia contractual.
+4. ✅ **Sistemas y simulación:** estado, parámetros, acciones, observables, snapshots y tiempo.
+   Validado con movimiento temporal visual e inventario no basado en keyframes.
+5. ✅ **Artefactos y ejecución:** workspace, preview, sandbox y grader inyectables. `CodeExercise`
+   valida JavaScript y SQL; el schema demuestra además un artefacto no ejecutable sin convertirlo en
+   una segunda UI prematura.
+
+La colaboración entre alumnos (`PeerReview`, coautoría, asignación de revisores) queda fuera del
+horizonte de Didact/SkillNet. El producto está orientado a cursos individuales y autocontenidos;
+añadir identidad, permisos, sincronización y persistencia multiusuario desviaría la arquitectura
+sin resolver una necesidad del consumidor principal.
+
+### Regla de dos verticales
+
+Un fundamento no se congela después de un solo ejemplo. Debe demostrar dos casos de dominios
+distintos que compartan authoring, estado y operaciones significativas. Si el segundo caso exige un
+contrato artificial o pierde accesibilidad, la base se divide antes de publicarse.
+
+Esto cambia el papel de los candidatos anteriores:
+
+- ✅ `InteractiveMedia` es una experiencia available/experimental;
+- `DataExplorer`/`FunctionExplorer` validan coordenadas y series;
+- `BranchingScenario`/`ProcedureTrainer` validan el grafo de decisiones;
+- `SimulationLab` es la experiencia general de sistemas;
+- `AnimationLab` pasa a recipe o especialización provisional hasta demostrar una diferencia
+  contractual real;
+- `CodeExercise` utiliza el workspace, pero ejecución y evaluación permanecen desacopladas.
+
+### Dependencias y estándares
+
+`inkjs`, Sandpack, proveedores de medios y runtimes gráficos son adaptadores opt-in detrás de
+contratos propios. QTI se usa como vocabulario y PCI como posible vía de interoperabilidad para
+interacciones avanzadas; ninguno de estos modelos se convierte en la API universal de Didact.
+
+### Criterio de salida por línea
+
+- matriz de prioridad y comparación con catálogo/H5P/QTI/LMS;
+- frontera motor/experiencia/recipe/consumidor documentada;
+- dos fixtures declarativos contrastantes;
+- authoring, state/response, result, feedback y eventos serializables;
+- alternativa accesible sobre el mismo estado;
+- API controlada, streaming, tests, stories y registry;
+- decisión explícita de estabilizar, dividir o abandonar la abstracción.
+
+Simular, animar, ramificar o añadir vídeo no se presenta por sí solo como mejora del aprendizaje.
+Cada experiencia debe provocar una acción cognitiva relevante y ofrecer feedback informativo.
+
+### Resultado de la primera línea
+
+- `@didact/schema` publica `InteractiveMediaDefinition`, estado runtime y validación
+  complete/streaming.
+- Dos fixtures contrastantes demuestran vídeo corporativo y audio lingüístico con actividades hijas
+  referenciadas por manifest.
+- `@didact/core/InteractiveMedia` ofrece player nativo sustituible, estado controlado/no controlado,
+  checkpoints temporales y accesibles fuera de la timeline, transcript navegable y finalización.
+- El catálogo publica el tipo como experimental y lo incorpora a Language Learning y Corporate
+  Training.
+- El registry copia componente y schema sin imports `@didact/*`; fixture limpio y CLI oficial lo
+  validan.
+
+### Resultado de la segunda línea
+
+- `DataExplorer` mantiene datos, foco, selección y edición en una única fuente de verdad compartida
+  por gráfica y tabla accesible.
+- Una función matemática y una serie empresarial/científica prueban escalas y acciones distintas
+  sin duplicar el componente.
+- Engine, experiencia, recipes y consumidor tienen responsabilidades explícitas; engine y recipes
+  no inflan el catálogo educativo.
+- El tipo se publica como available/experimental y se distribuye desde Mathematics & Data y
+  Corporate Training.
+- La decisión y el gate completos viven en
+  [`specs/education-components/data-coordinate-foundation.md`](specs/education-components/data-coordinate-foundation.md).
+
+### Resultado de la tercera línea
+
+- `BranchingScenario` comparte un grafo serializable entre conversaciones y procedimientos.
+- Condiciones y efectos modifican variables sin ejecutar código arbitrario; el historial restaura
+  snapshots al retroceder.
+- Conversación comercial y seguridad validan rutas, consecuencias y desenlaces distintos.
+- `ProcedureTrainer` permanece como recipe y `inkjs` como adaptador opcional.
+- El gate vive en
+  [`specs/education-components/decision-procedure-foundation.md`](specs/education-components/decision-procedure-foundation.md).
+
+### Resultado de la cuarta línea
+
+- `SimulationLab` coordina un runtime determinista inyectado sin ejecutar expresiones del contenido.
+- Movimiento continuo e inventario manual validan el mismo contrato de sistema.
+- Los observables textuales conservan acceso al estado cuando existe una representación visual.
+- `AnimationLab` y laboratorios de dominio permanecen como recipes.
+- El gate vive en
+  [`specs/education-components/system-simulation-foundation.md`](specs/education-components/system-simulation-foundation.md).
+
+### Resultado de la quinta línea
+
+- `ArtifactWorkspaceDefinition` conserva archivos, estado, solicitudes de ejecución y evaluación
+  como datos serializables.
+- `CodeExercise` coordina edición, salida y feedback sin ejecutar código dentro de Didact.
+- JavaScript y SQL demuestran dos runtimes; un artefacto de procedimiento no ejecutable verifica que
+  el schema no está acoplado al código.
+- Sandpack, WebContainers, workers y graders remotos permanecen como adaptadores opt-in.
+- El gate vive en
+  [`specs/education-components/artifact-execution-foundation.md`](specs/education-components/artifact-execution-foundation.md).
+
+---
+
+## Fase 11 — Interoperabilidad opcional
+
+**Entregables:**
+
+- `@didact/qti`, con import/export del subconjunto QTI realmente soportado;
+- `@didact/xapi`, que convierte eventos Didact en statements xAPI;
+- tabla pública por tipo: compatibilidad completa, aproximada, custom o no soportada;
+- fixtures contra ejemplos externos y round-trips cuando sean posibles.
+
+**Criterio de salida:** el núcleo funciona sin estos paquetes y una integración LMS puede añadirlos
+sin reinterpretar manualmente cada componente. Antes de esta fase se habla de “mapping semántico”,
+no de “compatibilidad QTI/xAPI”.
+
+---
+
+## Fase 12 — Validación en consumidores reales
+
+Didact no desarrolla ni mantiene un adaptador SkillNet. SkillNet y cualquier otro producto consumen
+los componentes, schemas y kits públicos del registry como propietarios del código copiado.
+
+La integración realizada en cada consumidor pertenece a su propio repositorio: composición de
+cursos, persistencia, generación dinámica, theming y compatibilidad con su modelo de datos. Didact
+solo recoge problemas reproducibles de su API pública y los convierte en pruebas o mejoras generales.
+
+**Criterio de salida:** al menos un consumidor real instala un kit y varios componentes sin imports
+internos, forks específicos ni condiciones que mencionen el producto consumidor dentro de Didact.
+
+---
+
+## Fase 13 — Medición e iteración
+
+**Señales:** adopción por tipo, finalización, abandono, intentos, uso de pistas, revisión del
+feedback, componentes copiados pero no usados y problemas de accesibilidad reportados.
+
+**Criterio de salida:** cada ciclo produce al menos una decisión documentada de mejorar,
+consolidar, dividir o retirar una capacidad usando datos reales, no solo intuición.
+
+## Lógica headless y dependencias opcionales
+
+No todo debe convertirse en un componente React:
+
+| Capacidad | Lugar correcto |
+|---|---|
+| Scheduler SM-2/FSRS, interleaving, scoring, tolerancias | lógica headless |
+| Validación, authoring schema, migrations | `@didact/schema` |
+| Eventos neutrales | `@didact/events` |
+| QTI XML, xAPI statements, LMS/LRS | adaptadores opcionales |
+| Persistencia de intentos, mastery y archivos | consumidor/backend |
+| Editor visual de cursos | producto de autoría separado |
+
+Dependencias previstas:
+
+- `dnd-kit`: drag-and-drop con alternativa accesible, solo en las familias que lo necesiten;
+- `ts-fsrs`: únicamente si se ofrece un scheduler FSRS real junto al SM-2 existente;
+- `inkjs`: adaptador de escenarios ramificados;
+- Sandpack: integración opt-in de ejecución de código.
+
+Ninguna de estas librerías es evidencia pedagógica ni debe convertirse en dependencia global.
+
+## Fuera de alcance del núcleo
+
+- contenido pedagógico real, bancos de preguntas y currículos;
+- persistencia, autenticación, almacenamiento de archivos o un LRS;
+- un authoring studio completo;
+- afirmar que puntos, badges o progreso equivalen a dominio;
+- prometer “adaptatividad” sin reglas, calibración y validación;
+- compatibilidad QTI/xAPI antes de que los adaptadores y sus fixtures existan.

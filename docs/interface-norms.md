@@ -85,11 +85,24 @@ hierarchy above, not size).
 feels cramped or sparse, that's a signal about what content belongs in it, not a reason to
 special-case its padding.
 
+## Media controls
+
+- Audio controls occupy one horizontal row: play/pause, current time, timeline, duration, and seek.
+  Timestamps stay inline so they never push the timeline above or below the control baseline.
+- Video controls live inside the video viewport, aligned along its lower edge. Do not render a
+  second toolbar below the video or duplicate playback progress elsewhere in the card.
+- Play, pause, and seek are quiet icon-only buttons with localized accessible names. They have no
+  persistent decorative fill; hover and focus remain visible through the shared Button treatment.
+- A player does not add cover art, gradients, badges, or repeated titles when the surrounding
+  educational component already supplies the title and objective.
+
 ## Focus & states
 
-- **Focus:** every interactive primitive uses the same treatment — a 3px ring at the `ring` color,
-  ~50% opacity, plus a ring-colored border (`focus-visible:border-ring focus-visible:ring-ring/50
-  focus-visible:ring-[3px]`).
+- **Focus:** every interactive primitive uses the same treatment — a 2px CSS outline at the `ring`
+  color with a 2px offset, plus a ring-colored border (`focus-visible:border-ring
+  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`). This is an
+  outline, not Tailwind's box-shadow-based ring utility, so focus remains visible without breaking
+  the zero-shadow visual rule.
   Never remove it and never invent a different focus style for a new component — WCAG 2.4.7
   requires focus to be visible, and a consistent treatment is what lets a learner recognize "this
   is focused" instantly across the whole interface. See `visual-language.md`'s "Focus" section for
@@ -100,8 +113,8 @@ special-case its padding.
 - **Loading:** a component in a loading state keeps its layout (no collapsing/reflow) and disables
   interaction the same way `disabled` does, while adding a visible, non-color-only cue (a spinner
   or "Loading…" text) — never a bare color change, per WCAG 1.4.1.
-- **Invalid:** driven by `aria-invalid`, styled via `aria-invalid:border-destructive
-  aria-invalid:ring-destructive/20` (already built into
+- **Invalid:** driven by `aria-invalid`, styled via `aria-invalid:border-destructive` and
+  `aria-invalid:focus-visible:outline-destructive` (already built into
   `Button`, `Badge`, and `Toggle`) — paired with real error text via `aria-describedby`, never the
   red border alone.
 - **Empty:** an empty state is content, not a blank `Card`/`CardContent` — say what's missing and,
@@ -146,7 +159,8 @@ Radix primitives already expose — not a JS animation runtime. Concretely:
 - Keep the Action hierarchy rule (one `default` per view) even inside a composed education
   component — a `Flashcard`'s own "Known"/"Needs review" controls, for instance, are not
   `default`-variant buttons precisely because they're not the card's one primary action.
-- Never fork a primitive's classes to tweak a color/radius/shadow — override the underlying design
-  token instead (`--background`, `--primary`, `--radius`, …; `design-principles.md` §1). If a
+- Never fork a primitive's classes to tweak a color or radius — override the underlying design
+  token instead (`--background`, `--primary`, `--radius`, …; `design-principles.md` §1). Shadows
+  are not a customization axis: components do not use them. If a
   genuinely new visual value is needed, add a token to `@didact/theme`, don't hardcode it in the
   component.

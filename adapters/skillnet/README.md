@@ -1,8 +1,8 @@
-# SkillNet Adapter — boundary of responsibility
+# SkillNet consumer boundary — archived design note
 
-**This directory documents the boundary between Didact and SkillNet. It contains no code.** The
-adapter's real code (theme mapping, registering blocks in the v2 generative catalog) lives in the
-SkillNet repository (`repo/`), outside this monorepo — never here.
+**Didact will not implement or publish a SkillNet adapter. This directory contains no code and is
+kept only as an historical boundary note.** SkillNet consumes the public registry from its own
+repository like any other product; its integration code never lives in this monorepo.
 
 See `specs/education-components/design.md` §0 and §4, and `requirements.md` §0.1/§2.4: SkillNet is
 Didact's **first real consumer**, not the core's design criterion. Any SkillNet-specific decision
@@ -33,7 +33,7 @@ the `ui_spec`). Primary source: the executable docstring in
 | Component (RF) | Verdict | Reason |
 |---|---|---|
 | `Flashcard` (RF-1) | **FIT** | Flip/mark-as-known = ephemeral React state; no `answer_key` to protect. Precedent: `QuizItemBlock`. |
-| `SpacedRepetitionDeck` (RF-2) | **NOT FIT** | Persisting state across sessions requires `Query`/`Mutation`, forbidden while `RENDER_ALLOW_REACTIVE=False`. |
+| Headless spaced-repetition scheduling (RF-2) | **NOT FIT** | Persisting review state across sessions requires `Query`/`Mutation`, forbidden while `RENDER_ALLOW_REACTIVE=False`; the public UI uses `RetrievalPracticeSession` with consumer-owned scheduling. |
 | Matching/Sort/Categorize (RF-3) | **FIT** | Production precedent: `DragOrder` uses literal props + internal React, no `Mutation`. |
 | Quiz variants (RF-4) | **FIT** | `QuizItem` already covers 6 `item_type`s without `correct`/`explanation` in props (rule 5); open-answer verification runs server-side via a self-contained POST. |
 | `Glossary`/`Term` (RF-5) | **FIT** | Pure presentation; no answer to protect, no dynamic data. |

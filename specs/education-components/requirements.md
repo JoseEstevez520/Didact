@@ -1,5 +1,9 @@
 # Requirements — Education Components Library
 
+> **Normative update (2026-08-12):** no SkillNet adapter is planned or delivered by Didact.
+> SkillNet remains the first real external consumer and integrates the public registry within its
+> own repository. Older adapter requirements below are historical and no longer acceptance criteria.
+
 > Spec-Driven Development (SDD). This document fixes the **what** and the **why** before
 > designing (`design.md`) or planning tasks (`../../ROADMAP.md`). It does not prescribe
 > implementation.
@@ -13,7 +17,7 @@ they are product direction:
    project," not just in `repo/` (SkillNet). SkillNet is the **first real consumer** (where the
    need was born and where it will be tested first), but it is not the design criterion. Any
    coupling to SkillNet-specific decisions (tokens from `design-system.md`, the generative v2
-   catalog) is treated as an **optional adapter**, never as part of the core.
+   catalog) belongs exclusively to that consumer, never to Didact.
 2. **Style and distribution model reference: shadcn/ui.** Not as a versioned npm package, but as a
    **registry + CLI that copies the component's source code into the consuming project**
    ("copy-paste ownership"). Explicit motivation: this avoids exactly the risk SkillNet already

@@ -16,6 +16,7 @@ import type { StorybookConfig } from "@storybook/react-vite";
  */
 const config: StorybookConfig = {
   stories: [
+    "../src/**/*.stories.@(ts|tsx)",
     "../../../packages/core/src/**/*.stories.@(ts|tsx)",
     "../../../packages/ui/src/**/*.stories.@(ts|tsx)",
   ],
@@ -28,6 +29,7 @@ const config: StorybookConfig = {
     return mergeConfig(viteConfig, {
       resolve: {
         alias: {
+          "@didact/catalog": path.resolve(import.meta.dirname, "../../../packages/catalog/src/index.ts"),
           "@didact/ui": path.resolve(import.meta.dirname, "../../../packages/ui/src/index.ts"),
           "@didact/core": path.resolve(import.meta.dirname, "../../../packages/core/src/index.ts"),
         },

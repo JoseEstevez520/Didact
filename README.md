@@ -43,20 +43,25 @@ scope, not dropped — see `research/decisions.md` (D2).
 
 ## Project status
 
-Phases 0–3.5 of `ROADMAP.md` are done and **Phase 4 (first component wave) is in progress** — see
-the "Current status" table in `ROADMAP.md` for the authoritative state. In short, the repo now has:
+Phases 0–6.6 of `ROADMAP.md` are done and **Phase 10** is in progress. Its first foundation,
+`InteractiveMedia`, is available experimentally; data and coordinate exploration is next, followed
+by decisions, simulations and artifact creation. `AnimationLab` is no longer the default next
+component: it is a possible simulation case that must prove reuse beyond animation. See the status
+table in `ROADMAP.md` for the authoritative state. In short, the repo now has:
 
 - The research that grounds every decision (`specs/education-components/research.md` and the raw
   reports in `research/reports/`).
-- The **scientific validators**: machine-readable data derived from that research (WCAG criteria,
-  QTI/xAPI mappings, per-requirement pedagogical evidence, declarative component schema,
-  dependency drift control) in `packages/validators/`.
+- Framework-neutral schema and event contracts in `@didact/schema` and `@didact/events`, plus the
+  declarative inventory in `@didact/catalog`.
+- Typed subject/action/representation facets, six curated collections and six registry kits for
+  grouped discovery and download without duplicating component source.
+- The **scientific validators**: machine-readable WCAG, QTI/xAPI, evidence and dependency-drift
+  reference data in `packages/validators/`.
 - A working **design foundation**: the `@didact/ui` primitive kit and the `@didact/theme` neutral
   tokens, rendering faithfully in Storybook, with the design norms codified in `docs/`.
-- The first real education components (`Flashcard`, `MasteryBadge`), with more being built in
-  Phase 4.
-- Documentation of the boundary with the SkillNet adapter (`adapters/skillnet/`), with no code —
-  the adapter code lives in the SkillNet repo, not here.
+- A public catalog of 34 differentiated educational types, with behavior/a11y tests and Storybook states.
+- An archived note describing why SkillNet remains an ordinary external consumer; Didact does not
+  develop or publish a SkillNet adapter.
 
 ## Development
 
@@ -82,11 +87,13 @@ instantly via HMR while iterating on design.
 │   │                                  (Button, Card, Toggle/ToggleGroup, Separator, Badge)
 │   ├── theme/                        @didact/theme — neutral theme (Tailwind v4 + tokens)
 │   ├── spaced-repetition/            @didact/spaced-repetition — SM-2 / FSRS behind an agnostic interface
+│   ├── schema/                       @didact/schema — authoring, response/result and manifest contracts
+│   ├── events/                       @didact/events — framework-neutral learning event envelopes
+│   ├── catalog/                      @didact/catalog — available and planned component manifests
 │   ├── registry/                     @didact/registry — Didact's registry.json
-│   └── validators/                   @didact/validators — scientific validators (a11y, pedagogy,
-│                                      schema, dependency drift)
+│   └── validators/                   @didact/validators — evidence, a11y, mappings and drift data
 ├── adapters/
-│   └── skillnet/                     Documentation of the boundary with SkillNet (no code)
+│   └── skillnet/                     Archived consumer-boundary note (no adapter code)
 ├── apps/
 │   └── docs/                         Living documentation plan (Storybook, Phase 3)
 └── research/
@@ -96,6 +103,13 @@ instantly via HMR while iterating on design.
 ```
 
 ## Philosophy & design
+
+The catalog's product architecture, canonical Storybook navigation and anti-duplication rules live
+in [`docs/catalog-architecture.md`](docs/catalog-architecture.md). It explains how Didact serves both
+basic course building and specialized fields without turning every subject example into a new export.
+Discovery across subjects and grouped installation are specified separately in
+[`docs/distribution-collections.md`](docs/distribution-collections.md): structured facets, editorial
+collections and registry kits that reuse the same canonical components.
 
 - [`docs/PHILOSOPHY.md`](./docs/PHILOSOPHY.md) — the principles the whole project is held to.
 - [`docs/design-principles.md`](./docs/design-principles.md) — how customization works (tokens,

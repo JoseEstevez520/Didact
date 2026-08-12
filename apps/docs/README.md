@@ -1,4 +1,4 @@
-# apps/docs — Didact's living documentation (plan, Phase 3)
+# apps/docs — Didact's living documentation
 
 This directory will hold the library's browsable documentation (Storybook or equivalent),
 required by **RF-17**: every component must have a story with its states (empty, error, loading,
@@ -14,9 +14,9 @@ correct/incorrect) and pass automated a11y checks.
    flags ("well-intentioned accessibility without evidence") and with `packages/validators/`'s
    approach of tracing each criterion to a concrete source.
 
-## Plan (not implemented yet)
+## Implementation
 
-- **Tool:** Storybook (or an equivalent supporting a mature a11y addon), on top of
+- **Tool:** Storybook with its a11y addon, on top of
   `packages/core`'s neutral default theme — never SkillNet's theme or any specific consumer's.
 - **One story per component and per relevant state**: empty, error, loading,
   correct/incorrect — not just the happy path.
@@ -25,9 +25,19 @@ correct/incorrect) and pass automated a11y checks.
 - **Relationship to the registry:** stories must stay consistent with what
   `packages/registry/registry.json` describes — the registry is the source of truth for what's
   distributed, the docs site is how to explore it before copying it.
+- **Canonical navigation:** `docs/catalog-architecture.md` defines the sidebar hierarchy and the
+  one-location-per-component rule. Domain examples are recipes or stories, never duplicate entries.
+- **Cross-domain discovery:** `docs/distribution-collections.md` defines structured facets,
+  collections and downloadable kits. Subject views are generated from metadata instead of
+  duplicating sidebar entries.
+- **One public component per Storybook entry:** source modules may share implementation, but each
+  public component owns a separate `Meta` and discoverable sidebar node.
 
 ## Status
 
-Not implemented. Depends on the root's build/tsconfig scaffold (already present) and on
-`packages/core` having at least one real component to document — that's why this plan is Phase 3
-of `ROADMAP.md` but its real content arrives with Phase 4's first wave of components.
+Implemented. Component stories live beside their source in `packages/core` and `packages/ui`.
+`src/catalog.stories.tsx` adds a searchable inventory driven directly by the available manifests
+and collections from `@didact/catalog`. It combines filters for subject, representation, learner
+action, purpose, context, educational family, technical role, keyboard access and QTI mapping.
+Each collection shows its curated contents and generated kit name; planned drafts cannot appear as
+shipped components accidentally.

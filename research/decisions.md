@@ -77,6 +77,79 @@ enter in a later wave, not that they're dropped forever.
 
 ---
 
+## D3 — Foundation portfolio before sector-specific labs
+
+**Date:** 2026-08-12.
+
+**Previous roadmap assumption:** `AnimationLab` was selected as the first experience-platform pilot
+after animation was discussed as an attractive example for a dynamically generated course. That
+conversation demonstrated product ambition, not relative market demand or architectural priority.
+
+**Product decision:** advanced growth is planned as a portfolio of reusable foundations: interactive
+media, data/coordinates, decisions/procedures, system simulation and artifact execution. A public
+experience sits on a specialized foundation; subject and sector cases are
+normally declarative recipes.
+
+No foundation is considered general after one vertical. It must support two materially different
+cases with the same meaningful authoring/state contract. If the second case fits only through
+domain-specific flags or inaccessible behavior, the abstraction is split instead of frozen.
+
+**Evidence boundary:** H5P's published 2022 H5P.com distribution is used as one usage proxy, not as
+current global market share. QTI, Moodle and Open edX are coverage checks, not rankings. Simulation
+evidence is conditional and does not justify prioritizing a simulation solely because it is
+interactive.
+
+**Immediate consequence:** Phase 10 begins by designing an interactive-media foundation with a
+procedure-video fixture and a language-comprehension audio fixture. `AnimationLab` becomes a
+possible simulation recipe or specialization and is not implemented until the system-simulation
+foundation is evaluated with a contrasting non-keyframe case.
+
+**Source of truth:** `docs/experience-foundations.md` contains the scoring method, initial matrix,
+portfolio boundaries and admission gate.
+
+---
+
+## D4 — Retire the deck UI, preserve spaced repetition as a capability
+
+**Date:** 2026-08-12.
+
+**Observed problem:** `SpacedRepetitionDeck` repeated the same visible study interaction as
+`Flashcard` while adding scheduling controls to the component surface. In Storybook and for library
+consumers, that looked like a second card component rather than a materially different learning
+experience.
+
+**Product decision:** remove `SpacedRepetitionDeck` from `@didact/core`, the public catalog and the
+download registry. Keep three responsibilities separate:
+
+- `Flashcard` is the compact revealable study surface;
+- `RetrievalPracticeSession` requires an authored response before comparison and supports
+  self-assessment without pretending to own persistence;
+- `@didact/spaced-repetition` remains a headless scheduling contract and SM-2 implementation that a
+  consumer can connect to stored review history.
+
+This reduces the public catalog from 25 to 24 differentiated types without removing spaced
+practice support. Historical research and design reports retain the former component name because
+they record the evidence and architecture considered at that time; this decision supersedes their
+public-component recommendation.
+
+---
+
+## D5 — Individual-course scope; collaboration outside the horizon
+
+**Date:** 2026-08-12.
+
+**Product decision:** SkillNet courses are generated and completed individually. Didact therefore
+does not plan `PeerReview`, `CollaborativeArtifact`, reviewer assignment or real-time coauthoring in
+the current product horizon.
+
+Those experiences require identity, permissions, multiuser persistence, moderation and workflow
+semantics that are not reusable UI concerns for the target product. `Rubric`, authored feedback and
+artifact submission remain valid for individual learning; only learner-to-learner collaboration is
+excluded. If validated demand appears later, it will be assessed as a separate product boundary
+rather than prebuilt speculatively into the core.
+
+---
+
 ## How this relates to the rest of the repo
 
 See `research/README.md` for how `research.md`, `reports/`, `sources/`, and this document fit

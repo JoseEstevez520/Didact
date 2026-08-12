@@ -1,5 +1,10 @@
 # Design — Education Components Library
 
+> **Normative update (2026-08-12):** Didact will not implement or publish a SkillNet adapter.
+> References below to an optional adapter are retained as historical Phase 2 analysis only. SkillNet
+> consumes the public registry from its own repository like any other project; consumer-specific
+> generation, theming and data mapping are not Didact deliverables.
+
 > Answers the **how**, starting from `requirements.md`. **Phase 2 status: closed.** Every section
 > that was previously marked as awaiting the research phase is now resolved below, using the
 > cited evidence from `specs/education-components/research.md` (Phase 1) and, where the product
@@ -13,7 +18,7 @@
 > (2026-08-11): the React 19 smoke test has since been executed — see §2 for the result** (PASS);
 > the `shadcn diff` gap in §3 is still open.
 
-## 0. Framework: core vs. adapter
+## 0. Framework: library vs. consumer
 
 Everything in this document distinguishes two things that **do not live in the same place nor
 share the same lifecycle**:

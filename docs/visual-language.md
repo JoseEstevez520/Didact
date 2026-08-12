@@ -5,6 +5,16 @@ without imposing a brand. It is implemented as tokens in `@didact/theme` and con
 component through those tokens (see [`design-principles.md`](./design-principles.md) §1). The
 values below are Didact's defaults; any consumer overrides them.
 
+## Iconography
+
+- The interface never uses emoji or Unicode characters as substitutes for functional icons.
+- Actions such as play, pause, seek, close, and complete use consistent SVG icons.
+- An icon-only button always has an accessible name through a localized `aria-label` and may expose
+  a localized `title` when that improves discoverability.
+- Icons can reinforce a label, but they never carry educational meaning or state on their own.
+- Didact uses published icon-library assets rather than drawing ad hoc SVG paths. Interactive media
+  controls currently use the Material Design family exposed by `react-icons/md`.
+
 ## Palette
 
 Near-monochrome by design. The default theme is built from neutral greys with a near-black
@@ -30,17 +40,22 @@ color as the only signal (WCAG 1.4.1). A consumer that wants dedicated status to
 - **Radius:** a single base radius of `0.625rem`, with a derived `sm / md / lg / xl` scale
   (`calc()` off the base). Controls and chips use the small/medium radius; surfaces (cards,
   popovers) use the larger base radius.
+- **Elevation:** flat by design. Didact uses no `box-shadow`, `drop-shadow`, glow, or simulated
+  elevation at any weight. Cards, controls, popovers, and interactive states are separated with a
+  fixed 1px solid border drawn from `border`/`input`; hover and selection may change fill or border
+  color, but never introduce a shadow.
 - **Restraint:** components are compact and quiet. Small text with medium weight, tight padding,
-  hairline borders, no heavy shadows or gradients. The interface should recede so the learning
-  content stands out.
+  fixed hairline borders, and no gradients. The interface should recede so the learning content
+  stands out.
 - **Badges/chips:** gently rounded (`rounded-md`), `text-xs` / medium weight, minimal padding,
   transparent border by default — a small, calm status marker, not a loud button.
 
 ## Focus
 
 Focus is always visible and never removed without a substitute (WCAG 2.4.7). The default is a
-**3px ring in the `ring` color at ~50% opacity**, plus a ring-colored border — soft but
-unmistakable, and consistent across every interactive component.
+**2px CSS outline in the `ring` color with a 2px offset**, plus a ring-colored border. An outline
+is used deliberately instead of Tailwind's ring utilities because those are implemented with
+`box-shadow`, which would violate Didact's zero-shadow rule.
 
 ## Typography
 
@@ -68,7 +83,7 @@ Result, both light and dark:
   mode at **4.73:1** — over the bar, but the smallest margin, so re-run the audit if that token
   changes.
 - **Non-text pairs (WCAG 1.4.11, ≥ 3:1) — a known trade-off inherited from the reference default,
-  honestly reported and NOT silently patched:** the focus **`ring`** passes in dark (4.18:1) but is
+  honestly reported and NOT silently patched:** the focus **outline** (`ring` token) passes in dark (4.18:1) but is
   **2.59:1 in light mode**, below the 3:1 bar; and **`border`** is intentionally a decorative
   hairline (~1.25:1). This is exactly how the reference's default theme behaves. Author rule: never
   rely on `border` alone to convey a boundary or state. If strict WCAG 1.4.11 for the focus

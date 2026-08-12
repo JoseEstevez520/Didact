@@ -21,6 +21,19 @@ date: 2026-08-11.
   cross-validation checklist for the inventory, not as a dependency. Accessible.
 - **H5P — semantics.json**: https://h5p.org/semantics — Dual declarative schema (documents +
   validates at runtime) adopted as the pattern for `packages/validators/schema/`. Accessible.
+- **H5P — content-type distribution on H5P.com (2022 data, published 2023)**:
+  https://h5p.org/blog/status-update-february-2023 — Direct usage proxy showing Course
+  Presentation, Interactive Video and Question Set as the three largest top-level types in the
+  measured H5P.com corpus. It is not treated as current global LMS market share. Accessible.
+- **H5P — author tutorials/content-type inventory**: https://h5p.org/node/2465 — Cross-check for
+  the breadth of composition, media, language, visual and scenario experiences. Accessible.
+- **Moodle 5.0 — standard activities**: https://docs.moodle.org/500/en/activities — Official list
+  spanning assessment, collaboration, communication and interactive content; used to avoid
+  reducing educational activity coverage to question widgets. Accessible.
+- **Open edX — guide to problem types**:
+  https://docs.openedx.org/en/latest/educators/references/course_development/exercise_tools/guide_problem_types.html
+  — Official distinction between core problems and advanced/external tools including open
+  response, peer instruction, external graders and specialized interactions. Accessible.
 - **xAPI Spec (ADL)**: https://github.com/adlnet/xAPI-Spec — Closed vocabulary of 10
   `interactionType`s; used only as naming inspiration for callbacks, basis for
   `xapi-mapping.json`. Accessible.

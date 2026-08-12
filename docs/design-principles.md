@@ -48,6 +48,8 @@ When adding a component:
 
 - Read every visual value from a token; if a token is missing, add it to the theme rather than
   hardcoding.
+- Do not use `box-shadow`, `drop-shadow`, Tailwind `shadow-*`, or ring utilities implemented as
+  shadows. Use fixed token-driven borders for separation and CSS `outline` for keyboard focus.
 - Expose the meaningful looks as `variant`s; don't make callers override `className` for things
   that should be first-class options.
 - Always accept and merge `className` via `cn()`.
