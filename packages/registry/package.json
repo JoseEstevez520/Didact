@@ -5,8 +5,9 @@
   "description": "Didact registry in shadcn/ui's official schema (registry.json), no custom CLI.",
   "license": "MIT",
   "scripts": {
-    "build": "echo \"@didact/registry: no real build yet (ROADMAP Phase 4/6)\"",
-    "lint": "echo \"@didact/registry: no real lint yet (ROADMAP Phase 4/6)\"",
-    "test": "echo \"@didact/registry: no real tests yet (ROADMAP Phase 4/6)\""
+    "build": "node scripts/build.mjs",
+    "lint": "node scripts/lint.mjs",
+    "test": "node --test scripts/registry.test.mjs && node scripts/verify-consumer.mjs",
+    "verify:consumer": "node scripts/verify-consumer.mjs"
   }
 }

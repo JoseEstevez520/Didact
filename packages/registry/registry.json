@@ -5,6 +5,80 @@
   "items": [
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "didact-theme",
+      "type": "registry:theme",
+      "title": "Didact Theme",
+      "description": "Reusable shadcn theme setup for every copied Didact component. Installs the complete semantic color set and a radius scale derived from --radius; it does not require @didact/theme or any other npm package.",
+      "cssVars": {
+        "theme": {
+          "radius-sm": "calc(var(--radius) - 4px)",
+          "radius-md": "calc(var(--radius) - 2px)",
+          "radius-lg": "var(--radius)",
+          "radius-xl": "calc(var(--radius) + 4px)",
+          "color-background": "var(--background)",
+          "color-foreground": "var(--foreground)",
+          "color-card": "var(--card)",
+          "color-card-foreground": "var(--card-foreground)",
+          "color-popover": "var(--popover)",
+          "color-popover-foreground": "var(--popover-foreground)",
+          "color-primary": "var(--primary)",
+          "color-primary-foreground": "var(--primary-foreground)",
+          "color-secondary": "var(--secondary)",
+          "color-secondary-foreground": "var(--secondary-foreground)",
+          "color-muted": "var(--muted)",
+          "color-muted-foreground": "var(--muted-foreground)",
+          "color-accent": "var(--accent)",
+          "color-accent-foreground": "var(--accent-foreground)",
+          "color-destructive": "var(--destructive)",
+          "color-border": "var(--border)",
+          "color-input": "var(--input)",
+          "color-ring": "var(--ring)"
+        },
+        "light": {
+          "radius": "0.625rem",
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "card": "oklch(1 0 0)",
+          "card-foreground": "oklch(0.145 0 0)",
+          "popover": "oklch(1 0 0)",
+          "popover-foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "secondary": "oklch(0.97 0 0)",
+          "secondary-foreground": "oklch(0.205 0 0)",
+          "muted": "oklch(0.97 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "accent": "oklch(0.97 0 0)",
+          "accent-foreground": "oklch(0.205 0 0)",
+          "destructive": "oklch(0.577 0.245 27.325)",
+          "border": "oklch(0.922 0 0)",
+          "input": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)"
+        },
+        "dark": {
+          "background": "oklch(0.145 0 0)",
+          "foreground": "oklch(0.985 0 0)",
+          "card": "oklch(0.205 0 0)",
+          "card-foreground": "oklch(0.985 0 0)",
+          "popover": "oklch(0.205 0 0)",
+          "popover-foreground": "oklch(0.985 0 0)",
+          "primary": "oklch(0.922 0 0)",
+          "primary-foreground": "oklch(0.205 0 0)",
+          "secondary": "oklch(0.269 0 0)",
+          "secondary-foreground": "oklch(0.985 0 0)",
+          "muted": "oklch(0.269 0 0)",
+          "muted-foreground": "oklch(0.708 0 0)",
+          "accent": "oklch(0.269 0 0)",
+          "accent-foreground": "oklch(0.985 0 0)",
+          "destructive": "oklch(0.704 0.191 22.216)",
+          "border": "oklch(1 0 0 / 10%)",
+          "input": "oklch(1 0 0 / 15%)",
+          "ring": "oklch(0.556 0 0)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -367,30 +441,6 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-      "name": "spaced-repetition-deck",
-      "type": "registry:ui",
-      "title": "Spaced Repetition Deck",
-      "description": "Sequences a set of cards through a single review pass (RF-2): shows the current card as a Flashcard and, when the learner rates it, asks a SpacedRepetitionScheduler (SM-2 by default) for the next state and due date before advancing. Presentation-only, no persistence -- it computes the next review state but never stores it, handing each result to the consumer via onReview. Composed from @didact/ui's Card/Button and the flashcard item -- see packages/core/src/components/spaced-repetition-deck.tsx for the full rationale.",
-      "registryDependencies": ["card", "button", "flashcard", "spaced-repetition"],
-      "dependencies": ["clsx", "tailwind-merge"],
-      "files": [
-        {
-          "path": "packages/core/src/components/spaced-repetition-deck.tsx",
-          "type": "registry:ui"
-        },
-        {
-          "path": "packages/core/src/lib/cn.ts",
-          "type": "registry:lib"
-        }
-      ],
-      "cssVars": {
-        "theme": {
-          "muted-foreground": "oklch(0.556 0 0)"
-        }
-      }
-    },
-    {
-      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "quiz-item",
       "type": "registry:ui",
       "title": "Quiz Item",
@@ -430,10 +480,652 @@
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "matching-exercises",
+      "type": "registry:ui",
+      "title": "Matching / Sort / Categorize Exercises",
+      "description": "The RF-3 interaction family: MatchingExercise, SortExercise, and CategorizeExercise. Matching uses identical fixed nodes on both sides, with connection points on opposite edges; its primary interaction lets the learner click anywhere on each node, while the SVG line still runs exactly between the two filled points and drag remains optional. Categorize physically moves and reflows cards across an Unassigned lane and category columns; Sort reorders a list. Every variant includes a non-dragging WCAG 2.5.7 path, pointer and keyboard support, controlled/uncontrolled values, text-and-icon results, feedback, empty states, and token-only styling.",
+      "registryDependencies": ["button", "card"],
+      "dependencies": ["@dnd-kit/core@6.3.1", "@dnd-kit/sortable@10.0.0", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/matching-exercises.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "muted": "oklch(0.97 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "destructive": "oklch(0.577 0.245 27.325)",
+          "border": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline / Steps",
+      "description": "A presentational ordered sequence for protocols, procedures, and step-by-step flows (RF-8), with vertical and horizontal orientations. Status can be explicit per step or derived from currentStep; complete/current/upcoming is conveyed through marker shape, screen-reader text, and aria-current=step rather than color alone. Supports partial step arrays for streaming consumers and configurable status labels for localization. Styled only with @didact/theme token utilities; no animation or interactive state.",
+      "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/timeline.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "border": "oklch(0.922 0 0)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "A neutral determinate/indeterminate progress primitive backed by Radix progressbar semantics. Values are clamped to max; the token-driven track and indicator respect reduced motion and expose an indicatorClassName customization hook.",
+      "dependencies": ["radix-ui", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/ui/src/components/progress.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "primary": "oklch(0.205 0 0)",
+          "secondary": "oklch(0.97 0 0)",
+          "radius": "0.625rem"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "progress-indicators",
+      "type": "registry:ui",
+      "title": "Progress Indicators",
+      "description": "RF-7 lesson/skill ProgressIndicator and ProgressOverview. Every snapshot pairs its visual bar with visible percentage/pending text, semantic progressbar values and lesson/skill labels rather than relying on color. Missing values remain indeterminate for streaming consumers; lists support localization, descriptions and explicit empty states.",
+      "registryDependencies": ["progress"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/progress-indicator.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "secondary": "oklch(0.97 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "border": "oklch(0.922 0 0)",
+          "radius": "0.625rem"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "hint-reveal",
+      "type": "registry:ui",
+      "title": "Hint / Reveal",
+      "description": "RF-6 progressive Hint, standalone Reveal, and HintReveal alias. Hints, solution and feedback are conditionally mounted only after explicit learner requests, never merely hidden in the DOM. Includes controlled/uncontrolled disclosure state, callbacks, localized functional labels, partial streaming content, explicit pending state, keyboard/ARIA semantics and reduced-motion-safe token styling.",
+      "registryDependencies": ["button", "card"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/hint-reveal.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "card": "oklch(1 0 0)",
+          "card-foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "muted": "oklch(0.97 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "border": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)",
+          "radius": "0.625rem"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "rubric",
+      "type": "registry:ui",
+      "title": "Rubric / Self-assessment",
+      "description": "RF-10 criterion-by-criterion self-assessment with accessible single-select performance levels. Supports controlled/uncontrolled selection maps, disabled criteria, localized functional fallbacks, partial streaming levels and explicit empty/pending states. Reports textual assessment progress but deliberately exposes no score, answer key, weighting, correctness, pass/fail result or automatic grading path.",
+      "registryDependencies": ["card", "radio-group"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/rubric.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "foreground": "oklch(0.145 0 0)",
+          "card": "oklch(1 0 0)",
+          "card-foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "border": "oklch(0.922 0 0)",
+          "input": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)",
+          "radius": "0.625rem"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Didact's anchored, non-modal supplementary-content primitive. Radix supplies collision-aware positioning, focus restoration, Escape and outside-click dismissal; the surface uses @didact/theme popover, border, ring, and radius tokens with zero shadow and reduced-motion-safe opacity transitions.",
+      "dependencies": ["radix-ui", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/ui/src/components/popover.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/ui/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "popover": "oklch(1 0 0)",
+          "popover-foreground": "oklch(0.145 0 0)",
+          "border": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)",
+          "radius": "0.625rem"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "glossary",
+      "type": "registry:ui",
+      "title": "Glossary / Term",
+      "description": "RF-5 inline Term and compact Glossary list. Terms open an accessible anchored popover without navigation; optional recallPrompt keeps the definition out of the DOM until explicitly revealed, converting passive lookup into an active-recall moment. Supports controlled state, partial streaming entries, localized labels and empty state, rich definitions/examples, keyboard operation, Escape focus restoration, and token-only styling.",
+      "registryDependencies": ["button", "popover"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/glossary.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)",
+          "primary": "oklch(0.205 0 0)",
+          "primary-foreground": "oklch(0.985 0 0)",
+          "muted-foreground": "oklch(0.556 0 0)",
+          "border": "oklch(0.922 0 0)",
+          "ring": "oklch(0.708 0 0)"
+        }
+      }
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "practice-set",
+      "type": "registry:ui",
+      "title": "Practice Set / Question Set",
+      "description": "A bounded practice orchestrator for heterogeneous child interactions. Owns navigation, attempts, submit/review phases and completion summary without imposing a universal scoring model or exposing feedback before submission. Supports controlled and uncontrolled progress, partial item arrays, disabled state, localization and opaque response/result types.",
+      "registryDependencies": ["button", "card"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/practice-set.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "retrieval-practice-session",
+      "type": "registry:ui",
+      "title": "Retrieval Practice Session",
+      "description": "A constructed-retrieval session with the explicit cycle write from memory, compare with a model, self-rate and schedule. Scheduler, incoming review state and persistence are injected; the component never owns a backend. Includes controlled/uncontrolled responses, localization, partial streaming content and accessible rating controls.",
+      "registryDependencies": ["button", "card", "label", "textarea", "spaced-repetition"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/retrieval-practice-session.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "generative-learning",
+      "type": "registry:ui",
+      "title": "Self-explanation, Worked Example and Completion Problem",
+      "description": "Three related learning components: an ungraded SelfExplanationPrompt with post-submit model comparison, a static or progressively disclosed WorkedExample, and a CompletionProblem with worked/missing steps, partial results and informative per-step feedback. Includes controlled/uncontrolled APIs, localization, partial/empty/disabled states and accessible native form controls.",
+      "registryDependencies": ["button", "card", "input", "label", "textarea"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/generative-learning.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "numeric-question",
+      "type": "registry:ui",
+      "title": "Numeric Question",
+      "description": "A quantitative response interaction with exact values, absolute or relative tolerance, open or closed ranges, visible or required units, localized decimal parsing, ungraded use, informative post-submit feedback, and controlled or uncontrolled state.",
+      "registryDependencies": ["button", "card", "input", "label"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/numeric-question.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "word-bank",
+      "type": "registry:ui",
+      "title": "Word Bank / Gap Match",
+      "description": "An accessible gap-match interaction with real inline sentence gaps. Bank options can be dragged directly into each gap or assigned through the same click and keyboard controls. Supports bounded or unlimited option reuse, two-way selection, undo, partial or human-reviewed results, streaming content and post-submit feedback.",
+      "registryDependencies": ["button", "card"],
+      "dependencies": ["@dnd-kit/core@6.3.1", "clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/word-bank.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "hotspot",
+      "type": "registry:ui",
+      "title": "Hotspot / Select Point",
+      "description": "A responsive spatial interaction for predefined regions or normalized free points. Pointer input is paired with an equivalent textual list or percentage-coordinate controls; alt text, long descriptions, single or multiple selection, ungraded and partial results, streaming content and post-submit feedback are supported.",
+      "registryDependencies": ["button", "card", "input", "label"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/hotspot.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "interactive-media-schema",
+      "type": "registry:lib",
+      "title": "Interactive Media schema",
+      "description": "Framework-neutral authoring/runtime contract and validator for timed audio/video checkpoints, transcripts, accessibility equivalents and completion policies.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "packages/schema/src/taxonomy.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "packages/schema/src/types.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "packages/schema/src/interactive-media.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "media-player",
+      "type": "registry:ui",
+      "title": "Media Player",
+      "description": "A minimal standalone audio/video player with inline accessible controls. It has no educational title, transcript, checkpoints or completion policy; Interactive Media composes those capabilities above it.",
+      "registryDependencies": ["button"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        {
+          "path": "packages/core/src/components/media-player.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "interactive-media",
+      "type": "registry:ui",
+      "title": "Interactive Media",
+      "description": "Coordinates timed learning checkpoints and a navigable transcript over audio or video. Child activities retain their own response, evaluation and feedback contracts; native playback is replaceable through an adapter.",
+      "registryDependencies": ["button", "card", "separator", "media-player", "interactive-media-schema"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        {
+          "path": "packages/core/src/components/interactive-media.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "data-coordinate-schema",
+      "type": "registry:lib",
+      "title": "Data and Coordinate schema",
+      "description": "Framework-neutral definitions and validators for axes, linear/time domains, point or function series, synchronized table data and serializable exploration state.",
+      "dependencies": [],
+      "files": [
+        {
+          "path": "packages/schema/src/taxonomy.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "packages/schema/src/types.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "packages/schema/src/data-coordinate.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "data-explorer",
+      "type": "registry:ui",
+      "title": "Data Explorer",
+      "description": "An accessible graph-and-table experience for inspecting and manipulating mathematical functions, scientific series and business data over one serializable state.",
+      "registryDependencies": ["button", "card", "input", "label", "data-coordinate-schema"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        {
+          "path": "packages/core/src/components/data-explorer.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "packages/core/src/lib/cn.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "decision-graph-schema",
+      "type": "registry:lib",
+      "title": "Decision Graph schema",
+      "description": "Serializable state-graph contract, deterministic conditions/effects, history snapshots and validation for branching conversations and procedures.",
+      "dependencies": [],
+      "files": [
+        { "path": "packages/schema/src/types.ts", "type": "registry:lib" },
+        { "path": "packages/schema/src/decision-graph.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "branching-scenario",
+      "type": "registry:ui",
+      "title": "Branching Scenario",
+      "description": "Accessible consequential decision practice over a serializable graph with variables, conditions, effects, history and informative outcomes.",
+      "registryDependencies": ["button", "card", "decision-graph-schema"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        { "path": "packages/core/src/components/branching-scenario.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "simulation-schema",
+      "type": "registry:lib",
+      "title": "Simulation schema",
+      "description": "Serializable parameters, observables, clock, actions, snapshots and state validation for domain-independent simulations.",
+      "dependencies": [],
+      "files": [
+        { "path": "packages/schema/src/types.ts", "type": "registry:lib" },
+        { "path": "packages/schema/src/simulation.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "simulation-lab",
+      "type": "registry:ui",
+      "title": "Simulation Lab",
+      "description": "A domain-independent simulation shell with accessible parameters, play/pause/step controls, injected deterministic runtime, actions, observables and snapshots.",
+      "registryDependencies": ["button", "card", "input", "label", "simulation-schema"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        { "path": "packages/core/src/components/simulation-lab.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "artifact-execution-schema",
+      "type": "registry:lib",
+      "title": "Artifact and Execution schema",
+      "description": "Serializable multi-file artifact, execution request/response, evaluation and workspace-state contracts with host-owned sandbox boundaries.",
+      "dependencies": [],
+      "files": [
+        { "path": "packages/schema/src/types.ts", "type": "registry:lib" },
+        { "path": "packages/schema/src/artifact-execution.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "code-exercise",
+      "type": "registry:ui",
+      "title": "Code Exercise",
+      "description": "A multi-file technical workspace with accessible editing and host-injected sandbox execution and evaluation ports.",
+      "registryDependencies": ["button", "card", "textarea", "artifact-execution-schema"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        { "path": "packages/core/src/components/code-exercise.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "label-diagram",
+      "type": "registry:ui",
+      "title": "Label Diagram",
+      "description": "Accessible normalized diagram labelling with optional drag and complete click, keyboard and textual alternatives.",
+      "registryDependencies": ["button", "card"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons", "@dnd-kit/core"],
+      "files": [
+        { "path": "packages/core/src/components/label-diagram.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "concept-map",
+      "type": "registry:ui",
+      "title": "Concept Map",
+      "description": "A serializable concept-network constructor with graphical and complete textual relationship builders.",
+      "registryDependencies": ["button", "card", "input", "label"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        { "path": "packages/core/src/components/concept-map.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "drawing-response",
+      "type": "registry:ui",
+      "title": "Drawing Response",
+      "description": "Responsive SVG drawing and annotation with structured normalized strokes, keyboard coordinates and optional host evaluation.",
+      "registryDependencies": ["button", "card", "input", "label"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        { "path": "packages/core/src/components/drawing-response.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "equation-workbench-schema",
+      "type": "registry:lib",
+      "title": "Equation Workbench schema",
+      "description": "Serializable symbolic expressions, transformation steps, events and host evaluation results.",
+      "dependencies": [],
+      "files": [
+        { "path": "packages/schema/src/types.ts", "type": "registry:lib" },
+        { "path": "packages/schema/src/equation-workbench.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "evidence-annotation-schema",
+      "type": "registry:lib",
+      "title": "Evidence Annotation schema",
+      "description": "Serializable documents, stable spans, labels, claims, relations, events and host results.",
+      "dependencies": [],
+      "files": [
+        { "path": "packages/schema/src/types.ts", "type": "registry:lib" },
+        { "path": "packages/schema/src/evidence-annotation.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "measurement-lab-schema",
+      "type": "registry:lib",
+      "title": "Measurement Lab schema",
+      "description": "Serializable instrument geometry, scales, units, tolerance, readings, events and host results.",
+      "dependencies": [],
+      "files": [
+        { "path": "packages/schema/src/types.ts", "type": "registry:lib" },
+        { "path": "packages/schema/src/measurement-lab.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "equation-workbench",
+      "type": "registry:ui",
+      "title": "Equation Workbench",
+      "description": "Structured symbolic transformation steps with host-injected rendering and evaluation.",
+      "registryDependencies": ["button", "card", "input", "label"],
+      "dependencies": ["clsx", "tailwind-merge", "react-icons"],
+      "files": [
+        { "path": "packages/core/src/components/equation-workbench.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "evidence-annotation",
+      "type": "registry:ui",
+      "title": "Evidence Annotation",
+      "description": "Stable source-segment annotation with categories, claims, notes and an accessible list interaction.",
+      "registryDependencies": ["button", "card", "checkbox", "input", "label", "textarea"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        { "path": "packages/core/src/components/evidence-annotation.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "measurement-lab",
+      "type": "registry:ui",
+      "title": "Measurement Lab",
+      "description": "Accessible linear and dial measurement instruments with explicit scales, units and precision.",
+      "registryDependencies": ["button", "card", "input", "label"],
+      "dependencies": ["clsx", "tailwind-merge"],
+      "files": [
+        { "path": "packages/core/src/components/measurement-lab.tsx", "type": "registry:ui" },
+        { "path": "packages/core/src/lib/cn.ts", "type": "registry:lib" }
+      ]
+    },
+    {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
       "name": "spaced-repetition",
       "type": "registry:lib",
       "title": "Spaced Repetition Scheduler (SM-2)",
-      "description": "The persistence-agnostic spaced-repetition scheduler behind SpacedRepetitionDeck (RF-2): a pure schedule(state, grade, now) that returns the next opaque state and due date, plus the SpacedRepetitionScheduler/ReviewState/ReviewGrade/ReviewResult vocabulary consumers program against without knowing which algorithm is behind it. Ships the default, fully implemented SM-2 arithmetic -- initial easiness factor 2.5 with a 1.3 floor, interval growth 1/6/round(I*EF) days on success, reset to 1 day on failure. Zero runtime dependencies, nothing persisted -- see packages/spaced-repetition/src/sm2.ts and types.ts for the full contract.",
+      "description": "A persistence-agnostic spaced-repetition scheduler for RetrievalPracticeSession and consumer-defined practice flows: a pure schedule(state, grade, now) that returns the next opaque state and due date, plus the SpacedRepetitionScheduler/ReviewState/ReviewGrade/ReviewResult vocabulary consumers program against without knowing which algorithm is behind it. Ships the default, fully implemented SM-2 arithmetic -- initial easiness factor 2.5 with a 1.3 floor, interval growth 1/6/round(I*EF) days on success, reset to 1 day on failure. Zero runtime dependencies and nothing persisted.",
       "dependencies": [],
       "files": [
         {

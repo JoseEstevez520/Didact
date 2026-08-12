@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "technical-training",
+  "type": "registry:block",
+  "title": "Technical Training",
+  "description": "Executable practice, data exploration and systems thinking for programming, analytics and technical operations.",
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/code-exercise.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/data-explorer.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/simulation-lab.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/label-diagram.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/drawing-response.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/measurement-lab.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/generative-learning.json"
+  ],
+  "dependencies": [],
+  "files": [],
+  "meta": {
+    "collectionId": "didact.collection.technical-training",
+    "collectionVersion": "1.0.0"
+  }
+}

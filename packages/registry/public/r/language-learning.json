@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "language-learning",
+  "type": "registry:block",
+  "title": "Language Learning",
+  "description": "Vocabulary, sentence completion, constructed responses and recall for language courses.",
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/word-bank.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/quiz-item.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/glossary.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/generative-learning.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/evidence-annotation.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/interactive-media.json"
+  ],
+  "dependencies": [],
+  "files": [],
+  "meta": {
+    "collectionId": "didact.collection.language-learning",
+    "collectionVersion": "1.0.0"
+  }
+}

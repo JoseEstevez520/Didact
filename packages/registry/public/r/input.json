@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input",
+  "type": "registry:ui",
   "title": "Input",
   "description": "A single-line text field (@didact/ui, layers 1-2): a styled native <input> with no headless primitive behind it, reading @didact/theme's real tokens (border-input, text-muted-foreground placeholder, the shared focus-ring and aria-invalid treatment). Pair it with the label item via htmlFor/id -- see packages/ui/src/components/input.tsx.",
   "dependencies": [
@@ -9,27 +10,19 @@
   ],
   "files": [
     {
-      "path": "packages/ui/src/components/input.tsx",
-      "content": "import * as React from \"react\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Input -- a single-line text field, ported verbatim from the same reference kit as Button (see\n * button.tsx's header comment for the porting rationale). It is a styled native `<input>` with no\n * headless-primitive behind it (a text field needs none): standard Tailwind utilities reading\n * `@didact/theme`'s tokens (`border-input`, `bg-transparent`, `text-foreground`, the shared\n * focus-ring and `aria-invalid` treatments), the same `data-slot=\"input\"` attribute, and the same\n * class structure as the reference. The only change from the reference source is the `cn` import\n * path.\n *\n * Accessibility: pair every Input with a `Label` (label.tsx) via `htmlFor`/`id`, and drive its\n * error state with `aria-invalid` + real error text referenced by `aria-describedby` (never the\n * red ring alone) -- docs/interface-norms.md \"Focus & states\".\n */\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Input };\n",
-      "type": "registry:ui"
+      "path": "components/ui/input.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/didact/cn\";\n\n/**\n * Input -- a single-line text field, adapted from the same reference kit as Button (see\n * button.tsx's header comment for the porting rationale). It is a styled native `<input>` with no\n * headless-primitive behind it (a text field needs none): standard Tailwind utilities reading\n * `@didact/theme`'s tokens (`border-input`, `bg-transparent`, `text-foreground`, the shared\n * focus-outline and `aria-invalid` treatments), and the same `data-slot=\"input\"` attribute. Its\n * reference shadow and box-shadow focus ring are replaced by a fixed border and CSS outline.\n *\n * Accessibility: pair every Input with a `Label` (label.tsx) via `htmlFor`/`id`, and drive its\n * error state with `aria-invalid` + real error text referenced by `aria-describedby` (never the\n * red outline alone) -- docs/interface-norms.md \"Focus & states\".\n */\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base transition-colors outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring\",\n        \"aria-invalid:border-destructive aria-invalid:focus-visible:outline-destructive\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nexport { Input };\n",
+      "type": "registry:ui",
+      "target": "components/ui/input.tsx"
     },
     {
-      "path": "packages/ui/src/lib/cn.ts",
+      "path": "lib/didact/cn.ts",
       "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
-      "type": "registry:lib"
+      "type": "registry:lib",
+      "target": "lib/didact/cn.ts"
     }
   ],
-  "cssVars": {
-    "theme": {
-      "input": "oklch(0.922 0 0)",
-      "primary": "oklch(0.205 0 0)",
-      "primary-foreground": "oklch(0.985 0 0)",
-      "foreground": "oklch(0.145 0 0)",
-      "muted-foreground": "oklch(0.556 0 0)",
-      "ring": "oklch(0.708 0 0)",
-      "destructive": "oklch(0.577 0.245 27.325)",
-      "radius": "0.625rem"
-    }
-  },
-  "type": "registry:ui"
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json"
+  ]
 }

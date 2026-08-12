@@ -1,33 +1,31 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toggle-group",
+  "type": "registry:ui",
   "title": "Toggle Group",
   "description": "A roving-tabindex group of Toggles (@didact/ui, layers 1-2), single or multiple selection, backed by the unified radix-ui package's ToggleGroup. Depends on the toggle item for its shared toggleVariants and variant/size context.",
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/toggle.json"
+  ],
   "dependencies": [
     "class-variance-authority",
     "clsx",
     "tailwind-merge",
     "radix-ui"
   ],
-  "registryDependencies": [
-    "toggle"
-  ],
   "files": [
     {
-      "path": "packages/ui/src/components/toggle-group.tsx",
-      "content": "import * as React from \"react\";\nimport { type VariantProps } from \"class-variance-authority\";\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\";\n\nimport { cn } from \"../lib/cn.js\";\nimport { toggleVariants } from \"./toggle.js\";\n\n/**\n * ToggleGroup / ToggleGroupItem -- a roving-tabindex group of `Toggle`s (single or multiple\n * selection), ported verbatim from the same reference kit as Button (see button.tsx's header\n * comment). Backed by `radix-ui`'s `ToggleGroup`, which owns the keyboard roving/selection\n * behavior; this layer only supplies the shared `variant`/`size`/`spacing` styling via context, so\n * every `ToggleGroupItem` matches the group's look unless it overrides its own.\n */\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number;\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n});\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number;\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs\",\n        className,\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  );\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> & VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext);\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"min-w-0 shrink-0 rounded-none px-3 shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10\",\n        \"data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  );\n}\n\nexport { ToggleGroup, ToggleGroupItem };\n",
-      "type": "registry:ui"
+      "path": "components/ui/toggle-group.tsx",
+      "content": "import * as React from \"react\";\nimport { type VariantProps } from \"class-variance-authority\";\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\";\n\nimport { cn } from \"@/lib/didact/cn\";\nimport { toggleVariants } from \"@/components/ui/toggle\";\n\n/**\n * ToggleGroup / ToggleGroupItem -- a roving-tabindex group of `Toggle`s (single or multiple\n * selection), adapted from the same reference kit as Button (see button.tsx's header\n * comment). Backed by `radix-ui`'s `ToggleGroup`, which owns the keyboard roving/selection\n * behavior; this layer only supplies the shared `variant`/`size`/`spacing` styling via context, so\n * every `ToggleGroupItem` matches the group's look unless it overrides its own. The group uses\n * fixed borders without a container shadow.\n */\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number;\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n});\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number;\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center rounded-md\",\n        className,\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  );\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> & VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext);\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"min-w-0 shrink-0 rounded-none px-3 first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10\",\n        \"data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l\",\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  );\n}\n\nexport { ToggleGroup, ToggleGroupItem };\n",
+      "type": "registry:ui",
+      "target": "components/ui/toggle-group.tsx"
     },
     {
-      "path": "packages/ui/src/lib/cn.ts",
+      "path": "lib/didact/cn.ts",
       "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
-      "type": "registry:lib"
+      "type": "registry:lib",
+      "target": "lib/didact/cn.ts"
     }
-  ],
-  "cssVars": {
-    "theme": {
-      "radius": "0.625rem"
-    }
-  },
-  "type": "registry:ui"
+  ]
 }

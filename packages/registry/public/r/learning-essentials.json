@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "learning-essentials",
+  "type": "registry:block",
+  "title": "Learning Essentials",
+  "description": "A compact foundation for questions, practice, scaffolding, feedback and progress in general online courses.",
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/quiz-item.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/flashcard.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/hint-reveal.json",
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/practice-set.json"
+  ],
+  "dependencies": [],
+  "files": [],
+  "meta": {
+    "collectionId": "didact.collection.learning-essentials",
+    "collectionVersion": "1.0.0"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "type": "registry:ui",
+  "title": "Popover",
+  "description": "Didact's anchored, non-modal supplementary-content primitive. Radix supplies collision-aware positioning, focus restoration, Escape and outside-click dismissal; the surface uses @didact/theme popover, border, ring, and radius tokens with zero shadow and reduced-motion-safe opacity transitions.",
+  "dependencies": [
+    "radix-ui",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "components/ui/popover.tsx",
+      "content": "import * as React from \"react\";\nimport { Popover as PopoverPrimitive } from \"radix-ui\";\n\nimport { cn } from \"@/lib/didact/cn\";\n\n/**\n * Popover -- an anchored, non-modal surface for compact supplementary content. Radix owns\n * positioning, collision avoidance, focus restoration, Escape and outside-click dismissal;\n * Didact adds the neutral token-driven surface and the shared focus/motion conventions.\n */\nfunction Popover(props: React.ComponentProps<typeof PopoverPrimitive.Root>) {\n  return <PopoverPrimitive.Root data-slot=\"popover\" {...props} />;\n}\n\nfunction PopoverTrigger(props: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {\n  return <PopoverPrimitive.Trigger data-slot=\"popover-trigger\" {...props} />;\n}\n\nfunction PopoverAnchor(props: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {\n  return <PopoverPrimitive.Anchor data-slot=\"popover-anchor\" {...props} />;\n}\n\nfunction PopoverContent({\n  className,\n  align = \"center\",\n  sideOffset = 6,\n  collisionPadding = 8,\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Content>) {\n  return (\n    <PopoverPrimitive.Portal>\n      <PopoverPrimitive.Content\n        data-slot=\"popover-content\"\n        align={align}\n        sideOffset={sideOffset}\n        collisionPadding={collisionPadding}\n        className={cn(\n          \"z-50 w-72 max-w-[calc(100vw-1rem)] rounded-lg border bg-popover p-4 text-popover-foreground outline-none transition-opacity duration-150 data-[state=closed]:opacity-0 data-[state=open]:opacity-100 motion-reduce:transition-none\",\n          className,\n        )}\n        {...props}\n      />\n    </PopoverPrimitive.Portal>\n  );\n}\n\nexport { Popover, PopoverAnchor, PopoverContent, PopoverTrigger };\n",
+      "type": "registry:ui",
+      "target": "components/ui/popover.tsx"
+    },
+    {
+      "path": "lib/didact/cn.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
+      "type": "registry:lib",
+      "target": "lib/didact/cn.ts"
+    }
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json"
+  ]
+}

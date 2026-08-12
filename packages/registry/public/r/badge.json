@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "badge",
+  "type": "registry:ui",
   "title": "Badge",
   "description": "A generic label/status primitive (@didact/ui, layers 1-2): variants default/secondary/destructive/outline/ghost/link, asChild via the unified radix-ui package's Slot. Distinct from packages/core's domain-specific MasteryBadge -- see packages/ui/src/components/badge.tsx for how they differ.",
   "dependencies": [
@@ -11,29 +12,19 @@
   ],
   "files": [
     {
-      "path": "packages/ui/src/components/badge.tsx",
-      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { Slot } from \"radix-ui\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Badge -- a small status/label primitive, ported verbatim from the same reference kit as Button\n * (see button.tsx's header comment). Unlike `MasteryBadge` (packages/core, a domain-specific\n * component with a fixed `level` prop and no layer-1 primitive), this is the generic, reusable\n * primitive `@didact/core` components can compose from for any label/tag/status chip that isn't\n * specifically about mastery. Variants: `default`, `secondary`, `destructive`, `outline`, `ghost`,\n * `link`.\n */\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nexport interface BadgeProps\n  extends React.ComponentProps<\"span\">,\n    VariantProps<typeof badgeVariants> {\n  /** Render onto the single child element instead of a `<span>` (docs/design-principles.md §4). */\n  asChild?: boolean;\n}\n\nfunction Badge({ className, variant = \"default\", asChild = false, ...props }: BadgeProps) {\n  const Comp = asChild ? Slot.Root : \"span\";\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  );\n}\n\nexport { Badge, badgeVariants };\n",
-      "type": "registry:ui"
+      "path": "components/ui/badge.tsx",
+      "content": "import * as React from \"react\";\nimport { cva, type VariantProps } from \"class-variance-authority\";\nimport { Slot } from \"radix-ui\";\n\nimport { cn } from \"@/lib/didact/cn\";\n\n/**\n * Badge -- a small status/label primitive, adapted from the same reference kit as Button\n * (see button.tsx's header comment). Unlike `MasteryBadge` (packages/core, a domain-specific\n * component with a fixed `level` prop and no layer-1 primitive), this is the generic, reusable\n * primitive `@didact/core` components can compose from for any label/tag/status chip that isn't\n * specifically about mastery. Variants: `default`, `secondary`, `destructive`, `outline`, `ghost`,\n * `link`.\n */\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-invalid:border-destructive aria-invalid:focus-visible:outline-destructive [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:outline-destructive dark:bg-destructive/60 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  },\n);\n\nexport interface BadgeProps\n  extends React.ComponentProps<\"span\">,\n    VariantProps<typeof badgeVariants> {\n  /** Render onto the single child element instead of a `<span>` (docs/design-principles.md §4). */\n  asChild?: boolean;\n}\n\nfunction Badge({ className, variant = \"default\", asChild = false, ...props }: BadgeProps) {\n  const Comp = asChild ? Slot.Root : \"span\";\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  );\n}\n\nexport { Badge, badgeVariants };\n",
+      "type": "registry:ui",
+      "target": "components/ui/badge.tsx"
     },
     {
-      "path": "packages/ui/src/lib/cn.ts",
+      "path": "lib/didact/cn.ts",
       "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
-      "type": "registry:lib"
+      "type": "registry:lib",
+      "target": "lib/didact/cn.ts"
     }
   ],
-  "cssVars": {
-    "theme": {
-      "foreground": "oklch(0.145 0 0)",
-      "primary": "oklch(0.205 0 0)",
-      "primary-foreground": "oklch(0.985 0 0)",
-      "secondary": "oklch(0.97 0 0)",
-      "secondary-foreground": "oklch(0.205 0 0)",
-      "accent": "oklch(0.97 0 0)",
-      "accent-foreground": "oklch(0.205 0 0)",
-      "destructive": "oklch(0.577 0.245 27.325)",
-      "border": "oklch(0.922 0 0)",
-      "ring": "oklch(0.708 0 0)"
-    }
-  },
-  "type": "registry:ui"
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json"
+  ]
 }

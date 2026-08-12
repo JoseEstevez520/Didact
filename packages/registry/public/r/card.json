@@ -1,6 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "card",
+  "type": "registry:ui",
   "title": "Card",
   "description": "The Card family (@didact/ui, layers 1-2): Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent, CardFooter. Title/description/optional action in the header, body in content, actions in the footer -- see docs/interface-norms.md's Card composition for when to use each slot.",
   "dependencies": [
@@ -9,24 +10,19 @@
   ],
   "files": [
     {
-      "path": "packages/ui/src/components/card.tsx",
-      "content": "import * as React from \"react\";\n\nimport { cn } from \"../lib/cn.js\";\n\n/**\n * Card family -- ported verbatim from the same reference kit as Button (see button.tsx's header\n * comment for the porting rationale). Anatomy and slot names are unchanged: `Card` (the surface) >\n * `CardHeader` (title + description + optional action, laid out with a container-query grid so the\n * action column only appears when a `CardAction` child is present) > `CardTitle` / `CardDescription`\n * / `CardAction` > `CardContent` (body) > `CardFooter` (actions). See docs/interface-norms.md,\n * \"Card composition\" for when to use each slot.\n *\n * Every slot carries a `data-slot` attribute (unchanged from the reference) so a consumer can\n * target a specific slot (e.g. `[data-slot=card-header]`) without relying on class names, and so\n * `CardHeader`'s own grid can react to whether a `CardAction` is present via\n * `has-data-[slot=card-action]`.\n */\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\"col-start-2 row-span-2 row-start-1 self-start justify-self-end\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-content\" className={cn(\"px-6\", className)} {...props} />;\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };\n",
-      "type": "registry:ui"
+      "path": "components/ui/card.tsx",
+      "content": "import * as React from \"react\";\n\nimport { cn } from \"@/lib/didact/cn\";\n\n/**\n * Card family -- based on the same reference kit as Button (see button.tsx's header comment).\n * The reference shadow is intentionally removed in favor of a fixed border. Anatomy and slot names\n * are unchanged: `Card` (the surface) >\n * `CardHeader` (title + description + optional action, laid out with a container-query grid so the\n * action column only appears when a `CardAction` child is present) > `CardTitle` / `CardDescription`\n * / `CardAction` > `CardContent` (body) > `CardFooter` (actions). See docs/interface-norms.md,\n * \"Card composition\" for when to use each slot.\n *\n * Every slot carries a `data-slot` attribute (unchanged from the reference) so a consumer can\n * target a specific slot (e.g. `[data-slot=card-header]`) without relying on class names, and so\n * `CardHeader`'s own grid can react to whether a `CardAction` is present via\n * `has-data-[slot=card-action]`.\n */\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border border-border bg-card py-6 text-card-foreground\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className,\n      )}\n      {...props}\n    />\n  );\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\"col-start-2 row-span-2 row-start-1 self-start justify-self-end\", className)}\n      {...props}\n    />\n  );\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"card-content\" className={cn(\"px-6\", className)} {...props} />;\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  );\n}\n\nexport { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };\n",
+      "type": "registry:ui",
+      "target": "components/ui/card.tsx"
     },
     {
-      "path": "packages/ui/src/lib/cn.ts",
+      "path": "lib/didact/cn.ts",
       "content": "import { clsx, type ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\n/**\n * `cn` -- Didact's class-composition helper (docs/design-principles.md §3), mirrored here from\n * packages/core/src/lib/cn.ts so `@didact/ui` has no dependency on `@didact/core`: `clsx` resolves\n * conditional/array/falsy class inputs, `tailwind-merge` then resolves conflicting Tailwind\n * utilities (e.g. a caller's `className=\"px-4\"` overriding this component's own `px-2`) by keeping\n * the last one instead of leaving both in the DOM. Every Didact component that accepts `className`\n * must merge it LAST through this helper, not a manual array-join, so a single instance can be\n * restyled inline without fighting the base classes.\n */\nexport function cn(...inputs: ClassValue[]): string {\n  return twMerge(clsx(inputs));\n}\n",
-      "type": "registry:lib"
+      "type": "registry:lib",
+      "target": "lib/didact/cn.ts"
     }
   ],
-  "cssVars": {
-    "theme": {
-      "card": "oklch(1 0 0)",
-      "card-foreground": "oklch(0.145 0 0)",
-      "border": "oklch(0.922 0 0)",
-      "muted-foreground": "oklch(0.556 0 0)",
-      "radius": "0.625rem"
-    }
-  },
-  "type": "registry:ui"
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/didact-theme.json"
+  ]
 }

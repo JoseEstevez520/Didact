@@ -4,6 +4,13 @@ Didact's `registry.json` in **shadcn/ui's official schema** — the distribution
 for RF-15 in `requirements.md` (registry + CLI that copies source code into the consuming
 project, not a versioned npm dependency).
 
+Grouped downloads are specified in
+[`docs/distribution-collections.md`](../../docs/distribution-collections.md). The build generates six
+kits from catalog collections. They reference existing items through `registryDependencies` and do
+not duplicate component files: `learning-essentials`, `math-foundations`, `language-learning`,
+`visual-spatial` and `corporate-training`. Namespaced commands remain unpublished until Didact has
+a stable public host and namespace.
+
 ## Why shadcn's official schema and not a custom CLI
 
 `specs/education-components/research.md` Question 1 confirms that shadcn/ui's third-party
@@ -75,43 +82,82 @@ Items, by layer:
   `toggle-group` (depends on `toggle` via `registryDependencies` rather than duplicating its file),
   `input`, `textarea`, `label`, `radio-group`, `checkbox`.
 - **`@didact/core` education components** (layer 3): `mastery-badge` (depends on `badge`),
-  `flashcard` (depends on `card`, `button`, `toggle-group`), `spaced-repetition-deck` (depends on
-  `card`, `button`, `flashcard`, and the `spaced-repetition` lib item), `quiz-item` (the
+  `flashcard` (depends on `card`, `button`, `toggle-group`), `retrieval-practice-session` (active
+  recall with a consumer-injected scheduler), `quiz-item` (the
   `SingleChoiceQuiz`/`MultiSelectQuiz`/`TrueFalseQuiz`/`FillInTheBlankQuiz`/`ShortAnswerQuiz`
   family, one file, one item -- depends on `card`, `button`, `radio-group`, `checkbox`, `input`,
-  `label`, `textarea`, `toggle-group`).
+  `label`, `textarea`, `toggle-group`), `timeline` (RF-8; ordered vertical/horizontal steps,
+  status semantics and token-only styling; no primitive dependency), `matching-exercises`
+  (`MatchingExercise`/`SortExercise`/`CategorizeExercise`, RF-3; depends on `button`, `card`, and
+  exact-pinned `@dnd-kit/core`/`@dnd-kit/sortable`), `practice-set`,
+  `retrieval-practice-session`, and `generative-learning` (`SelfExplanationPrompt`,
+  `WorkedExample`, and `CompletionProblem`), plus the cross-domain `numeric-question`, `word-bank`,
+  and `hotspot` interactions, and `interactive-media` with its framework-neutral
+  `interactive-media-schema` dependency.
 - **`@didact/spaced-repetition`**: `spaced-repetition` (`registry:lib`), the SM-2 scheduler --
   `types.ts` plus `sm2.ts`, zero runtime dependencies. The FSRS module (`fsrs.ts`) is not a
   registry item: it is a documented implementation stub (ROADMAP Phase 4), not a real component
   yet.
 
-Each item's own `cssVars.theme` only lists the tokens its own file references directly, not the
-ones its `registryDependencies` already bring along (e.g. `flashcard` composes `Card`/`Button`/
-`ToggleGroup` but references no token directly itself, so it has no `cssVars`; `mastery-badge`
-composes `Badge` but adds one direct reference of its own, `muted-foreground`) -- mirroring
-`toggle-group`/`toggle`'s existing pattern. `dependencies` lists only the npm packages a file
-actually imports, checked against each package's real `package.json` rather than assumed --
+Source items record the tokens their files reference so the design audit remains local and
+readable. The public build removes those partial `cssVars` blocks and installs the complete
+`didact-theme` dependency instead; this prevents dependency ordering from producing an incomplete
+or conflicting light/dark theme. `dependencies` lists only the npm packages a file actually
+imports, checked against each package's real `package.json` rather than assumed --
 notably every Radix-backed primitive imports from the single unified `radix-ui` package (`"radix-
 ui": "1.6.7"` in `packages/ui/package.json`), not the older scoped `@radix-ui/react-*` subpackages.
 
-One residual gap worth flagging: `flashcard.tsx`, `mastery-badge.tsx`, `spaced-repetition-deck.tsx`
-and `quiz-item.tsx` import `@didact/ui` (and, for the deck, `@didact/spaced-repetition`) as real
-package specifiers (needed for the actual pnpm workspace build), whereas `registryDependencies`
-only copies the *source files* of the items they compose from into a copy-paste consumer's
-project -- unlike `toggle-group`'s relative `"./toggle.js"` import, those package imports will not
-resolve for a consumer who copies one of these items without also installing `@didact/ui` (and
-`@didact/spaced-repetition`, for the deck) as a real npm dependency. Not solved here; a future pass
-should either publish those packages as installable for that path or rewrite these items' registry
-copies to relative imports at build time. The built, servable JSON lives in `public/r/` and IS
-committed (same reasoning as `pnpm-lock.yaml`: it's generated, but it's the actual artifact a
-static host would serve, not throwaway build junk) -- regenerate it after any change to
-`registry.json` or the files it points at with:
+The registry build is deliberately different from the workspace build. Workspace source keeps its
+package imports (`@didact/ui`, `@didact/spaced-repetition`) for normal monorepo type checking; the
+registry build rewrites those imports to stable shadcn consumer aliases such as
+`@/components/ui/button`, `@/components/didact/flashcard`, and
+`@/lib/didact/spaced-repetition/types`. The rewriter verifies that each local import is supplied by
+the item's `registryDependencies`, so copied components do not require unpublished Didact npm
+packages.
+
+The build also expands the short dependency names used in source `registry.json` into full Didact
+item URLs. This is required because shadcn interprets a bare dependency such as `card` as its own
+built-in registry item. The default base is the repository's raw `main` artifact path; release
+automation must set `DIDACT_REGISTRY_BASE_URL` to the immutable tag or deployment URL before
+building published artifacts.
+
+Every item also receives the reusable `didact-theme` registry dependency. It installs the complete
+semantic token set plus `radius-sm`/`radius-md`/`radius-lg`/`radius-xl` derived from `--radius` via
+shadcn's `cssVars.theme`; no `@didact/theme` npm dependency or manual CSS copy is required.
+
+The built, servable JSON lives in `public/r/` and is committed because it is the artifact a static
+host serves. Regenerate and validate it after any change to `registry.json` or a referenced source
+file with:
 
 ```
-pnpm dlx shadcn@latest build packages/registry/registry.json -o packages/registry/public/r --cwd <repo root>
+pnpm --filter @didact/registry build
+pnpm --filter @didact/registry lint
+pnpm --filter @didact/registry test
 ```
 
-The registry copy mechanism itself is verified end to end (ROADMAP.md Phase 3 block F): `shadcn
-add` against the built item JSON, from a throwaway consumer project outside this workspace,
-produces a byte-identical copy of the real source file and a working Vite build. This registry
-gets published for real hosting in Phase 6.
+## Versions and updates
+
+shadcn registry items have no native version field. Didact therefore follows these rules:
+
+- `public/r/<name>.json` is the current stable copy of an item and may be reinstalled to update it.
+- Breaking prop or behavior changes require a new item name with a major suffix (for example,
+  `flashcard-v2`); the previous major remains available during its documented migration window.
+- Compatible fixes keep the item name. Consumers review their local diff before accepting a
+  reinstall because copied source belongs to the consuming project after installation.
+- Published artifacts must be generated from a clean commit/tag. The tag is the immutable version
+  reference for audits and reproducible installs; mutable `main` URLs are for evaluation only.
+- Do not promise `shadcn diff` for third-party namespaces until it is covered by an end-to-end test.
+
+The automated tests inspect every educational artifact and generated kit, their recursive dependency closure, all
+local alias imports, and the theme/radius setup. They fail if an unresolved `@didact/*` import
+returns or a component references a local file not supplied by `registryDependencies`.
+
+## Consumer fixture
+
+`fixture/consumer` is a clean React/TypeScript application contract, not a workspace package. Its
+handwritten `CourseActivity` consumes `HintReveal`; `pnpm --filter @didact/registry
+verify:consumer` recreates `.generated/` from both the `hint-reveal` component and the
+`math-foundations` kit, then validates the complete copied dependency graph without using monorepo
+source imports. The official CLI also accepts the generated dependency-only kit through `shadcn
+view`. See `fixture/consumer/README.md` for installation, semantic-token customization, independent
+`pnpm check`, and pinned-release usage.
