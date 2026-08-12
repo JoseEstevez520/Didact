@@ -8,7 +8,8 @@ import { cn } from "../lib/cn.js";
  * (see button.tsx's header comment). Backed by `radix-ui`'s `Checkbox` (the unified `radix-ui`
  * package, same import style as Toggle/ToggleGroup), which owns `aria-checked`/`data-state` and
  * keyboard toggling. Standard Tailwind utilities reading `@didact/theme`'s tokens, the same
- * `data-slot` attributes, and the same class structure as the reference.
+ * `data-slot` attributes, with the reference shadow and focus ring replaced by a fixed border and
+ * CSS focus outline.
  *
  * Two deviations from the reference source, both matching conventions already established in this
  * kit rather than the reference's own environment:
@@ -25,7 +26,7 @@ function Checkbox({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:bg-primary",
+        "peer size-4 shrink-0 rounded-[4px] border border-input transition-colors outline-none focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:outline-destructive data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:data-[state=checked]:bg-primary",
         className,
       )}
       {...props}

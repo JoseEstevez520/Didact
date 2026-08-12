@@ -7,7 +7,7 @@ import { Badge } from "./badge.js";
  * differs from packages/core's domain-specific `MasteryBadge`).
  */
 const meta = {
-  title: "UI/Badge",
+  title: "01 Foundations/Feedback/Badge",
   component: Badge,
   parameters: {
     layout: "centered",

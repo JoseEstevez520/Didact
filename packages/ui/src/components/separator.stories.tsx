@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Separator } from "./separator.js";
 
 const meta = {
-  title: "UI/Separator",
+  title: "01 Foundations/Layout/Separator",
   component: Separator,
   parameters: {
     layout: "centered",

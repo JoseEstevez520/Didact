@@ -3,8 +3,9 @@ import * as React from "react";
 import { cn } from "../lib/cn.js";
 
 /**
- * Card family -- ported verbatim from the same reference kit as Button (see button.tsx's header
- * comment for the porting rationale). Anatomy and slot names are unchanged: `Card` (the surface) >
+ * Card family -- based on the same reference kit as Button (see button.tsx's header comment).
+ * The reference shadow is intentionally removed in favor of a fixed border. Anatomy and slot names
+ * are unchanged: `Card` (the surface) >
  * `CardHeader` (title + description + optional action, laid out with a container-query grid so the
  * action column only appears when a `CardAction` child is present) > `CardTitle` / `CardDescription`
  * / `CardAction` > `CardContent` (body) > `CardFooter` (actions). See docs/interface-norms.md,
@@ -21,7 +22,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm",
+        "flex flex-col gap-6 rounded-xl border border-border bg-card py-6 text-card-foreground",
         className,
       )}
       {...props}

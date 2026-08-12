@@ -9,7 +9,7 @@ import { ToggleGroup, ToggleGroupItem } from "./toggle-group.js";
  * Storybook controls can't safely narrow that for us.
  */
 const meta = {
-  title: "UI/ToggleGroup",
+  title: "01 Foundations/Actions/Toggle Group",
   component: ToggleGroup,
   parameters: {
     layout: "centered",

@@ -5,7 +5,7 @@ import { Slot } from "radix-ui";
 import { cn } from "../lib/cn.js";
 
 /**
- * Badge -- a small status/label primitive, ported verbatim from the same reference kit as Button
+ * Badge -- a small status/label primitive, adapted from the same reference kit as Button
  * (see button.tsx's header comment). Unlike `MasteryBadge` (packages/core, a domain-specific
  * component with a fixed `level` prop and no layer-1 primitive), this is the generic, reusable
  * primitive `@didact/core` components can compose from for any label/tag/status chip that isn't
@@ -14,7 +14,7 @@ import { cn } from "../lib/cn.js";
  */
 
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-invalid:border-destructive aria-invalid:focus-visible:outline-destructive [&>svg]:pointer-events-none [&>svg]:size-3",
   {
     variants: {
       variant: {
@@ -22,7 +22,7 @@ const badgeVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
-          "bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
+          "bg-destructive text-white focus-visible:outline-destructive dark:bg-destructive/60 [a&]:hover:bg-destructive/90",
         outline:
           "border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         ghost: "[a&]:hover:bg-accent [a&]:hover:text-accent-foreground",

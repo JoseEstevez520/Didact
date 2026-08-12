@@ -4,7 +4,7 @@ import { Input } from "./input.js";
 import { Label } from "./label.js";
 
 const meta = {
-  title: "UI/Input",
+  title: "01 Foundations/Forms/Input",
   component: Input,
   parameters: {
     layout: "centered",
@@ -51,7 +51,7 @@ export const Invalid: Story = {
       description: {
         story:
           "The invalid state is driven by aria-invalid and paired with real error text referenced " +
-          "by aria-describedby -- never the red ring alone (docs/interface-norms.md, WCAG 1.4.1).",
+          "by aria-describedby -- never the red outline alone (docs/interface-norms.md, WCAG 1.4.1).",
       },
     },
   },

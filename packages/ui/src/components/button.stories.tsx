@@ -7,7 +7,7 @@ import { Button } from "./button.js";
  * docs/interface-norms.md's "Action hierarchy" for when to reach for each variant.
  */
 const meta = {
-  title: "UI/Button",
+  title: "01 Foundations/Actions/Button",
   component: Button,
   parameters: {
     layout: "centered",

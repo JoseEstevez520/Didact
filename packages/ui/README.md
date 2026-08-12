@@ -2,7 +2,7 @@
 
 Layers 1-2 of Didact's 3-layer architecture (`specs/education-components/design.md` §2),
 materialized as one real package: a small, **general-purpose primitive kit** (Button, Card family,
-ToggleGroup/Toggle, Separator, Badge) that `@didact/core` (layer 3, the education molecules)
+ToggleGroup/Toggle, Separator, Badge, Popover) that `@didact/core` (layer 3, the education molecules)
 composes from, instead of every education component styling its own button/card/focus treatment
 ad hoc.
 
@@ -27,6 +27,9 @@ ad hoc.
 - `Badge` -- variants `default`/`secondary`/`destructive`/`outline`/`ghost`/`link`, `asChild`.
 - `Separator` -- backed by `radix-ui`'s `Separator`.
 - `Toggle` / `ToggleGroup`, `ToggleGroupItem` -- backed by `radix-ui`'s `Toggle` and `ToggleGroup`.
+- `Popover`, `PopoverTrigger`, `PopoverContent`, `PopoverAnchor` -- collision-aware anchored
+  supplementary content, backed by `radix-ui`'s `Popover`.
+- `Progress` -- determinate or indeterminate progress with Radix progressbar semantics.
 
 See [`docs/interface-norms.md`](../../docs/interface-norms.md) for the composition norms this kit
 exists to make possible by construction (action hierarchy, card slot usage, spacing/sizing scale,
@@ -34,14 +37,15 @@ focus/state treatment, motion strategy).
 
 ## How each primitive was built
 
-Every component here is a **verbatim port** of the reference headless-primitives + Tailwind +
-`cva` kit (the style/architecture reference `specs/education-components/requirements.md` §0.2
-names for Didact's distribution model) -- not invented from scratch, and not re-tokenized. Same
-variant/size sets, same class structure, same standard Tailwind utility classes (`bg-primary`,
-`text-muted-foreground`, `rounded-xl`, `shadow-sm`, `focus-visible:ring-ring/50`, etc.) reading
+Every component here is based on the reference headless-primitives + Tailwind + `cva` kit (the
+style/architecture reference `specs/education-components/requirements.md` §0.2 names for Didact's
+distribution model). It retains the same anatomy, behavior, variant/size sets, and standard
+Tailwind utility vocabulary (`bg-primary`,
+`text-muted-foreground`, `rounded-xl`, `border-border`, `focus-visible:outline-ring`, etc.) reading
 `@didact/theme`'s CSS custom properties, same `data-slot`/`data-variant`/`data-size` attributes,
-same `asChild`/Slot escape hatch where it applies, same unified `radix-ui` package import. The only
-change from the reference source in every file is the `cn` import path.
+same `asChild`/Slot escape hatch where it applies, and same unified `radix-ui` package import.
+Didact deliberately diverges in one global visual rule: every reference `shadow-*` and
+box-shadow-based focus ring is removed in favor of fixed borders and CSS outlines.
 
 ## Pinned dependencies (RNF-5)
 

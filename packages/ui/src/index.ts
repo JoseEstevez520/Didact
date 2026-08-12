@@ -7,12 +7,12 @@
  * make possible by construction (action hierarchy, card composition, spacing/sizing, focus/state
  * treatment, motion strategy).
  *
- * Every primitive here is a verbatim port of the reference headless-primitives + Tailwind + `cva`
- * kit named in `requirements.md` §0.2: same variant/size sets, same class structure (standard
+ * Every primitive here is based on the reference headless-primitives + Tailwind + `cva` kit named
+ * in `requirements.md` §0.2: same anatomy, behavior and variant/size sets, with standard
  * Tailwind utilities reading `@didact/theme`'s CSS custom properties, e.g. `bg-primary`,
  * `text-muted-foreground`), same `data-slot`/`data-variant`/`data-size` attributes, same
  * `asChild`/Slot escape hatch where it applies, and the same unified `radix-ui` package import.
- * See each component file for the specific porting notes.
+ * Didact's deliberate visual divergence is global: no shadows; fixed borders + CSS focus outlines.
  *
  * Product-owner decision recorded in `requirements.md` §2 (2026-08-11): this package revisits the
  * original "generic primitives are out of scope" scope line -- Didact now ships its own minimal
@@ -49,5 +49,14 @@ export { Label } from "./components/label.js";
 export { RadioGroup, RadioGroupItem } from "./components/radio-group.js";
 
 export { Checkbox } from "./components/checkbox.js";
+
+export {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+  PopoverTrigger,
+} from "./components/popover.js";
+
+export { Progress, type ProgressProps } from "./components/progress.js";
 
 export { cn } from "./lib/cn.js";

@@ -4,7 +4,7 @@ import { Textarea } from "./textarea.js";
 import { Label } from "./label.js";
 
 const meta = {
-  title: "UI/Textarea",
+  title: "01 Foundations/Forms/Textarea",
   component: Textarea,
   parameters: {
     layout: "centered",

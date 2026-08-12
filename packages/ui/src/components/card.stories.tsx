@@ -18,7 +18,7 @@ import { Badge } from "./badge.js";
  * actions in the footer.
  */
 const meta = {
-  title: "UI/Card",
+  title: "01 Foundations/Layout/Card",
   component: Card,
   parameters: {
     layout: "centered",

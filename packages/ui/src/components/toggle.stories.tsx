@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Toggle } from "./toggle.js";
 
 const meta = {
-  title: "UI/Toggle",
+  title: "01 Foundations/Actions/Toggle",
   component: Toggle,
   parameters: {
     layout: "centered",

@@ -4,7 +4,7 @@ import { Label } from "./label.js";
 import { Input } from "./input.js";
 
 const meta = {
-  title: "UI/Label",
+  title: "01 Foundations/Forms/Label",
   component: Label,
   parameters: {
     layout: "centered",

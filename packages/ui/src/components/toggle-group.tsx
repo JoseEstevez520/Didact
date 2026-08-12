@@ -7,10 +7,11 @@ import { toggleVariants } from "./toggle.js";
 
 /**
  * ToggleGroup / ToggleGroupItem -- a roving-tabindex group of `Toggle`s (single or multiple
- * selection), ported verbatim from the same reference kit as Button (see button.tsx's header
+ * selection), adapted from the same reference kit as Button (see button.tsx's header
  * comment). Backed by `radix-ui`'s `ToggleGroup`, which owns the keyboard roving/selection
  * behavior; this layer only supplies the shared `variant`/`size`/`spacing` styling via context, so
- * every `ToggleGroupItem` matches the group's look unless it overrides its own.
+ * every `ToggleGroupItem` matches the group's look unless it overrides its own. The group uses
+ * fixed borders without a container shadow.
  */
 
 const ToggleGroupContext = React.createContext<
@@ -40,7 +41,7 @@ function ToggleGroup({
       data-variant={variant}
       data-size={size}
       className={cn(
-        "group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs",
+        "group/toggle-group flex w-fit items-center rounded-md",
         className,
       )}
       {...props}
@@ -71,7 +72,7 @@ function ToggleGroupItem({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        "min-w-0 shrink-0 rounded-none px-3 shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10",
+        "min-w-0 shrink-0 rounded-none px-3 first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10",
         "data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l",
         className,
       )}
