@@ -1,54 +1,56 @@
-# Clean React consumer fixture
+# Clean external consumer fixture
 
-This fixture proves that a course activity can consume a Didact registry item as copied source,
-without importing `@didact/*` packages or relying on monorepo source paths.
+This directory is an ordinary React/Vite application contract, not a workspace package. It proves
+that copied Didact source can type-check and build without imports from the Didact monorepo.
 
-`pnpm --filter @didact/registry verify:consumer` performs the same operation as an external
-consumer in a disposable `.generated/` directory:
+## Coverage
 
-1. Reads `public/r/hint-reveal.json`.
-2. Resolves its complete registry dependency graph.
-3. Copies every file to the published `target` under `src/`.
-4. Rejects unresolved `@didact/*` imports and conflicting copied targets.
-5. Verifies every local alias and every external import against the copied targets and this clean
-   consumer's public `package.json`.
+`pnpm --filter @didact/registry verify:consumer` materializes:
 
-## Install in an application
+- `hint-reveal` - basic component and theme dependencies;
+- `word-bank` - drag dependency plus keyboard/click alternative;
+- `interactive-media` - copied schema and composite dependencies;
+- `measurement-lab` - responsive domain component and controlled result API;
+- `math-foundations` - dependency-only kit expansion.
 
-Use the hosted item URL directly:
+The verifier resolves the recursive dependency graph, rejects residual `@didact/*` imports,
+rejects conflicting targets, and checks every external import against this fixture's public
+`package.json`.
+
+## Run the generated application
+
+From the repository root:
 
 ```bash
-pnpm dlx shadcn@latest add https://raw.githubusercontent.com/JoseEstevez520/Didact/main/packages/registry/public/r/hint-reveal.json
+pnpm --filter @didact/registry build
+pnpm --filter @didact/registry verify:consumer
+cd packages/registry/fixture/consumer/.generated
+pnpm install --ignore-workspace
+pnpm check
+pnpm build
 ```
 
-For reproducible production installation, replace `main` with a Didact release tag or commit SHA.
-The registry dependency graph also installs the Didact theme, Button and Card source automatically.
+The final two commands are the real external TypeScript and Vite gates. Routine registry tests do
+not install packages from the network, so they remain deterministic.
 
-Then import the copied component through the consumer alias:
+## Test the official CLI
 
-```tsx
-import { HintReveal } from "@/components/didact/hint-reveal";
+The release gate goes one step further in a fresh Vite application:
+
+```bash
+pnpm dlx shadcn@latest add <immutable-registry-url>/hint-reveal.json
+pnpm dlx shadcn@latest add <immutable-registry-url>/word-bank.json
+pnpm dlx shadcn@latest add <immutable-registry-url>/interactive-media.json
+pnpm dlx shadcn@latest add <immutable-registry-url>/measurement-lab.json
+pnpm dlx shadcn@latest add <immutable-registry-url>/math-foundations.json
+pnpm exec tsc --noEmit
+pnpm exec vite build
 ```
+
+Do not substitute mutable `main` URLs for the immutable URL in a production release gate.
 
 ## Customize
 
-The copied files belong to the application. Customize an instance with props and `className`, or
-override the semantic variables installed by `didact-theme` (`--primary`, `--background`,
-`--radius`, and the remaining light/dark tokens). Keep the `@/*` alias pointing to `src/*` or let
-shadcn rewrite targets according to the application's `components.json` aliases.
-
-## Run independently
-
-From a copy of this directory, materialize the registry files under `src/`, then run:
-
-```bash
-pnpm install
-pnpm check
-```
-
-The repository verification intentionally stops before package installation, so routine registry
-tests remain deterministic and do not require network access. `pnpm check` is the final independent
-React/TypeScript compilation check after installing the fixture's declared public dependencies.
-
-The committed fixture contains only the handwritten activity and configuration. `.generated/` is
-ignored because the verification command recreates it from the public artifacts on every run.
+Copied files belong to the application. Override semantic variables such as `--primary`,
+`--background`, and `--radius`, or compose a specific instance with `className`. Keep the `@/*`
+alias aligned between `components.json`, TypeScript, and Vite.

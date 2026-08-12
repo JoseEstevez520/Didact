@@ -13,5 +13,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["activity.tsx", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["activity.tsx", "main.tsx", "vite.config.ts", "src/**/*.ts", "src/**/*.tsx"]
 }

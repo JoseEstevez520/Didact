@@ -8,8 +8,8 @@ Grouped downloads are specified in
 [`docs/distribution-collections.md`](../../docs/distribution-collections.md). The build generates six
 kits from catalog collections. They reference existing items through `registryDependencies` and do
 not duplicate component files: `learning-essentials`, `math-foundations`, `language-learning`,
-`visual-spatial` and `corporate-training`. Namespaced commands remain unpublished until Didact has
-a stable public host and namespace.
+`visual-spatial`, `corporate-training`, and `technical-training`. Namespaced commands remain
+unpublished until Didact has a stable public host and namespace.
 
 ## Why shadcn's official schema and not a custom CLI
 
@@ -154,10 +154,9 @@ returns or a component references a local file not supplied by `registryDependen
 
 ## Consumer fixture
 
-`fixture/consumer` is a clean React/TypeScript application contract, not a workspace package. Its
-handwritten `CourseActivity` consumes `HintReveal`; `pnpm --filter @didact/registry
-verify:consumer` recreates `.generated/` from both the `hint-reveal` component and the
-`math-foundations` kit, then validates the complete copied dependency graph without using monorepo
-source imports. The official CLI also accepts the generated dependency-only kit through `shadcn
-view`. See `fixture/consumer/README.md` for installation, semantic-token customization, independent
-`pnpm check`, and pinned-release usage.
+`fixture/consumer` is a clean React/Vite application contract, not a workspace package. Its
+handwritten `CourseActivity` exercises a basic component, a drag interaction, and a measurement
+tool; `verify:consumer` also materializes Interactive Media and the Mathematics & Data kit. It
+validates the complete copied dependency graph without monorepo imports. See
+`fixture/consumer/README.md` for independent `pnpm check`, `vite build`, official CLI coverage,
+theming, and pinned-release usage.

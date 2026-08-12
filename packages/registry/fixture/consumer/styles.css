@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.course-shell {
+  display: grid;
+  gap: 2rem;
+  width: min(48rem, calc(100% - 2rem));
+  margin: 3rem auto;
+}

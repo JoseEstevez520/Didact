@@ -11,7 +11,13 @@ const byName = new Map(index.items.map((item) => [item.name, item]));
 const installed = new Set();
 const targetContents = new Map();
 const publicDependencies = new Set();
-const rootItems = ["hint-reveal", "math-foundations", "interactive-media"];
+const rootItems = [
+  "hint-reveal",
+  "word-bank",
+  "interactive-media",
+  "measurement-lab",
+  "math-foundations",
+];
 
 function installItem(name) {
   if (installed.has(name)) return;
@@ -43,7 +49,7 @@ for (const [target, content] of targetContents) {
   fs.writeFileSync(destination, content);
 }
 
-for (const file of ["activity.tsx", "package.json", "tsconfig.json"]) {
+for (const file of ["activity.tsx", "index.html", "main.tsx", "package.json", "styles.css", "tsconfig.json", "vite.config.ts"]) {
   fs.copyFileSync(path.join(fixtureRoot, file), path.join(generatedRoot, file));
 }
 
