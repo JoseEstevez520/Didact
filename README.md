@@ -43,6 +43,11 @@ the library is validated in dynamically generated corporate courses. Didact rema
 it contains no SkillNet-specific adapter or data model, and every public contract must remain useful
 to other learning products.
 
+SkillNet currently uses [OpenUI](https://github.com/openai/openui) as its generated-interface layer;
+Didact supplies the educational components that the application selects and renders inside that
+surface. A2TL-Web is related prior research in compact agent-generated interfaces, not a current
+SkillNet runtime dependency.
+
 ## Quick start
 
 ### Requirements
